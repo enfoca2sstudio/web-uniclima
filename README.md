@@ -12,7 +12,7 @@ Grupo Uniclima es un holding de empresas distribuidor autorizado de marcas líde
 
 ## 🌐 Secciones del sitio
 
-- **Inicio** – Presentación general de la empresa y marcas representadas.
+- **Inicio** – Hero en carrusel (3 diapositivas: marca general, proyectos/experiencia, servicio técnico), presentación general de la empresa y marcas representadas.
 - **Nosotros** – Historia, misión y trayectoria del grupo.
 - **Productos** – Catálogo / tienda de equipos y repuestos.
 - **Proyectos** – Portafolio de proyectos ejecutados.
@@ -29,11 +29,16 @@ Grupo Uniclima es un holding de empresas distribuidor autorizado de marcas líde
 
 Aire Acondicionado · Chillers · Equipos Compactos · Fan & Coil · Manejadoras de Aire · Mini Splits · Mini VRF · Piso-Techo · Sistemas VRF · Tecnología Inverter · Unidad Condensadora · Unidad Evaporadora · Unidades de Paquete · Ventilación
 
+## ✨ Características destacadas
+
+- **Tema claro/oscuro** – Toggle en el header que alterna entre tema claro y oscuro. La preferencia se guarda en `localStorage` y, si el usuario no ha elegido ninguna, se respeta la preferencia del sistema operativo (`prefers-color-scheme`) y se sigue actualizando en vivo si esta cambia. Un script inline en el `<head>` aplica el tema antes del primer render para evitar parpadeos (FOUC). Las secciones oscuras por diseño (hero, footer, banners) se mantienen igual en ambos temas; solo cambian las secciones "claras" (fondos, tarjetas, textos).
+- **Carrusel del hero** – La sección de Inicio muestra 3 diapositivas (marca general, proyectos/experiencia, servicio técnico) con transición tipo *crossfade*, autoplay (7s), flechas y puntos de navegación. El autoplay se pausa al pasar el mouse, al enfocar con teclado o al cambiar de pestaña, soporta swipe en móvil y respeta `prefers-reduced-motion`.
+
 ## 🛠️ Stack tecnológico
 
 - **Frontend:** HTML5, JavaScript (Vanilla, sin frameworks de JS)
 - **Estilos:** [Tailwind CSS](https://tailwindcss.com) vía Play CDN (`assets/js/tailwind-config.js` define los tokens de color/tipografía de la marca) + CSS custom (`assets/css/styles.css`) para componentes bespoke (gradientes, animaciones, clip-paths) que no se expresan bien como utilidades
-- **Persistencia:** localStorage (si aplica para paneles admin o datos locales)
+- **Persistencia:** localStorage (preferencia de tema claro/oscuro; disponible también para paneles admin o datos locales si se necesita)
 - **Integraciones:** WhatsApp (contacto directo), formularios de cotización, calculadora de BTU
 - **Sin backend / servidor:** sitio 100% estático, desplegable en cualquier hosting estático
 - **Sin build step:** Tailwind se carga vía CDN (Play CDN), así que no hace falta `npm install` ni compilar nada para ver el sitio. Si el proyecto crece, se recomienda migrar a un build local de Tailwind (Tailwind CLI) para producción.
@@ -76,7 +81,7 @@ uniclima-web/
 │   │   └── styles.css          # componentes custom (no cubiertos por utilidades Tailwind)
 │   └── js/
 │       ├── tailwind-config.js  # tokens de marca para Tailwind (colores, tipografías, sombras)
-│       ├── main.js             # header, menú, dropdowns, reveal-on-scroll, contadores
+│       ├── main.js             # header, menú, dropdowns, reveal-on-scroll, contadores, tema claro/oscuro, carrusel del hero
 │       └── calculadora-btu.js
 └── README.md
 ```
