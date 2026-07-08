@@ -33,6 +33,7 @@
   var idField = document.getElementById("prodId");
   var nameField = document.getElementById("prodName");
   var categoryField = document.getElementById("prodCategory");
+  var subcategoryField = document.getElementById("prodSubcategory");
   var specsField = document.getElementById("prodSpecs");
   var imageField = document.getElementById("prodImage");
   var submitBtn = document.getElementById("prodSubmitBtn");
@@ -53,6 +54,30 @@
       toast.classList.remove("show");
     }, 2600);
   }
+
+  /* ---------- Subcategoría dependiente de la categoría elegida ---------- */
+  function populateSubcategoryOptions(selectedValue) {
+    var subs = data.SUBCATEGORIES[categoryField.value] || [];
+    subcategoryField.innerHTML =
+      '<option value="">— Ninguna —</option>' +
+      subs
+        .map(function (s) {
+          return (
+            '<option value="' +
+            data.escapeHtml(s) +
+            '"' +
+            (s === selectedValue ? " selected" : "") +
+            ">" +
+            data.escapeHtml(s) +
+            "</option>"
+          );
+        })
+        .join("");
+  }
+  categoryField.addEventListener("change", function () {
+    populateSubcategoryOptions("");
+  });
+  populateSubcategoryOptions("");
 
   /* ---------- Pantalla de acceso ---------- */
   function unlock() {
@@ -90,6 +115,7 @@
     idField.value = "";
     submitBtn.textContent = "Agregar producto";
     cancelBtn.hidden = true;
+    populateSubcategoryOptions("");
   }
 
   function renderAdminList() {
@@ -104,6 +130,7 @@
           data.escapeHtml(p.name) +
           "</strong><span>" +
           data.escapeHtml(data.CATEGORY_LABELS[p.category] || p.category) +
+          (p.subcategory ? " · " + data.escapeHtml(p.subcategory) : "") +
           " · " +
           data.escapeHtml(p.specs) +
           "</span></div>" +
@@ -125,6 +152,7 @@
     var id = idField.value;
     var entry = {
       category: categoryField.value,
+      subcategory: subcategoryField.value,
       name: nameField.value.trim(),
       specs: specsField.value.trim(),
       image: imageField.value.trim(),
@@ -163,6 +191,7 @@
       idField.value = p.id;
       nameField.value = p.name;
       categoryField.value = p.category;
+      populateSubcategoryOptions(p.subcategory || "");
       specsField.value = p.specs;
       imageField.value = p.image || "";
       submitBtn.textContent = "Guardar cambios";
@@ -208,7 +237,13 @@
   });
 
   /* ---------- Importar / exportar CSV ---------- */
-  var CSV_HEADERS = ["nombre", "categoria", "especificaciones", "imagen"];
+  var CSV_HEADERS = [
+    "nombre",
+    "categoria",
+    "subcategoria",
+    "especificaciones",
+    "imagen",
+  ];
 
   var csvFile = document.getElementById("csvFile");
   var csvFileName = document.getElementById("csvFileName");
@@ -317,9 +352,119 @@
     }, 1000);
   }
 
+  // Alias de encabezados: además de nuestras columnas propias, reconoce los
+  // nombres típicos de exportaciones de WooCommerce, Shopify y similares.
+  // Cada campo interno se resuelve probando esta lista en orden hasta
+  // encontrar la primera columna presente en el archivo.
+  var HEADER_ALIASES = {
+    nombre: ["nombre", "name", "product name", "title", "nombre del producto"],
+    categoria: [
+      "categoria",
+      "categorias",
+      "category",
+      "categories",
+      "product category",
+      "product categories",
+    ],
+    especificaciones: [
+      "especificaciones",
+      "specs",
+      "specifications",
+      "short description",
+      "descripcion corta",
+      "description",
+      "descripcion",
+      "detalles",
+    ],
+    imagen: [
+      "imagen",
+      "imagenes",
+      "image",
+      "images",
+      "image src",
+      "imagen destacada",
+      "featured image",
+    ],
+    subcategoria: ["subcategoria", "subcategory"],
+  };
+
+  function findColumn(header, field) {
+    var aliases = HEADER_ALIASES[field];
+    for (var i = 0; i < aliases.length; i++) {
+      var idx = header.indexOf(aliases[i]);
+      if (idx !== -1) return idx;
+    }
+    return -1;
+  }
+
+  // Como findColumn, pero devuelve TODAS las columnas que matchean (en el
+  // orden de prioridad de los alias), no solo la primera. Se usa para
+  // especificaciones: así, si "short description" viene vacía en una fila
+  // puntual, esa fila cae a "description" en vez de quedar en blanco.
+  function findAllColumns(header, field) {
+    var aliases = HEADER_ALIASES[field];
+    var found = [];
+    for (var i = 0; i < aliases.length; i++) {
+      var idx = header.indexOf(aliases[i]);
+      if (idx !== -1) found.push(idx);
+    }
+    return found;
+  }
+
+  // Quita etiquetas HTML (frecuentes en descripciones exportadas de
+  // WooCommerce/Shopify, ej. "<p>Texto</p>") y decodifica entidades como
+  // &nbsp;, dejando solo texto plano legible.
+  function stripHtml(str) {
+    var div = document.createElement("div");
+    div.innerHTML = String(str || "");
+    return (div.textContent || div.innerText || "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  // Mapa por categoría de "subcategoría en cualquier forma" -> nombre
+  // canónico exacto (el que se muestra en las píldoras/formulario).
+  var SUBCATEGORY_LOOKUP = {};
+  Object.keys(data.SUBCATEGORIES).forEach(function (catKey) {
+    SUBCATEGORY_LOOKUP[catKey] = {};
+    data.SUBCATEGORIES[catKey].forEach(function (sub) {
+      SUBCATEGORY_LOOKUP[catKey][normalizeKey(sub)] = sub;
+    });
+  });
+
+  // Los campos de categoría pueden traer varios valores separados por coma
+  // (ej. "APLICADO, APLICADO > Chillers enfriados por agua") y jerarquías
+  // tipo "Padre > Hijo > Nieto" (así exporta WooCommerce). De todos los
+  // valores separados por coma nos quedamos con el que tenga MÁS niveles de
+  // jerarquía (el más específico), y de ahí tomamos el 1er nivel como
+  // categoría y el 2do como subcategoría (se ignoran niveles más profundos,
+  // ej. la marca del compresor).
+  function parseCategoryPath(raw) {
+    var candidates = String(raw || "")
+      .split(",")
+      .map(function (s) {
+        return s.trim();
+      })
+      .filter(Boolean);
+    var best = null;
+    var bestDepth = -1;
+    candidates.forEach(function (c) {
+      var depth = c.split(">").length;
+      if (depth > bestDepth) {
+        bestDepth = depth;
+        best = c;
+      }
+    });
+    if (!best) return { parent: "", child: "" };
+    var parts = best.split(">").map(function (s) {
+      return s.trim();
+    });
+    return { parent: parts[0] || "", child: parts[1] || "" };
+  }
+
   function parseImportedCSV(text) {
     var rows = parseCSV(text);
-    var result = { products: [], errors: [] };
+    var result = { products: [], errors: [], warnings: [] };
     if (!rows.length) {
       result.errors.push("El archivo está vacío.");
       return result;
@@ -327,16 +472,39 @@
 
     var header = rows[0].map(normalizeKey);
     var col = {
-      nombre: header.indexOf("nombre"),
-      categoria: header.indexOf("categoria"),
-      especificaciones: header.indexOf("especificaciones"),
-      imagen: header.indexOf("imagen"),
+      nombre: findColumn(header, "nombre"),
+      categoria: findColumn(header, "categoria"),
+      subcategoria: findColumn(header, "subcategoria"),
+      imagen: findColumn(header, "imagen"),
     };
-    if (col.nombre === -1 || col.categoria === -1 || col.especificaciones === -1) {
+    var specsCols = findAllColumns(header, "especificaciones");
+
+    // Salvaguarda: en WooCommerce la columna "Type" (tipo de producto:
+    // simple/variable/grouped/external/variation) a veces se confunde con
+    // categoría. Si TODOS los valores de la columna detectada caen dentro
+    // de ese set fijo, no es una columna de categorías real: la ignoramos.
+    var WOO_PRODUCT_TYPES = [
+      "simple",
+      "variable",
+      "grouped",
+      "external",
+      "variation",
+      "",
+    ];
+    if (col.categoria !== -1) {
+      var looksLikeProductType = rows.slice(1).every(function (r) {
+        return (
+          WOO_PRODUCT_TYPES.indexOf(normalizeKey(r[col.categoria] || "")) !==
+          -1
+        );
+      });
+      if (looksLikeProductType) col.categoria = -1;
+    }
+
+    if (col.nombre === -1) {
       result.errors.push(
-        "Encabezado inválido. Se esperaban las columnas: " +
-          CSV_HEADERS.join(", ") +
-          " (imagen es opcional)."
+        "No se encontró una columna de nombre del producto (se aceptan encabezados como " +
+          '"nombre", "name" o "product name").'
       );
       return result;
     }
@@ -344,33 +512,64 @@
     for (var i = 1; i < rows.length; i++) {
       var r = rows[i];
       var rowNum = i + 1; // +1 porque la fila 1 es el encabezado
-      var name = (r[col.nombre] || "").trim();
-      var categoryRaw = (r[col.categoria] || "").trim();
-      var specs = (r[col.especificaciones] || "").trim();
-      var image = col.imagen !== -1 ? (r[col.imagen] || "").trim() : "";
+      var name = stripHtml(r[col.nombre] || "").trim();
+      var catPath =
+        col.categoria !== -1
+          ? parseCategoryPath(r[col.categoria])
+          : { parent: "", child: "" };
+      // Prueba cada columna candidata (ej. "short description", luego
+      // "description") hasta encontrar la primera con contenido en esta fila.
+      var specs = "";
+      for (var s = 0; s < specsCols.length; s++) {
+        var candidate = stripHtml(r[specsCols[s]] || "");
+        if (candidate) {
+          specs = candidate;
+          break;
+        }
+      }
+      var image =
+        col.imagen !== -1
+          ? String(r[col.imagen] || "")
+              .split(/[|,]/)[0] // si trae varias imágenes, usamos la primera
+              .trim()
+          : "";
 
-      if (!name || !categoryRaw || !specs) {
-        result.errors.push(
-          "Fila " + rowNum + ": faltan datos obligatorios (nombre, categoría o especificaciones)."
-        );
+      if (!name) {
+        result.errors.push("Fila " + rowNum + ": falta el nombre del producto.");
         continue;
       }
-      var category = CATEGORY_LOOKUP[normalizeKey(categoryRaw)];
+      if (!specs) specs = "Sin especificaciones";
+
+      var category = catPath.parent
+        ? CATEGORY_LOOKUP[normalizeKey(catPath.parent)]
+        : null;
       if (!category) {
-        result.errors.push(
+        category = "otros";
+        result.warnings.push(
           "Fila " +
             rowNum +
-            ': categoría "' +
-            categoryRaw +
-            '" no reconocida (usa una de: ' +
-            Object.keys(data.CATEGORY_LABELS).join(", ") +
-            ")."
+            ' ("' +
+            name +
+            '"): categoría' +
+            (catPath.parent ? ' "' + catPath.parent + '"' : "") +
+            ' no reconocida, se asignó a "Otros". Puedes cambiarla luego con "Editar".'
         );
-        continue;
       }
+
+      var subcategory = "";
+      var explicitSub =
+        col.subcategoria !== -1 ? String(r[col.subcategoria] || "").trim() : "";
+      if (explicitSub && SUBCATEGORY_LOOKUP[category]) {
+        subcategory = SUBCATEGORY_LOOKUP[category][normalizeKey(explicitSub)] || "";
+      } else if (catPath.child && SUBCATEGORY_LOOKUP[category]) {
+        subcategory =
+          SUBCATEGORY_LOOKUP[category][normalizeKey(catPath.child)] || "";
+      }
+
       result.products.push({
         id: "p" + Date.now() + "_" + i,
         category: category,
+        subcategory: subcategory,
         name: name,
         specs: specs,
         image: image,
@@ -400,20 +599,34 @@
       pendingImport = parsed.products;
       csvPreview.hidden = false;
 
+      var noteParts = [];
+      if (parsed.errors.length)
+        noteParts.push(parsed.errors.length + " fila(s) omitida(s) por error");
+      if (parsed.warnings.length)
+        noteParts.push(
+          parsed.warnings.length + " fila(s) con categoría reasignada a \"Otros\""
+        );
+
       csvSummary.textContent =
         parsed.products.length +
-        " producto(s) válido(s) encontrados en el archivo" +
-        (parsed.errors.length
-          ? ", " + parsed.errors.length + " fila(s) con problemas (ver abajo)."
-          : ".");
+        " producto(s) listo(s) para importar" +
+        (noteParts.length ? " — " + noteParts.join(", ") + "." : ".");
 
-      if (parsed.errors.length) {
+      var allNotes = parsed.errors.concat(parsed.warnings);
+      if (allNotes.length) {
         csvErrors.hidden = false;
-        csvErrors.innerHTML = parsed.errors
-          .map(function (msg) {
-            return "<li>" + data.escapeHtml(msg) + "</li>";
-          })
-          .join("");
+        var MAX_SHOWN = 25;
+        var shown = allNotes.slice(0, MAX_SHOWN);
+        var extra = allNotes.length - shown.length;
+        csvErrors.innerHTML =
+          shown
+            .map(function (msg) {
+              return "<li>" + data.escapeHtml(msg) + "</li>";
+            })
+            .join("") +
+          (extra > 0
+            ? "<li><em>…y " + extra + " fila(s) más con el mismo tipo de aviso.</em></li>"
+            : "");
       } else {
         csvErrors.hidden = true;
         csvErrors.innerHTML = "";
@@ -469,10 +682,11 @@
       [
         "Serie 16LJ",
         "aplicado",
+        "Chillers enfriados por agua",
         "75 – 525 Toneladas",
         "img/productos/16lj.jpg",
       ],
-      ["Serie XYZ VRF", "vrf", "10 – 20 Toneladas", ""],
+      ["Serie XYZ VRF", "vrf", "CARRIER", "10 – 20 Toneladas", ""],
     ];
     downloadFile("plantilla-productos.csv", buildCSV(sample));
   });
@@ -480,7 +694,7 @@
   csvExportBtn.addEventListener("click", function () {
     var rows = [CSV_HEADERS];
     products.forEach(function (p) {
-      rows.push([p.name, p.category, p.specs, p.image || ""]);
+      rows.push([p.name, p.category, p.subcategory || "", p.specs, p.image || ""]);
     });
     downloadFile("catalogo-productos.csv", buildCSV(rows));
   });

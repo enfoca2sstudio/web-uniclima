@@ -2086,6 +2086,74 @@ html.theme-dark .brand-logo {
   border-color: var(--blue-600);
   color: #fff;
 }
+.filter-pill-wrap {
+  position: relative;
+  display: inline-block;
+}
+.filter-pill.has-submenu {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.filter-pill-chev {
+  width: 13px;
+  height: 13px;
+  transition: transform 0.2s var(--ease);
+}
+.filter-pill-wrap.open .filter-pill-chev {
+  transform: rotate(180deg);
+}
+.filter-submenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 40;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 240px;
+  max-height: 320px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 8px;
+  box-shadow: var(--shadow-soft);
+}
+.filter-pill-wrap.open .filter-submenu {
+  display: flex;
+}
+.filter-subpill {
+  border: none;
+  background: none;
+  text-align: left;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-heading);
+  cursor: pointer;
+  white-space: normal;
+}
+.filter-subpill:hover {
+  background: var(--surface-alt);
+}
+.filter-subpill.active {
+  background: var(--blue-600);
+  color: #fff;
+}
+.filter-subpill-all {
+  font-weight: 700;
+  border-bottom: 1px solid var(--divider);
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 4px;
+}
+.product-tag-sub {
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.85;
+}
 .catalog-grid-section {
   padding: 48px 0 100px;
   background: var(--surface-alt);
@@ -2201,7 +2269,7 @@ html.theme-dark .brand-logo {
   color: var(--blue-600);
 }
 .admin-page {
-  padding: 116px 0 100px;
+  padding: 108px 0 100px;
   min-height: 60vh;
   background: var(--surface-alt);
 }
@@ -2307,7 +2375,11 @@ html.theme-dark .brand-logo {
 }
 .admin-form-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 14px;
+}
+.admin-form-row label {
+  flex: 1 1 160px;
 }
 .admin-form input,
 .admin-form select {

@@ -171,7 +171,9 @@
               />
             </svg>
             <h1>Acceso administrador</h1>
-            <p>Ingresa la contraseña para gestionar el catálogo de productos.</p>
+            <p>
+              Ingresa la contraseña para gestionar el catálogo de productos.
+            </p>
             <form id="gateForm">
               <input
                 type="password"
@@ -233,6 +235,12 @@
                   <option value="valvulas">Válvulas de Control</option>
                 </select>
               </label>
+              <label>
+                Subcategoría (opcional)
+                <select id="prodSubcategory">
+                  <option value="">— Ninguna —</option>
+                </select>
+              </label>
             </div>
             <label>
               Especificaciones
@@ -271,22 +279,40 @@
               <h3>Importar / exportar CSV</h3>
               <p>
                 Sube un CSV para agregar varios productos de una sola vez.
-                Columnas esperadas (con encabezado):
-                <code>nombre, categoria, especificaciones, imagen</code>.
-                La columna <code>imagen</code> es opcional. Los valores de
-                <code>categoria</code> aceptan la clave interna (por ejemplo
-                <code>vrf</code>) o el nombre visible (por ejemplo
-                <code>VRF</code>).
+                Reconoce automáticamente varios formatos de encabezado,
+                incluyendo exportaciones de WooCommerce/Shopify: por ejemplo
+                <code>nombre</code>/<code>name</code>,
+                <code>categoria</code>/<code>categories</code>,
+                <code>especificaciones</code>/<code>short description</code>,
+                <code>imagen</code>/<code>images</code>. Solo el nombre del
+                producto es obligatorio. Si una categoría no coincide con las
+                nuestras (Aplicado, Compresores, Línea CIAC, Otros, Residencial
+                - Comercial Ligero, VRF, Válvulas de Control), el producto igual
+                se importa y queda como <code>Otros</code> — puedes corregirla
+                luego con "Editar".
               </p>
               <div class="admin-csv-actions">
                 <label class="btn btn-outline-dark admin-csv-upload">
                   Elegir archivo CSV
-                  <input type="file" id="csvFile" accept=".csv,text/csv" hidden />
+                  <input
+                    type="file"
+                    id="csvFile"
+                    accept=".csv,text/csv"
+                    hidden
+                  />
                 </label>
-                <button type="button" class="btn btn-outline-dark" id="csvTemplateBtn">
+                <button
+                  type="button"
+                  class="btn btn-outline-dark"
+                  id="csvTemplateBtn"
+                >
                   Descargar plantilla CSV
                 </button>
-                <button type="button" class="btn btn-outline-dark" id="csvExportBtn">
+                <button
+                  type="button"
+                  class="btn btn-outline-dark"
+                  id="csvExportBtn"
+                >
                   Exportar catálogo actual a CSV
                 </button>
               </div>
@@ -302,10 +328,18 @@
                 <button type="button" class="btn btn-primary" id="csvAppendBtn">
                   Agregar estos productos al catálogo
                 </button>
-                <button type="button" class="btn btn-outline-dark" id="csvReplaceBtn">
+                <button
+                  type="button"
+                  class="btn btn-outline-dark"
+                  id="csvReplaceBtn"
+                >
                   Reemplazar todo el catálogo
                 </button>
-                <button type="button" class="btn btn-outline-dark" id="csvCancelBtn">
+                <button
+                  type="button"
+                  class="btn btn-outline-dark"
+                  id="csvCancelBtn"
+                >
                   Cancelar
                 </button>
               </div>
@@ -326,7 +360,13 @@
     <!-- Notificación breve de "acción completada" -->
     <div class="admin-toast" id="adminToast" role="status" aria-live="polite">
       <svg viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" />
+        <circle
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="1.8"
+        />
         <path
           d="m8 12.5 2.5 2.5L16 9.5"
           stroke="currentColor"
@@ -342,7 +382,11 @@
       <div class="mx-auto max-w-container px-6">
         <div class="footer-grid">
           <div>
-            <a href="index.html#inicio" class="logo" style="margin-bottom: 16px">
+            <a
+              href="index.html#inicio"
+              class="logo"
+              style="margin-bottom: 16px"
+            >
               <img
                 src="img/logo-footer.webp"
                 alt="Logo Uniclima"
@@ -358,7 +402,11 @@
             <h4>Enlaces Rápidos</h4>
             <ul>
               <li><a href="productos.html">Catálogos</a></li>
-              <li><a href="atencion-al-cliente/calculadora-btu.html">Calculadora BTU</a></li>
+              <li>
+                <a href="atencion-al-cliente/calculadora-btu.html"
+                  >Calculadora BTU</a
+                >
+              </li>
               <li><a href="cotizaciones.html">Solicitar Cotización</a></li>
               <li><a href="index.html#servicios">Servicios</a></li>
             </ul>

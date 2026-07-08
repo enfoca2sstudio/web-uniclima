@@ -87,6 +87,49 @@
     valvulas: "Válvulas de Control",
   };
 
+  // Etiquetas "hijas" (subcategorías) dentro de cada categoría, para el
+  // submenú de las píldoras de filtro y para el formulario de admin. El
+  // orden aquí es el orden en que se muestran.
+  var SUBCATEGORIES = {
+    aplicado: [
+      "Chillers enfriados por agua",
+      "Chillers enfriados por aire",
+      "Compactos",
+      "Control de Sistema de Edificio",
+      "Manejadoras de Aire",
+      "Sistemas divididos (Splits)",
+      "Unidad Fan Coil",
+    ],
+    compresores: ["Reciprocante", "Scroll", "Semi Herméticos"],
+    ciac: [
+      "Mini Splits Convencionales",
+      "Mini Splits Inverter",
+      "Paquetes pequeños",
+      "Piso/Techo",
+      "Sistemas de combinación flexible",
+      "VRF",
+    ],
+    otros: ["Owens Corning"],
+    residencial: [
+      "Aire Acondicionado Central",
+      "Aire Acondicionado De Ventana",
+      "Calidad Del Aire Interior",
+      "Cassettes",
+      "Compactos",
+      "Evaporadoras",
+      "Mini Splits Conventional",
+      "Mini Splits Inverter",
+      "Paquetes pequeños y medianos",
+      "Piso/Techo",
+      "Sistema Multi Split Xpower",
+      "Sistemas de Combinación Flexible",
+      "Sistemas divididos (Splits)",
+      "Termostatos y Controles",
+    ],
+    valvulas: ["Belimo"],
+    vrf: ["CARRIER", "MDV"],
+  };
+
   function load() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
@@ -116,6 +159,7 @@
     STORAGE_KEY: STORAGE_KEY,
     DEFAULT_PRODUCTS: DEFAULT_PRODUCTS,
     CATEGORY_LABELS: CATEGORY_LABELS,
+    SUBCATEGORIES: SUBCATEGORIES,
     load: load,
     save: save,
     escapeHtml: escapeHtml,
