@@ -206,4 +206,282 @@
     resetForm();
     showToast("Catálogo restaurado a los valores originales");
   });
+
+  /* ---------- Importar / exportar CSV ---------- */
+  var CSV_HEADERS = ["nombre", "categoria", "especificaciones", "imagen"];
+
+  var csvFile = document.getElementById("csvFile");
+  var csvFileName = document.getElementById("csvFileName");
+  var csvTemplateBtn = document.getElementById("csvTemplateBtn");
+  var csvExportBtn = document.getElementById("csvExportBtn");
+  var csvPreview = document.getElementById("csvPreview");
+  var csvSummary = document.getElementById("csvSummary");
+  var csvErrors = document.getElementById("csvErrors");
+  var csvAppendBtn = document.getElementById("csvAppendBtn");
+  var csvReplaceBtn = document.getElementById("csvReplaceBtn");
+  var csvCancelBtn = document.getElementById("csvCancelBtn");
+
+  var pendingImport = null; // productos parseados listos para aplicar
+
+  function stripAccents(str) {
+    return String(str)
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function normalizeKey(str) {
+    return stripAccents(str).trim().toLowerCase();
+  }
+
+  // Mapa "categoria en cualquier forma" -> clave interna (aplicado, vrf...)
+  var CATEGORY_LOOKUP = {};
+  Object.keys(data.CATEGORY_LABELS).forEach(function (key) {
+    CATEGORY_LOOKUP[normalizeKey(key)] = key;
+    CATEGORY_LOOKUP[normalizeKey(data.CATEGORY_LABELS[key])] = key;
+  });
+
+  // Parser de CSV simple tipo RFC4180: soporta campos con comas y saltos de
+  // línea si van entre comillas dobles, y comillas escapadas ("").
+  function parseCSV(text) {
+    var rows = [];
+    var row = [];
+    var field = "";
+    var inQuotes = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      var next = text[i + 1];
+      if (inQuotes) {
+        if (c === '"' && next === '"') {
+          field += '"';
+          i++;
+        } else if (c === '"') {
+          inQuotes = false;
+        } else {
+          field += c;
+        }
+      } else if (c === '"') {
+        inQuotes = true;
+      } else if (c === ",") {
+        row.push(field);
+        field = "";
+      } else if (c === "\r") {
+        /* ignorar: el \n que sigue cierra la fila */
+      } else if (c === "\n") {
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = "";
+      } else {
+        field += c;
+      }
+    }
+    if (field.length > 0 || row.length > 0) {
+      row.push(field);
+      rows.push(row);
+    }
+    // descarta filas totalmente vacías (ej. línea en blanco al final)
+    return rows.filter(function (r) {
+      return r.some(function (cell) {
+        return cell.trim() !== "";
+      });
+    });
+  }
+
+  function csvCell(value) {
+    var str = value == null ? "" : String(value);
+    if (/[",\n]/.test(str)) {
+      return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+  }
+
+  function buildCSV(rows) {
+    return rows
+      .map(function (row) {
+        return row.map(csvCell).join(",");
+      })
+      .join("\r\n");
+  }
+
+  function downloadFile(filename, content, mime) {
+    var blob = new Blob([content], { type: mime || "text/csv;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () {
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+  function parseImportedCSV(text) {
+    var rows = parseCSV(text);
+    var result = { products: [], errors: [] };
+    if (!rows.length) {
+      result.errors.push("El archivo está vacío.");
+      return result;
+    }
+
+    var header = rows[0].map(normalizeKey);
+    var col = {
+      nombre: header.indexOf("nombre"),
+      categoria: header.indexOf("categoria"),
+      especificaciones: header.indexOf("especificaciones"),
+      imagen: header.indexOf("imagen"),
+    };
+    if (col.nombre === -1 || col.categoria === -1 || col.especificaciones === -1) {
+      result.errors.push(
+        "Encabezado inválido. Se esperaban las columnas: " +
+          CSV_HEADERS.join(", ") +
+          " (imagen es opcional)."
+      );
+      return result;
+    }
+
+    for (var i = 1; i < rows.length; i++) {
+      var r = rows[i];
+      var rowNum = i + 1; // +1 porque la fila 1 es el encabezado
+      var name = (r[col.nombre] || "").trim();
+      var categoryRaw = (r[col.categoria] || "").trim();
+      var specs = (r[col.especificaciones] || "").trim();
+      var image = col.imagen !== -1 ? (r[col.imagen] || "").trim() : "";
+
+      if (!name || !categoryRaw || !specs) {
+        result.errors.push(
+          "Fila " + rowNum + ": faltan datos obligatorios (nombre, categoría o especificaciones)."
+        );
+        continue;
+      }
+      var category = CATEGORY_LOOKUP[normalizeKey(categoryRaw)];
+      if (!category) {
+        result.errors.push(
+          "Fila " +
+            rowNum +
+            ': categoría "' +
+            categoryRaw +
+            '" no reconocida (usa una de: ' +
+            Object.keys(data.CATEGORY_LABELS).join(", ") +
+            ")."
+        );
+        continue;
+      }
+      result.products.push({
+        id: "p" + Date.now() + "_" + i,
+        category: category,
+        name: name,
+        specs: specs,
+        image: image,
+      });
+    }
+    return result;
+  }
+
+  function resetCsvUI() {
+    csvFile.value = "";
+    csvFileName.hidden = true;
+    csvPreview.hidden = true;
+    csvErrors.hidden = true;
+    csvErrors.innerHTML = "";
+    pendingImport = null;
+  }
+
+  csvFile.addEventListener("change", function () {
+    var file = csvFile.files && csvFile.files[0];
+    if (!file) return;
+    csvFileName.hidden = false;
+    csvFileName.textContent = "Archivo elegido: " + file.name;
+
+    var reader = new FileReader();
+    reader.onload = function () {
+      var parsed = parseImportedCSV(String(reader.result));
+      pendingImport = parsed.products;
+      csvPreview.hidden = false;
+
+      csvSummary.textContent =
+        parsed.products.length +
+        " producto(s) válido(s) encontrados en el archivo" +
+        (parsed.errors.length
+          ? ", " + parsed.errors.length + " fila(s) con problemas (ver abajo)."
+          : ".");
+
+      if (parsed.errors.length) {
+        csvErrors.hidden = false;
+        csvErrors.innerHTML = parsed.errors
+          .map(function (msg) {
+            return "<li>" + data.escapeHtml(msg) + "</li>";
+          })
+          .join("");
+      } else {
+        csvErrors.hidden = true;
+        csvErrors.innerHTML = "";
+      }
+
+      var noValidProducts = parsed.products.length === 0;
+      csvAppendBtn.disabled = noValidProducts;
+      csvReplaceBtn.disabled = noValidProducts;
+    };
+    reader.onerror = function () {
+      csvPreview.hidden = false;
+      csvSummary.textContent = "No se pudo leer el archivo.";
+      csvErrors.hidden = false;
+      csvErrors.innerHTML = "<li>Error de lectura del archivo.</li>";
+      pendingImport = null;
+    };
+    reader.readAsText(file, "UTF-8");
+  });
+
+  csvAppendBtn.addEventListener("click", function () {
+    if (!pendingImport || !pendingImport.length) return;
+    products = products.concat(pendingImport);
+    data.save(products);
+    renderAdminList();
+    showToast(pendingImport.length + " producto(s) agregado(s) desde el CSV");
+    resetCsvUI();
+  });
+
+  csvReplaceBtn.addEventListener("click", function () {
+    if (!pendingImport || !pendingImport.length) return;
+    if (
+      !confirm(
+        "¿Reemplazar TODO el catálogo actual (" +
+          products.length +
+          " producto(s)) por los " +
+          pendingImport.length +
+          " del CSV? Esta acción no se puede deshacer."
+      )
+    )
+      return;
+    products = pendingImport;
+    data.save(products);
+    renderAdminList();
+    showToast("Catálogo reemplazado con " + pendingImport.length + " producto(s) del CSV");
+    resetCsvUI();
+  });
+
+  csvCancelBtn.addEventListener("click", resetCsvUI);
+
+  csvTemplateBtn.addEventListener("click", function () {
+    var sample = [
+      CSV_HEADERS,
+      [
+        "Serie 16LJ",
+        "aplicado",
+        "75 – 525 Toneladas",
+        "img/productos/16lj.jpg",
+      ],
+      ["Serie XYZ VRF", "vrf", "10 – 20 Toneladas", ""],
+    ];
+    downloadFile("plantilla-productos.csv", buildCSV(sample));
+  });
+
+  csvExportBtn.addEventListener("click", function () {
+    var rows = [CSV_HEADERS];
+    products.forEach(function (p) {
+      rows.push([p.name, p.category, p.specs, p.image || ""]);
+    });
+    downloadFile("catalogo-productos.csv", buildCSV(rows));
+  });
 })();

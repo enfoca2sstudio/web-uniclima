@@ -202,7 +202,7 @@
               >
               <h1>Administrar productos</h1>
             </div>
-            <a href="productos.html" class="btn btn-ghost"
+            <a href="productos.html" class="btn btn-outline-dark"
               >← Volver al catálogo</a
             >
           </div>
@@ -257,7 +257,7 @@
               </button>
               <button
                 type="button"
-                class="btn btn-ghost"
+                class="btn btn-outline-dark"
                 id="prodCancelBtn"
                 hidden
               >
@@ -265,6 +265,52 @@
               </button>
             </div>
           </form>
+
+          <div class="admin-csv">
+            <div class="admin-csv-head">
+              <h3>Importar / exportar CSV</h3>
+              <p>
+                Sube un CSV para agregar varios productos de una sola vez.
+                Columnas esperadas (con encabezado):
+                <code>nombre, categoria, especificaciones, imagen</code>.
+                La columna <code>imagen</code> es opcional. Los valores de
+                <code>categoria</code> aceptan la clave interna (por ejemplo
+                <code>vrf</code>) o el nombre visible (por ejemplo
+                <code>VRF</code>).
+              </p>
+              <div class="admin-csv-actions">
+                <label class="btn btn-outline-dark admin-csv-upload">
+                  Elegir archivo CSV
+                  <input type="file" id="csvFile" accept=".csv,text/csv" hidden />
+                </label>
+                <button type="button" class="btn btn-outline-dark" id="csvTemplateBtn">
+                  Descargar plantilla CSV
+                </button>
+                <button type="button" class="btn btn-outline-dark" id="csvExportBtn">
+                  Exportar catálogo actual a CSV
+                </button>
+              </div>
+              <p class="admin-csv-filename" id="csvFileName" hidden></p>
+            </div>
+
+            <!-- Vista previa: aparece tras elegir un archivo válido, antes
+                 de aplicar los cambios de verdad. -->
+            <div class="admin-csv-preview" id="csvPreview" hidden>
+              <p id="csvSummary"></p>
+              <ul class="admin-csv-errors" id="csvErrors" hidden></ul>
+              <div class="admin-csv-preview-actions">
+                <button type="button" class="btn btn-primary" id="csvAppendBtn">
+                  Agregar estos productos al catálogo
+                </button>
+                <button type="button" class="btn btn-outline-dark" id="csvReplaceBtn">
+                  Reemplazar todo el catálogo
+                </button>
+                <button type="button" class="btn btn-outline-dark" id="csvCancelBtn">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
 
           <div class="admin-list-head">
             <h3>Productos actuales (<span id="adminCount">0</span>)</h3>

@@ -1998,13 +1998,13 @@ html.theme-dark .brand-logo {
   text-align: center;
   color: #fff;
   background:
-    linear-gradient(
-      160deg,
-      rgba(6, 15, 34, 0.88),
-      rgba(10, 26, 58, 0.72)
-    ),
+    linear-gradient(160deg, rgba(6, 15, 34, 0.88), rgba(10, 26, 58, 0.72)),
     radial-gradient(circle at 15% 20%, rgba(28, 98, 201, 0.5), transparent 55%),
-    radial-gradient(circle at 85% 80%, rgba(45, 125, 210, 0.4), transparent 55%),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(45, 125, 210, 0.4),
+      transparent 55%
+    ),
     var(--navy-950);
   overflow: hidden;
 }
@@ -2201,7 +2201,7 @@ html.theme-dark .brand-logo {
   color: var(--blue-600);
 }
 .admin-page {
-  padding: 56px 0 100px;
+  padding: 116px 0 100px;
   min-height: 60vh;
   background: var(--surface-alt);
 }
@@ -2453,4 +2453,77 @@ html.theme-dark .brand-logo {
   .admin-toast.show {
     transform: translateY(0);
   }
+}
+
+/* ---- Importar/exportar CSV (admin-productos.html) ---- */
+.admin-csv {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 22px 24px;
+  margin-bottom: 28px;
+}
+.admin-csv-head h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 8px;
+}
+.admin-csv-head p {
+  font-size: 0.82rem;
+  color: var(--text-body);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.admin-csv-head code {
+  background: var(--surface-alt);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.8em;
+  color: var(--blue-600);
+}
+.admin-csv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.admin-csv-upload {
+  cursor: pointer;
+  position: relative;
+}
+.admin-csv-filename {
+  font-size: 0.8rem;
+  color: var(--text-body);
+  margin-top: 10px;
+}
+.admin-csv-preview {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--divider);
+}
+.admin-csv-preview > p {
+  font-size: 0.88rem;
+  color: var(--text-heading);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.admin-csv-errors {
+  list-style: none;
+  background: rgba(214, 69, 69, 0.08);
+  border: 1px solid rgba(214, 69, 69, 0.25);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+.admin-csv-errors li {
+  font-size: 0.78rem;
+  color: #b23636;
+  line-height: 1.6;
+}
+.admin-csv-preview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
