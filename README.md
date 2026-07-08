@@ -14,7 +14,7 @@ Grupo Uniclima es un holding de empresas distribuidor autorizado de marcas líde
 
 - **Inicio** – Hero en carrusel (3 diapositivas: marca general, proyectos/experiencia, servicio técnico), presentación general de la empresa y marcas representadas.
 - **Nosotros** – Historia, misión y trayectoria del grupo.
-- **Productos** – Catálogo / tienda de equipos y repuestos.
+- **Productos** – Catálogo de equipos HVAC (`productos.html`), con hero de presentación, buscador de productos en vivo y píldoras de filtro por categoría (Aplicado, Compresores, Línea CIAC, Otros, Residencial - Comercial Ligero, VRF, Válvulas de Control), sobre una grilla de fichas de producto.
 - **Proyectos** – Portafolio de proyectos ejecutados.
 - **Cursos** – Capacitación online, cursos presenciales y transmisiones vía Instagram Live.
 - **Cotizaciones** – Solicitud de cotizaciones de productos y proyectos.
@@ -33,6 +33,7 @@ Aire Acondicionado · Chillers · Equipos Compactos · Fan & Coil · Manejadoras
 
 - **Tema claro/oscuro** – Toggle en el header que alterna entre tema claro y oscuro. La preferencia se guarda en `localStorage` y, si el usuario no ha elegido ninguna, se respeta la preferencia del sistema operativo (`prefers-color-scheme`) y se sigue actualizando en vivo si esta cambia. Un script inline en el `<head>` aplica el tema antes del primer render para evitar parpadeos (FOUC). Las secciones oscuras por diseño (hero, footer, banners) se mantienen igual en ambos temas; solo cambian las secciones "claras" (fondos, tarjetas, textos).
 - **Carrusel del hero** – La sección de Inicio muestra 3 diapositivas (marca general, proyectos/experiencia, servicio técnico) con transición tipo *crossfade*, autoplay (7s), flechas y puntos de navegación. El autoplay se pausa al pasar el mouse, al enfocar con teclado o al cambiar de pestaña, soporta swipe en móvil y respeta `prefers-reduced-motion`.
+- **Catálogo de productos con filtros en vivo** – La página de Productos (`productos.html`) incluye un buscador de texto y píldoras de filtro por categoría que muestran/ocultan las fichas de producto al instante, en el cliente y sin recargar la página (JavaScript vanilla, sin backend ni llamadas a servidor).
 
 ## 🛠️ Stack tecnológico
 
