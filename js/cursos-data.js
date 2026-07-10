@@ -1,17 +1,15 @@
 /**
  * cursos-data.js
  * --------------
- * Catálogo de cursos de la Academia Uniclima (cursos.html). Contenido
- * real tomado de CORRECCIONES_WEB.docx: los 16 cursos organizados por
- * nivel (básico → avanzado), tal como se pidió ahí ("en lugar de colocar
- * por curso o módulo, colocarlo por sección de básico a avanzado").
+ * Catálogo de cursos de la Academia Uniclima. Fuente de datos compartida
+ * entre cursos.html (grilla pública) y admin-productos.html (panel de
+ * administración, sección "Cursos"). Igual que products-data.js: guarda
+ * en localStorage, y si no hay nada guardado aún usa DEFAULT_CURSOS (el
+ * contenido real tomado de CORRECCIONES_WEB.docx, organizado por nivel
+ * básico → avanzado).
  *
- * Las duraciones en horas son ESTIMADAS (el documento no especifica
- * horas por curso) — ajústalas a los valores reales cuando los tengas.
- * Las descripciones son un resumen breve a partir del título de cada
- * curso, ya que el documento tampoco incluye descripciones; el
- * documento pide además agregar "el contenido programático por cada
- * curso", que no está incluido aquí por no tener esa información.
+ * Las duraciones en horas de los cursos por defecto son ESTIMADAS (el
+ * documento no especifica horas por curso).
  */
 (function (global) {
   "use strict";
@@ -39,6 +37,26 @@
     "Cargas térmicas",
     "Software",
   ];
+
+  // Íconos (paths SVG) por temática, compartidos entre cursos-grid.js
+  // (tarjetas) y curso-detail.js (ficha individual), para no duplicarlos.
+  var ICONS = {
+    ac: '<path d="M4 9h16M4 9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2m-16 0v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9M8 19l-1 2m9-2 1 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 12.5h.01M11 12.5h.01M15 12.5h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    electric:
+      '<path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+    snow: '<path d="M12 2v20M4.9 4.9l14.2 14.2M19.1 4.9 4.9 19.1M12 7l-2.5-1.5M12 7l2.5-1.5M12 17l-2.5 1.5M12 17l2.5 1.5M7 9.5 5 8M7 9.5l-.5 2.4M17 9.5 19 8M17 9.5l.5 2.4M7 14.5 5 16M7 14.5l-.5-2.4M17 14.5 19 16M17 14.5l.5-2.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
+    water:
+      '<path d="M12 3c3 4.5 7 8.6 7 12.2A7 7 0 0 1 5 15.2C5 11.6 9 7.5 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+    vrf: '<circle cx="6" cy="6" r="2.4" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="6" r="2.4" stroke="currentColor" stroke-width="1.5"/><circle cx="6" cy="18" r="2.4" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="18" r="2.4" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/><path d="M8.2 7.7 10 10.3M15.8 7.7 14 10.3M8.2 16.3 10 13.7M15.8 16.3 14 13.7" stroke="currentColor" stroke-width="1.4"/>',
+    software:
+      '<rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  };
+
+  var LEVEL_ICON_CLASS = {
+    basico: "cursos-icon-basico",
+    intermedio: "cursos-icon-intermedio",
+    avanzado: "cursos-icon-avanzado",
+  };
 
   var CURSOS = [
     // ---------- Básico-Introductorio ----------
@@ -215,10 +233,45 @@
     },
   ];
 
+  var DEFAULT_CURSOS = CURSOS;
+
+  var STORAGE_KEY = "uniclima-cursos";
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (err) {
+      /* localStorage no disponible o dato corrupto: usar catálogo original */
+    }
+    return DEFAULT_CURSOS.slice();
+  }
+
+  function save(cursos) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cursos));
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.textContent = str == null ? "" : String(str);
+    return div.innerHTML;
+  }
+
   global.UniclimaCursos = {
-    CURSOS: CURSOS,
+    STORAGE_KEY: STORAGE_KEY,
+    DEFAULT_CURSOS: DEFAULT_CURSOS,
     KEYWORDS: KEYWORDS,
     LEVEL_LABELS: LEVEL_LABELS,
     LEVEL_SECTION_TITLES: LEVEL_SECTION_TITLES,
+    ICONS: ICONS,
+    LEVEL_ICON_CLASS: LEVEL_ICON_CLASS,
+    load: load,
+    save: save,
+    escapeHtml: escapeHtml,
   };
 })(window);

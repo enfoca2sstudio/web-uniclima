@@ -698,4 +698,208 @@
     });
     downloadFile("catalogo-productos.csv", buildCSV(rows));
   });
+
+  /* ==================================================================
+     PESTAÑAS (Productos / Cursos)
+     ================================================================== */
+  var tabs = document.querySelectorAll(".admin-tab");
+  var panelProductos = document.getElementById("panelProductos");
+  var panelCursos = document.getElementById("panelCursos");
+  var backLink = document.getElementById("adminBackLink");
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      tabs.forEach(function (t) {
+        t.classList.remove("active");
+      });
+      tab.classList.add("active");
+      var panel = tab.dataset.panel;
+      panelProductos.hidden = panel !== "productos";
+      panelCursos.hidden = panel !== "cursos";
+      if (panel === "cursos") {
+        backLink.href = "cursos.html";
+        backLink.textContent = "← Volver a la academia";
+      } else {
+        backLink.href = "productos.html";
+        backLink.textContent = "← Volver al catálogo";
+      }
+    });
+  });
+
+  /* ==================================================================
+     CURSOS (agregar / editar / eliminar / restaurar)
+     ================================================================== */
+  var cursosData = window.UniclimaCursos;
+  var cursos = cursosData.load();
+
+  var cursoForm = document.getElementById("cursoForm");
+  var cursoIdField = document.getElementById("cursoId");
+  var cursoTitleField = document.getElementById("cursoTitle");
+  var cursoLevelField = document.getElementById("cursoLevel");
+  var cursoHoursField = document.getElementById("cursoHours");
+  var cursoDescField = document.getElementById("cursoDescription");
+  var cursoIconField = document.getElementById("cursoIcon");
+  var cursoKeywordsGroup = document.getElementById("cursoKeywordsGroup");
+  var cursoSubmitBtn = document.getElementById("cursoSubmitBtn");
+  var cursoCancelBtn = document.getElementById("cursoCancelBtn");
+  var cursoList = document.getElementById("cursoList");
+  var cursoCount = document.getElementById("cursoCount");
+  var resetCursosBtn = document.getElementById("resetCursosBtn");
+
+  function populateKeywordCheckboxes(checkedKeywords) {
+    checkedKeywords = checkedKeywords || [];
+    cursoKeywordsGroup.innerHTML = cursosData.KEYWORDS.map(function (kw) {
+      var checked = checkedKeywords.indexOf(kw) !== -1 ? " checked" : "";
+      return (
+        "<label><input type=\"checkbox\" value=\"" +
+        cursosData.escapeHtml(kw) +
+        '"' +
+        checked +
+        " />" +
+        cursosData.escapeHtml(kw) +
+        "</label>"
+      );
+    }).join("");
+  }
+
+  function getCheckedKeywords() {
+    return Array.prototype.map.call(
+      cursoKeywordsGroup.querySelectorAll("input:checked"),
+      function (input) {
+        return input.value;
+      }
+    );
+  }
+
+  function resetCursoForm() {
+    cursoForm.reset();
+    cursoIdField.value = "";
+    cursoSubmitBtn.textContent = "Agregar curso";
+    cursoCancelBtn.hidden = true;
+    populateKeywordCheckboxes([]);
+  }
+
+  function renderCursoList() {
+    cursoCount.textContent = cursos.length;
+    cursoList.innerHTML = cursos
+      .map(function (c) {
+        return (
+          '<li class="admin-list-item" data-id="' +
+          cursosData.escapeHtml(c.id) +
+          '">' +
+          "<div><strong>" +
+          cursosData.escapeHtml(c.title) +
+          "</strong><span>" +
+          cursosData.escapeHtml(cursosData.LEVEL_LABELS[c.level] || c.level) +
+          " · " +
+          c.hours +
+          " horas · " +
+          cursosData.escapeHtml(c.description) +
+          "</span></div>" +
+          '<div class="admin-list-actions">' +
+          '<button type="button" class="admin-edit" data-id="' +
+          cursosData.escapeHtml(c.id) +
+          '">Editar</button>' +
+          '<button type="button" class="admin-delete" data-id="' +
+          cursosData.escapeHtml(c.id) +
+          '">Eliminar</button>' +
+          "</div></li>"
+        );
+      })
+      .join("");
+  }
+
+  populateKeywordCheckboxes([]);
+  renderCursoList();
+
+  cursoForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var id = cursoIdField.value;
+    var entry = {
+      title: cursoTitleField.value.trim(),
+      level: cursoLevelField.value,
+      hours: parseInt(cursoHoursField.value, 10) || 0,
+      description: cursoDescField.value.trim(),
+      icon: cursoIconField.value,
+      tags: getCheckedKeywords(),
+    };
+    if (!entry.title || !entry.description || !entry.hours) return;
+
+    var wasEdit = !!id;
+    if (id) {
+      var idx = cursos.findIndex(function (c) {
+        return c.id === id;
+      });
+      if (idx !== -1) cursos[idx] = Object.assign({ id: id }, entry);
+    } else {
+      entry.id = "c" + Date.now();
+      cursos.push(entry);
+    }
+    cursosData.save(cursos);
+    renderCursoList();
+    resetCursoForm();
+    showToast(
+      wasEdit
+        ? "Curso actualizado correctamente"
+        : "Curso agregado correctamente"
+    );
+  });
+
+  cursoList.addEventListener("click", function (e) {
+    var editBtn = e.target.closest(".admin-edit");
+    var delBtn = e.target.closest(".admin-delete");
+
+    if (editBtn) {
+      var c = cursos.find(function (c) {
+        return c.id === editBtn.dataset.id;
+      });
+      if (!c) return;
+      cursoIdField.value = c.id;
+      cursoTitleField.value = c.title;
+      cursoLevelField.value = c.level;
+      cursoHoursField.value = c.hours;
+      cursoDescField.value = c.description;
+      cursoIconField.value = c.icon || "ac";
+      populateKeywordCheckboxes(c.tags || []);
+      cursoSubmitBtn.textContent = "Guardar cambios";
+      cursoCancelBtn.hidden = false;
+      cursoTitleField.focus();
+    }
+
+    if (delBtn) {
+      var target = cursos.find(function (c) {
+        return c.id === delBtn.dataset.id;
+      });
+      if (!target) return;
+      if (
+        !confirm(
+          '¿Eliminar "' + target.title + '"? Esta acción no se puede deshacer.'
+        )
+      )
+        return;
+      cursos = cursos.filter(function (c) {
+        return c.id !== delBtn.dataset.id;
+      });
+      cursosData.save(cursos);
+      renderCursoList();
+      if (cursoIdField.value === delBtn.dataset.id) resetCursoForm();
+      showToast('Curso "' + target.title + '" eliminado');
+    }
+  });
+
+  cursoCancelBtn.addEventListener("click", resetCursoForm);
+
+  resetCursosBtn.addEventListener("click", function () {
+    if (
+      !confirm(
+        "¿Restaurar los cursos originales? Se perderán los cursos agregados/editados en este navegador."
+      )
+    )
+      return;
+    cursos = cursosData.DEFAULT_CURSOS.slice();
+    cursosData.save(cursos);
+    renderCursoList();
+    resetCursoForm();
+    showToast("Cursos restaurados a los valores originales");
+  });
 })();

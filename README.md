@@ -14,9 +14,9 @@ Grupo Uniclima es un holding de empresas distribuidor autorizado de marcas líde
 
 - **Inicio** – Hero en carrusel (3 diapositivas: marca general, proyectos/experiencia, servicio técnico), presentación general de la empresa y marcas representadas.
 - **Nosotros** – Historia, misión y trayectoria del grupo.
-- **Productos** – Catálogo de equipos HVAC (`productos.html`), con hero de presentación, buscador de productos en vivo y píldoras de filtro por categoría (Aplicado, Compresores, Línea CIAC, Otros, Residencial - Comercial Ligero, VRF, Válvulas de Control), cada una con su propio submenú desplegable de subcategorías, sobre una grilla de fichas de producto. El catálogo se administra desde un panel interno independiente — ver "🔐 Panel de administración de productos" más abajo.
+- **Productos** – Catálogo de equipos HVAC (`productos.html`), con hero de presentación, buscador de productos en vivo y píldoras de filtro por categoría (Aplicado, Compresores, Línea CIAC, Otros, Residencial - Comercial Ligero, VRF, Válvulas de Control), cada una con su propio submenú desplegable de subcategorías, sobre una grilla de fichas de producto. El catálogo se administra desde un panel interno independiente — ver "🔐 Panel de administración" más abajo.
 - **Proyectos** – Portafolio de proyectos ejecutados.
-- **Cursos** – Capacitación online, cursos presenciales y transmisiones vía Instagram Live.
+- **Cursos / Academia Uniclima** (`cursos.html`) – Catálogo de 16 cursos de formación HVAC organizados por nivel (Básico, Intermedio, Avanzado — cada uno en su propia sección), con buscador de texto, píldoras de nivel (Todos/Básico/Intermedio/Avanzado) y un desplegable de palabras clave (Chiller, Agua helada, VRF, Básico, Aire acondicionado, Inverter, Cargas térmicas, Software) dentro de la barra de búsqueda; los tres filtros se combinan entre sí. Incluye aviso de que los cursos no requieren examen y que los certificados no están avalados por Carrier. Se administra desde el mismo panel interno que los productos — ver "🔐 Panel de administración" más abajo.
 - **Cotizaciones** – Solicitud de cotizaciones de productos y proyectos.
 - **Noticias** – Blog / novedades de la empresa.
 - **Atención al Cliente**
@@ -34,17 +34,18 @@ Aire Acondicionado · Chillers · Equipos Compactos · Fan & Coil · Manejadoras
 - **Tema claro/oscuro** – Toggle en el header que alterna entre tema claro y oscuro. La preferencia se guarda en `localStorage` y, si el usuario no ha elegido ninguna, se respeta la preferencia del sistema operativo (`prefers-color-scheme`) y se sigue actualizando en vivo si esta cambia. Un script inline en el `<head>` aplica el tema antes del primer render para evitar parpadeos (FOUC). Las secciones oscuras por diseño (hero, footer, banners) se mantienen igual en ambos temas; solo cambian las secciones "claras" (fondos, tarjetas, textos).
 - **Carrusel del hero** – La sección de Inicio muestra 3 diapositivas (marca general, proyectos/experiencia, servicio técnico) con transición tipo *crossfade*, autoplay (7s), flechas y puntos de navegación. El autoplay se pausa al pasar el mouse, al enfocar con teclado o al cambiar de pestaña, soporta swipe en móvil y respeta `prefers-reduced-motion`.
 - **Catálogo de productos con filtros en vivo** – La página de Productos (`productos.html`) incluye un buscador de texto y píldoras de filtro por categoría — con submenú de subcategorías — que muestran/ocultan las fichas de producto al instante, en el cliente y sin recargar la página (JavaScript vanilla, sin backend ni llamadas a servidor). El catálogo (categorías, subcategorías y productos) vive en `localStorage` y se gestiona desde un panel de administración separado — ver la sección dedicada más abajo.
+- **Academia con filtro combinado** – La página de Cursos (`cursos.html`) organiza los cursos en 3 secciones por nivel y permite filtrar por nivel, por palabra clave (en un desplegable dentro del buscador) y por texto libre al mismo tiempo; las secciones sin resultados se ocultan solas. Igual que el catálogo de productos, vive en `localStorage` y se administra desde el mismo panel.
 - **Calculadora de BTU** – Estimación rápida de la capacidad de A/C necesaria (volumen del espacio × factor base, más ajustes por ocupantes y equipos electrónicos), con validación de campos y sugerencia del tamaño de equipo comercial más cercano. Cálculo instantáneo en el cliente, sin backend.
 
-## 🔐 Panel de administración de productos
+## 🔐 Panel de administración
 
-Página interna independiente (`admin-productos.html`) para gestionar el catálogo sin tocar código. No está enlazada desde el menú principal del sitio y lleva `<meta name="robots" content="noindex, nofollow">`.
+Página interna independiente (`admin-productos.html`) para gestionar el catálogo de productos y el de cursos sin tocar código, organizada en dos pestañas: **Productos** y **Cursos**. No está enlazada desde el menú principal del sitio y lleva `<meta name="robots" content="noindex, nofollow">`. Hay un botón "Administrar productos" en `productos.html` y "Administrar cursos" en `cursos.html` que llevan directo a esta página.
 
 - **Pantalla de acceso propia** (no el `prompt()` del navegador) con contraseña simple; recuerda el acceso durante la sesión del navegador (`sessionStorage`).
-- **CRUD completo**: agregar, editar y eliminar productos, incluyendo categoría y subcategoría (cada una de las 7 categorías tiene su propia lista de subcategorías — ver `js/products-data.js`).
-- **Importar / exportar CSV**: sube un CSV para agregar productos en bloque o reemplazar todo el catálogo. El importador reconoce automáticamente varios formatos de encabezado, en español e inglés, incluyendo exportaciones de WooCommerce/Shopify (`Name`/`Nombre`, `Categories`/`Categorías` — incluso jerárquicas tipo "Padre > Hijo" —, `Short description`/`Description`, `Images`/`Imágenes`). Si una categoría del CSV no coincide con las propias, el producto igual se importa (queda en "Otros" en vez de perderse). También permite descargar una plantilla CSV o exportar el catálogo actual.
-- **Notificación de confirmación** (toast) tras cada acción.
-- Todo se guarda en `localStorage` bajo la misma clave que lee `productos.html` (a través del módulo compartido `js/products-data.js`), así que los cambios se reflejan de inmediato en el catálogo público, sin backend.
+- **Pestaña Productos** – CRUD completo (agregar, editar, eliminar), incluyendo categoría y subcategoría (cada una de las 7 categorías tiene su propia lista de subcategorías — ver `js/products-data.js`). Incluye **importar / exportar CSV**: sube un CSV para agregar productos en bloque o reemplazar todo el catálogo. El importador reconoce automáticamente varios formatos de encabezado, en español e inglés, incluyendo exportaciones de WooCommerce/Shopify (`Name`/`Nombre`, `Categories`/`Categorías` — incluso jerárquicas tipo "Padre > Hijo" —, `Short description`/`Description`, `Images`/`Imágenes`). Si una categoría del CSV no coincide con las propias, el producto igual se importa (queda en "Otros" en vez de perderse). También permite descargar una plantilla CSV o exportar el catálogo actual.
+- **Pestaña Cursos** – CRUD completo (agregar, editar, eliminar, restaurar): título, nivel (Básico/Intermedio/Avanzado), horas, descripción, ícono de la tarjeta, y palabras clave como casillas de verificación (puede marcar varias por curso) — ver `js/cursos-data.js`.
+- **Notificación de confirmación** (toast) tras cada acción, en ambas pestañas.
+- Todo se guarda en `localStorage`: los productos bajo la misma clave que lee `productos.html` (`js/products-data.js`), y los cursos bajo la misma clave que lee `cursos.html` (`js/cursos-data.js`) — así los cambios se reflejan de inmediato en las páginas públicas, sin backend.
 
 > ⚠️ **Aviso de seguridad:** la contraseña del panel (definida en `js/admin-productos.js`) es solo para desalentar ediciones accidentales — el sitio es 100% estático y ese código, incluida la contraseña, es público y legible por cualquiera. No reemplaza un control de acceso real, que requeriría un backend con autenticación.
 
@@ -90,9 +91,9 @@ uniclima-web/
 ├── index.html
 ├── nosotros.html
 ├── productos.html
-├── admin-productos.html        # panel interno de administración del catálogo
+├── admin-productos.html        # panel interno de administración (pestañas: Productos y Cursos)
 ├── proyectos.html
-├── cursos.html
+├── cursos.html                 # Academia Uniclima: 16 cursos por nivel, con filtros (ver características destacadas)
 ├── cotizaciones.html
 ├── noticias.html
 ├── contacto.html
@@ -111,9 +112,11 @@ uniclima-web/
 │       ├── tailwind-config.js  # tokens de marca para Tailwind (colores, tipografías, sombras)
 │       ├── main.js             # header, menú, dropdowns, reveal-on-scroll, contadores, tema claro/oscuro, carrusel del hero
 │       ├── calculadora-btu.js  # lógica de la Calculadora de BTU (atencion-al-cliente/calculadora-btu.html)
-│       ├── products-data.js    # catálogo + categorías/subcategorías compartidas (localStorage)
+│       ├── products-data.js    # catálogo de productos: categorías/subcategorías compartidas (localStorage)
 │       ├── productos-grid.js   # grilla pública + buscador + filtros (productos.html)
-│       └── admin-productos.js  # pantalla de acceso + CRUD + import/export CSV (admin-productos.html)
+│       ├── cursos-data.js      # catálogo de cursos: niveles/palabras clave compartidos (localStorage)
+│       ├── cursos-grid.js      # grilla pública + buscador + filtro nivel/palabra clave (cursos.html)
+│       └── admin-productos.js  # pantalla de acceso + CRUD de productos (con import/export CSV) y de cursos (admin-productos.html)
 └── README.md
 ```
 
