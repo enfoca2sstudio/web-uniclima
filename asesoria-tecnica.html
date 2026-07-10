@@ -19,10 +19,10 @@
         }
       })();
     </script>
-    <title>Catálogo de Productos — Grupo Uniclima</title>
+    <title>Asesoría Técnica — Grupo Uniclima</title>
     <meta
       name="description"
-      content="Explore el catálogo completo de equipos HVAC de Grupo Uniclima: chillers, compresores, línea CIAC, VRF, válvulas de control y más."
+      content="Asesoría técnica especializada en climatización: diagnóstico, cálculo de carga térmica, selección de equipos Carrier y diseño de instalación."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,7 +32,7 @@
     />
     <!-- Tailwind CSS via Play CDN (no build step needed for this static site) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="js/tailwind-config.js"></script>
+    <script src="/js/tailwind-config.js"></script>
     <script
       src="https://kit.fontawesome.com/49286760f0.js"
       crossorigin="anonymous"
@@ -54,9 +54,9 @@
           </a>
           <ul class="nav-links" id="navLinks">
             <li><a href="index.html#inicio">Inicio</a></li>
-            <li><a href="productos.html" class="active">Productos</a></li>
+            <li><a href="productos.html">Productos</a></li>
             <li><a href="proyectos.html">Proyectos</a></li>
-            <li class="has-dropdown">
+            <li class="has-dropdown active-parent">
               <a href="index.html#servicios">Servicios</a>
               <button
                 class="dd-toggle"
@@ -73,10 +73,12 @@
                 </svg>
               </button>
               <div class="dropdown">
-                <a href="servicios/asesoria-tecnica.html">Asesoría Técnica</a>
-                <a href="servicios/instalacion.html">Instalación</a>
-                <a href="servicios/mantenimiento.html">Mantenimiento</a>
-                <a href="servicios/repuestos.html">Repuestos</a>
+                <a href="asesoria-tecnica.html" class="active"
+                  >Asesoría Técnica</a
+                >
+                <a href="instalacion.html">Instalación</a>
+                <a href="mantenimiento.html">Mantenimiento</a>
+                <a href="repuestos.html">Repuestos</a>
               </div>
             </li>
             <li class="has-dropdown">
@@ -146,87 +148,216 @@
       </div>
     </header>
 
-    <!-- ================= CATÁLOGO HERO ================= -->
-    <section class="catalog-hero">
-      <div class="mx-auto max-w-container px-6">
-        <h1 class="font-galano">Catálogo de Productos</h1>
-        <p
-          class="font-poppins font-semibold tracking-[0.18em] uppercase"
+    <!-- ================= HERO DEL SERVICIO ================= -->
+    <section class="service-hero">
+      <div class="service-hero-bg"></div>
+      <div class="mx-auto max-w-container px-6 service-hero-content">
+        <span
+          class="eyebrow font-poppins font-semibold text-[0.85rem] tracking-[0.1em]"
+          >Servicio Especializado</span
         >
-          Explore nuestra línea completa de equipos HVAC
+        <h1 class="font-galano">Asesoría Técnica</h1>
+        <p>
+          <strong
+            >Evaluación profesional de sus necesidades de climatización.</strong
+          ><br />
+          Nuestros ingenieros analizan cada proyecto para ofrecer la solución
+          HVAC más eficiente y rentable.
         </p>
+        <a href="../cotizaciones.html" class="btn btn-blanco"
+          >Solicitar Cotización</a
+        >
       </div>
+      <svg
+        class="service-hero-curve"
+        viewBox="0 0 1440 200"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M0,200 L0,55 C 300,205 1140,205 1440,55 L1440,200 Z"
+          fill="var(--surface)"
+        />
+      </svg>
     </section>
 
-    <!-- ================= CATÁLOGO TOOLBAR ================= -->
-    <section class="catalog-toolbar">
-      <div class="mx-auto max-w-container px-6">
-        <div class="catalog-toolbar-row">
-          <label class="search-box">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle
-                cx="11"
-                cy="11"
-                r="7"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <path
-                d="m20 20-3.2-3.2"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
-            <input
-              type="search"
-              id="productSearch"
-              placeholder="Buscar producto..."
-            />
-          </label>
-          <div class="filter-pills" id="filterPills">
-            <!-- Las píldoras (con sus submenús de subcategorías) se generan
-                 por JavaScript desde UniclimaProducts.CATEGORY_LABELS y
-                 .SUBCATEGORIES (ver js/products-data.js y
-                 js/productos-grid.js), para no duplicar esa lista aquí. -->
+    <!-- ================= ¿POR QUÉ ELEGIRNOS? ================= -->
+    <section class="service-why-section">
+      <div class="mx-auto max-w-container">
+        <div class="service-why-head">
+          <h2 class="reveal">¿Por qué <strong>elegirnos</strong>?</h2>
+          <svg viewBox="0 0 24 24" fill="#3e568d">
+            <path d="M4 8h16L12 18Z" />
+          </svg>
+        </div>
+        <div class="service-why-grid reveal-stagger">
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-01.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Diagnóstico Integral</h3>
+            </div>
+            <p>
+              Evaluamos las condiciones de su espacio, carga térmica y
+              requerimientos específicos para diseñar la solución ideal.
+            </p>
           </div>
-          <a href="admin-productos.html" class="btn-admin">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                stroke="currentColor"
-                stroke-width="1.6"
-              />
-              <path
-                d="M19.4 13.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V19a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H10a1.6 1.6 0 0 0 1-1.5V4a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V10a1.6 1.6 0 0 0 1.5 1H20a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"
-                stroke="currentColor"
-                stroke-width="1.4"
-              />
-            </svg>
-            Administrar productos
-          </a>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-02.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Optimización Energética</h3>
+            </div>
+            <p>
+              Proponemos sistemas que reducen el consumo energético sin
+              comprometer el confort térmico.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-03.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Normativas y Estándares</h3>
+            </div>
+            <p>
+              Asesoramos según normativas ASHRAE, SMACNA y códigos locales de
+              construcción.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-04.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Análisis<br />Costo-Beneficio</h3>
+            </div>
+            <p>
+              Comparamos alternativas para que tome la mejor decisión de
+              inversión en climatización.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-05.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Estudios de Factibilidad</h3>
+            </div>
+            <p>
+              Realizamos estudios técnicos y económicos antes de iniciar
+              cualquier proyecto.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-06.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Soporte<br />Continuo</h3>
+            </div>
+            <p>
+              Acompañamiento técnico durante todo el ciclo de vida de su sistema
+              HVAC.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= GRILLA DE PRODUCTOS ================= -->
-    <section class="catalog-grid-section">
+    <!-- ================= DETALLE DEL SERVICIO ================= -->
+    <section class="service-detail-section">
+      <div class="service-detail-bg"></div>
+      <div class="mx-auto max-w-container service-detail-grid">
+        <div class="service-detail-title reveal">
+          <h2>Detalle del<br /><span>Servicio</span></h2>
+          <div class="service-detail-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="service-detail-card reveal">
+          <ul>
+            <li>
+              Visita técnica al sitio para evaluación de condiciones actuales.
+            </li>
+            <li>Cálculo de carga térmica según metodología ASHRAE.</li>
+            <li>
+              Selección de equipos Carrier con especificaciones técnicas
+              detalladas.
+            </li>
+            <li>Diseño de ductería y distribución de aire acondicionado.</li>
+            <li>Elaboración de planos y diagramas de instalación.</li>
+            <li>Presupuesto detallado con opciones de equipos y accesorios.</li>
+            <li>Cronograma de ejecución del proyecto.</li>
+            <li>
+              Recomendaciones de mantenimiento preventivo post-instalación.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="service-cta-section">
       <div class="mx-auto max-w-container px-6">
-        <div class="product-grid" id="productGrid">
-          <!-- Las fichas de producto se generan por JavaScript a partir de
-               PRODUCTS (ver js/productos-grid.js y js/products-data.js),
-               que a su vez lee/guarda en localStorage para que los cambios
-               hechos desde admin-productos.html se reflejen aquí. -->
+        <div class="service-cta reveal">
+          <h2>¿Interesado en este <strong>servicio</strong>?</h2>
+          <p>Contáctenos para una asesoría personalizada y sin compromiso.</p>
+          <div class="service-cta-actions">
+            <a href="../cotizaciones.html" class="btn btn-secondary"
+              >Solicitar Cotización
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12h14M13 6l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                /></svg
+            ></a>
+            <a href="../index.html#contacto" class="btn btn-outline-dark"
+              >Contactar</a
+            >
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= FOOTER ================= -->
     <footer id="contacto">
       <div class="mx-auto max-w-container px-6">
         <div class="footer-grid">
           <div>
-            <a href="index.html#inicio" class="logo" style="margin-bottom: 16px">
+            <a
+              href="index.html#inicio"
+              class="logo"
+              style="margin-bottom: 16px"
+            >
               <img
                 src="img/logo-footer.webp"
                 alt="Logo Uniclima"
@@ -242,7 +373,11 @@
             <h4>Enlaces Rápidos</h4>
             <ul>
               <li><a href="productos.html">Catálogos</a></li>
-              <li><a href="atencion-al-cliente/calculadora-btu.html">Calculadora BTU</a></li>
+              <li>
+                <a href="atencion-al-cliente/calculadora-btu.html"
+                  >Calculadora BTU</a
+                >
+              </li>
               <li><a href="cotizaciones.html">Solicitar Cotización</a></li>
               <li><a href="index.html#servicios">Servicios</a></li>
             </ul>
@@ -394,7 +529,5 @@
     </footer>
 
     <script src="js/main.js" defer></script>
-    <script src="js/products-data.js"></script>
-    <script src="js/productos-grid.js" defer></script>
   </body>
 </html>

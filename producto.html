@@ -19,11 +19,8 @@
         }
       })();
     </script>
-    <title>Catálogo de Productos — Grupo Uniclima</title>
-    <meta
-      name="description"
-      content="Explore el catálogo completo de equipos HVAC de Grupo Uniclima: chillers, compresores, línea CIAC, VRF, válvulas de control y más."
-    />
+    <title>Producto — Grupo Uniclima</title>
+    <meta name="description" content="Ficha de producto — Grupo Uniclima." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -146,82 +143,91 @@
       </div>
     </header>
 
-    <!-- ================= CATÁLOGO HERO ================= -->
-    <section class="catalog-hero">
+    <!-- ================= FICHA DE PRODUCTO ================= -->
+    <section class="product-detail-section">
       <div class="mx-auto max-w-container px-6">
-        <h1 class="font-galano">Catálogo de Productos</h1>
-        <p
-          class="font-poppins font-semibold tracking-[0.18em] uppercase"
-        >
-          Explore nuestra línea completa de equipos HVAC
-        </p>
-      </div>
-    </section>
-
-    <!-- ================= CATÁLOGO TOOLBAR ================= -->
-    <section class="catalog-toolbar">
-      <div class="mx-auto max-w-container px-6">
-        <div class="catalog-toolbar-row">
-          <label class="search-box">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle
-                cx="11"
-                cy="11"
-                r="7"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <path
-                d="m20 20-3.2-3.2"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
-            <input
-              type="search"
-              id="productSearch"
-              placeholder="Buscar producto..."
+        <a href="productos.html" class="product-detail-back">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M19 12H5M11 18l-6-6 6-6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             />
-          </label>
-          <div class="filter-pills" id="filterPills">
-            <!-- Las píldoras (con sus submenús de subcategorías) se generan
-                 por JavaScript desde UniclimaProducts.CATEGORY_LABELS y
-                 .SUBCATEGORIES (ver js/products-data.js y
-                 js/productos-grid.js), para no duplicar esa lista aquí. -->
-          </div>
-          <a href="admin-productos.html" class="btn-admin">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+          </svg>
+          Volver al catálogo
+        </a>
+
+        <!-- Se muestra si el producto no existe (id inválido, o el
+             catálogo aún no se cargó en este navegador). -->
+        <div class="product-not-found" id="productNotFound" hidden>
+          <h1>Producto no encontrado</h1>
+          <p>
+            El producto que buscas no existe o el enlace ya no es válido.
+          </p>
+          <a href="productos.html" class="btn btn-primary"
+            >Ver todo el catálogo</a
+          >
+        </div>
+
+        <!-- Contenido real: lo llena js/producto-detail.js -->
+        <div class="product-detail" id="productDetail" hidden>
+          <div class="product-detail-media">
+            <img
+              id="pdImage"
+              src=""
+              alt=""
+              hidden
+            />
+            <svg
+              id="pdPlaceholder"
+              viewBox="0 0 100 100"
+              class="product-placeholder"
+              hidden
+            >
+              <rect
+                x="18"
+                y="26"
+                width="64"
+                height="52"
+                rx="4"
+                fill="none"
                 stroke="currentColor"
-                stroke-width="1.6"
+                stroke-width="2.5"
               />
               <path
-                d="M19.4 13.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V19a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H10a1.6 1.6 0 0 0 1-1.5V4a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V10a1.6 1.6 0 0 0 1.5 1H20a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"
+                d="M18 42h64M34 26v52M66 26v52"
                 stroke="currentColor"
-                stroke-width="1.4"
+                stroke-width="2"
               />
             </svg>
-            Administrar productos
-          </a>
+          </div>
+          <div class="product-detail-info">
+            <div class="product-detail-tags">
+              <span class="product-tag" id="pdCategory"></span>
+              <span class="product-tag product-tag-sub-standalone" id="pdSubcategory" hidden></span>
+            </div>
+            <h1 id="pdName"></h1>
+            <p class="product-detail-specs" id="pdSpecs"></p>
+            <div class="product-detail-actions">
+              <a href="cotizaciones.html" class="btn btn-primary" id="pdQuoteBtn"
+                >Solicitar cotización</a
+              >
+              <a
+                href="https://wa.me/584140260505"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-outline-dark"
+                id="pdWhatsappBtn"
+                >Consultar por WhatsApp</a
+              >
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= GRILLA DE PRODUCTOS ================= -->
-    <section class="catalog-grid-section">
-      <div class="mx-auto max-w-container px-6">
-        <div class="product-grid" id="productGrid">
-          <!-- Las fichas de producto se generan por JavaScript a partir de
-               PRODUCTS (ver js/productos-grid.js y js/products-data.js),
-               que a su vez lee/guarda en localStorage para que los cambios
-               hechos desde admin-productos.html se reflejen aquí. -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= FOOTER ================= -->
     <footer id="contacto">
       <div class="mx-auto max-w-container px-6">
         <div class="footer-grid">
@@ -395,6 +401,6 @@
 
     <script src="js/main.js" defer></script>
     <script src="js/products-data.js"></script>
-    <script src="js/productos-grid.js" defer></script>
+    <script src="js/producto-detail.js" defer></script>
   </body>
 </html>

@@ -19,10 +19,10 @@
         }
       })();
     </script>
-    <title>Catálogo de Productos — Grupo Uniclima</title>
+    <title>Calculadora de BTU — Grupo Uniclima</title>
     <meta
       name="description"
-      content="Explore el catálogo completo de equipos HVAC de Grupo Uniclima: chillers, compresores, línea CIAC, VRF, válvulas de control y más."
+      content="Calcule la capacidad de aire acondicionado (BTU) que necesita su espacio según sus dimensiones, ocupación y equipos electrónicos."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -54,7 +54,7 @@
           </a>
           <ul class="nav-links" id="navLinks">
             <li><a href="index.html#inicio">Inicio</a></li>
-            <li><a href="productos.html" class="active">Productos</a></li>
+            <li><a href="productos.html">Productos</a></li>
             <li><a href="proyectos.html">Proyectos</a></li>
             <li class="has-dropdown">
               <a href="index.html#servicios">Servicios</a>
@@ -73,14 +73,14 @@
                 </svg>
               </button>
               <div class="dropdown">
-                <a href="servicios/asesoria-tecnica.html">Asesoría Técnica</a>
-                <a href="servicios/instalacion.html">Instalación</a>
-                <a href="servicios/mantenimiento.html">Mantenimiento</a>
-                <a href="servicios/repuestos.html">Repuestos</a>
+                <a href="asesoria-tecnica.html">Asesoría Técnica</a>
+                <a href="instalacion.html">Instalación</a>
+                <a href="mantenimiento.html">Mantenimiento</a>
+                <a href="repuestos.html">Repuestos</a>
               </div>
             </li>
-            <li class="has-dropdown">
-              <a href="atencion-al-cliente/calculadora-btu.html"
+            <li class="has-dropdown active-parent">
+              <a href="calculadora-btu.html" class="active"
                 >Atención al Cliente</a
               >
               <button
@@ -98,18 +98,16 @@
                 </svg>
               </button>
               <div class="dropdown">
-                <a href="atencion-al-cliente/calculadora-btu.html"
+                <a href="calculadora-btu.html" class="active"
                   >Calculadora BTU</a
                 >
-                <a href="atencion-al-cliente/guia-practica.html"
-                  >Guía Práctica</a
-                >
-                <a href="atencion-al-cliente/garantia.html">Garantía</a>
+                <a href="guia-practica.html">Guía Práctica</a>
+                <a href="garantia.html">Garantía</a>
               </div>
             </li>
-            <li><a href="cursos.html">Academia</a></li>
-            <li><a href="cotizaciones.html">Cotización</a></li>
-            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="../cursos.html">Academia</a></li>
+            <li><a href="../cotizaciones.html">Cotización</a></li>
+            <li><a href="../index.html#contacto">Contacto</a></li>
           </ul>
           <button
             class="theme-toggle"
@@ -146,87 +144,228 @@
       </div>
     </header>
 
-    <!-- ================= CATÁLOGO HERO ================= -->
-    <section class="catalog-hero">
-      <div class="mx-auto max-w-container px-6">
-        <h1 class="font-galano">Catálogo de Productos</h1>
-        <p
-          class="font-poppins font-semibold tracking-[0.18em] uppercase"
+    <!-- ================= MODAL: INSTRUCCIONES DE USO ================= -->
+    <div class="btu-modal-overlay" id="btuInstructionsOverlay" hidden>
+      <div
+        class="btu-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="btuModalTitle"
+      >
+        <button
+          type="button"
+          class="btu-modal-close"
+          id="btuInstructionsClose"
+          aria-label="Cerrar instrucciones"
         >
-          Explore nuestra línea completa de equipos HVAC
-        </p>
-      </div>
-    </section>
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M6 6l12 12M18 6 6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
 
-    <!-- ================= CATÁLOGO TOOLBAR ================= -->
-    <section class="catalog-toolbar">
-      <div class="mx-auto max-w-container px-6">
-        <div class="catalog-toolbar-row">
-          <label class="search-box">
+        <span
+          class="eyebrow font-poppins font-semibold text-[0.72rem] tracking-[0.22em] uppercase text-blue-300"
+          style="color: var(--blue-600)"
+          >Atención al cliente</span
+        >
+        <h2 id="btuModalTitle">
+          ¿Cómo calcular la capacidad de aire acondicionado que necesita?
+        </h2>
+        <p>
+          Antes de elegir e invertir en un equipo de aire acondicionado,
+          conviene tener claros algunos datos básicos del espacio que se quiere
+          climatizar, para que el resultado sea realmente confortable. Con la
+          calculadora puede obtener una estimación de la potencia de
+          refrigeración recomendada para su espacio, expresada en BTU (British
+          Thermal Unit), la unidad con la que se mide la capacidad de estos
+          equipos.
+        </p>
+        <p>
+          Tenga en cuenta que se trata de un cálculo aproximado, basado en
+          condiciones climáticas promedio de la región. Cada espacio tiene
+          particularidades propias (orientación, tipo de paredes, ventanas,
+          etc.) que también influyen en la elección final del equipo.
+        </p>
+
+        <div class="btu-steps">
+          <div class="btu-step">
+            <span class="btu-step-num">1</span>
+            <p>
+              Indique en metros el ancho, largo y alto del espacio que desea
+              climatizar.
+            </p>
+          </div>
+          <div class="btu-step">
+            <span class="btu-step-num">2</span>
+            <p>Indique el número máximo de personas que ocuparán el espacio.</p>
+          </div>
+          <div class="btu-step">
+            <span class="btu-step-num">3</span>
+            <p>
+              Indique cuántos equipos electrónicos que generen calor hay en el
+              área (computadoras, televisores, impresoras, entre otros).
+            </p>
+          </div>
+          <div class="btu-step">
+            <span class="btu-step-num">4</span>
+            <p>
+              Una vez que obtenga el resultado,
+              <a href="../cotizaciones.html">contáctenos</a> para que nuestro
+              equipo lo asesore en la selección final del equipo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CALCULADORA DE BTU ================= -->
+    <section class="btu-hero">
+      <div class="btu-hero-bg"></div>
+      <div class="mx-auto px-6 btu-hero-content">
+        <div class="btu-card reveal">
+          <button
+            type="button"
+            class="btu-instructions-btn"
+            id="btuInstructionsBtn"
+          >
             <svg viewBox="0 0 24 24" fill="none">
               <circle
-                cx="11"
-                cy="11"
-                r="7"
-                stroke="currentColor"
-                stroke-width="1.8"
-              />
-              <path
-                d="m20 20-3.2-3.2"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
-            <input
-              type="search"
-              id="productSearch"
-              placeholder="Buscar producto..."
-            />
-          </label>
-          <div class="filter-pills" id="filterPills">
-            <!-- Las píldoras (con sus submenús de subcategorías) se generan
-                 por JavaScript desde UniclimaProducts.CATEGORY_LABELS y
-                 .SUBCATEGORIES (ver js/products-data.js y
-                 js/productos-grid.js), para no duplicar esa lista aquí. -->
-          </div>
-          <a href="admin-productos.html" class="btn-admin">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+                cx="12"
+                cy="12"
+                r="9"
                 stroke="currentColor"
                 stroke-width="1.6"
               />
               <path
-                d="M19.4 13.5a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V19a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H10a1.6 1.6 0 0 0 1-1.5V4a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V10a1.6 1.6 0 0 0 1.5 1H20a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"
+                d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7"
                 stroke="currentColor"
-                stroke-width="1.4"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <circle cx="12" cy="17" r="0.9" fill="currentColor" />
+            </svg>
+            ¿Cómo usar esta calculadora?
+          </button>
+          <div class="btu-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect
+                x="4"
+                y="3"
+                width="16"
+                height="18"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.6"
+              />
+              <path
+                d="M7 7h10"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <path
+                d="M7.5 11.5h1M11.5 11.5h1M15.5 11.5h1M7.5 15.5h1M11.5 15.5h1M15.5 15.5h1M7.5 19h1M11.5 19h1M15.5 19h1"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
               />
             </svg>
-            Administrar productos
-          </a>
+          </div>
+          <h1>Calculadora de BTU</h1>
+          <p class="btu-subtitle">
+            Calcule la capacidad de aire acondicionado necesaria para su espacio
+          </p>
+
+          <form id="btuForm" class="btu-form">
+            <div class="btu-form-section">
+              <h2>Dimensiones del espacio</h2>
+              <div class="btu-grid-3">
+                <label>
+                  Ancho (m)
+                  <input
+                    type="number"
+                    id="btuAncho"
+                    min="0"
+                    step="0.1"
+                    placeholder="0.0"
+                    required
+                  />
+                </label>
+                <label>
+                  Largo (m)
+                  <input
+                    type="number"
+                    id="btuLargo"
+                    min="0"
+                    step="0.1"
+                    placeholder="0.0"
+                    required
+                  />
+                </label>
+                <label>
+                  Alto (m)
+                  <input
+                    type="number"
+                    id="btuAlto"
+                    min="0"
+                    step="0.1"
+                    placeholder="0.0"
+                    required
+                  />
+                </label>
+              </div>
+              <div class="btu-grid-2">
+                <label>
+                  Personas
+                  <input
+                    type="number"
+                    id="btuPersonas"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                  />
+                </label>
+                <label>
+                  Equipos electrónicos
+                  <input
+                    type="number"
+                    id="btuEquipos"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                  />
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btu-submit">
+              Calcular BTU
+            </button>
+          </form>
+
+          <div class="btu-result" id="btuResult" hidden>
+            <span class="btu-result-label">Capacidad recomendada</span>
+            <strong class="btu-result-value" id="btuResultValue">0 BTU</strong>
+            <span class="btu-result-hint" id="btuResultHint"></span>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ================= GRILLA DE PRODUCTOS ================= -->
-    <section class="catalog-grid-section">
-      <div class="mx-auto max-w-container px-6">
-        <div class="product-grid" id="productGrid">
-          <!-- Las fichas de producto se generan por JavaScript a partir de
-               PRODUCTS (ver js/productos-grid.js y js/products-data.js),
-               que a su vez lee/guarda en localStorage para que los cambios
-               hechos desde admin-productos.html se reflejen aquí. -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= FOOTER ================= -->
     <footer id="contacto">
       <div class="mx-auto max-w-container px-6">
         <div class="footer-grid">
           <div>
-            <a href="index.html#inicio" class="logo" style="margin-bottom: 16px">
+            <a
+              href="index.html#inicio"
+              class="logo"
+              style="margin-bottom: 16px"
+            >
               <img
                 src="img/logo-footer.webp"
                 alt="Logo Uniclima"
@@ -242,7 +381,11 @@
             <h4>Enlaces Rápidos</h4>
             <ul>
               <li><a href="productos.html">Catálogos</a></li>
-              <li><a href="atencion-al-cliente/calculadora-btu.html">Calculadora BTU</a></li>
+              <li>
+                <a href="atencion-al-cliente/calculadora-btu.html"
+                  >Calculadora BTU</a
+                >
+              </li>
               <li><a href="cotizaciones.html">Solicitar Cotización</a></li>
               <li><a href="index.html#servicios">Servicios</a></li>
             </ul>
@@ -394,7 +537,6 @@
     </footer>
 
     <script src="js/main.js" defer></script>
-    <script src="js/products-data.js"></script>
-    <script src="js/productos-grid.js" defer></script>
+    <script src="js/calculadora-btu.js" defer></script>
   </body>
 </html>
