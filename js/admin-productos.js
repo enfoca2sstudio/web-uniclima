@@ -2,22 +2,28 @@
  * admin-productos.js
  * -------------------
  * Lógica de la página admin-productos.html: pantalla de acceso, y el CRUD
- * (agregar / editar / eliminar / restaurar) del catálogo, que guarda en
- * localStorage a través de UniclimaProducts (ver products-data.js, que
- * debe cargarse antes que este archivo).
+ * (agregar / editar / eliminar / restaurar) del catálogo de productos y
+ * de cursos, que guarda en Firestore a través de UniclimaProducts /
+ * UniclimaCursos (ver products-data.js, cursos-data.js y
+ * firebase-init.js, que deben cargarse antes que este archivo). Los
+ * cambios quedan disponibles de inmediato para cualquier visitante del
+ * sitio, no solo en este navegador.
  *
  * OJO: la contraseña (ADMIN_PASSWORD) es solo para desalentar ediciones
  * accidentales, NO es seguridad real: el sitio es 100% estático y este
  * archivo es público, cualquiera puede leer la contraseña en el código
- * fuente y entrar directo a esta página. Si necesitas control de acceso
- * real, esta página debe vivir detrás de un login con backend (y no debe
- * enlazarse desde el menú público).
+ * fuente y entrar directo a esta página. Además, sin reglas de Firestore
+ * que exijan autenticación, alguien con conocimientos técnicos podría
+ * escribir en la base de datos sin pasar por esta contraseña (ver el
+ * aviso completo en js/firebase-init.js). Si necesitas control de acceso
+ * real, esta página debe vivir detrás de un login con Firebase
+ * Authentication (y no debe enlazarse desde el menú público).
  */
 (function () {
   "use strict";
 
   var data = window.UniclimaProducts;
-  var products = data.load();
+  var products = [];
 
   // Cambia esta contraseña por la que prefieras.
   var ADMIN_PASSWORD = "uniclima2026";
@@ -83,7 +89,19 @@
   function unlock() {
     gate.hidden = true;
     content.hidden = false;
-    renderAdminList();
+    adminList.innerHTML =
+      '<p class="data-loading">Cargando catálogo…</p>';
+    data
+      .load()
+      .then(function (loaded) {
+        products = loaded;
+        renderAdminList();
+      })
+      .catch(function (err) {
+        console.error("No se pudo cargar el catálogo:", err);
+        adminList.innerHTML =
+          '<p class="data-error">No se pudo cargar el catálogo. Verifica tu conexión y recarga la página.</p>';
+      });
   }
 
   try {
@@ -160,23 +178,35 @@
     if (!entry.name || !entry.specs) return;
 
     var wasEdit = !!id;
-    if (id) {
-      var idx = products.findIndex(function (p) {
-        return p.id === id;
+    if (wasEdit) entry.id = id;
+
+    submitBtn.disabled = true;
+    data
+      .addOrUpdate(entry)
+      .then(function (newId) {
+        if (wasEdit) {
+          var idx = products.findIndex(function (p) {
+            return p.id === id;
+          });
+          if (idx !== -1) products[idx] = Object.assign({ id: id }, entry);
+        } else {
+          products.push(Object.assign({ id: newId }, entry));
+        }
+        renderAdminList();
+        resetForm();
+        showToast(
+          wasEdit
+            ? "Producto actualizado correctamente"
+            : "Producto agregado correctamente"
+        );
+      })
+      .catch(function (err) {
+        console.error("No se pudo guardar el producto:", err);
+        showToast("No se pudo guardar. Verifica tu conexión e intenta de nuevo.");
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
       });
-      if (idx !== -1) products[idx] = Object.assign({ id: id }, entry);
-    } else {
-      entry.id = "p" + Date.now();
-      products.push(entry);
-    }
-    data.save(products);
-    renderAdminList();
-    resetForm();
-    showToast(
-      wasEdit
-        ? "Producto actualizado correctamente"
-        : "Producto agregado correctamente"
-    );
   });
 
   adminList.addEventListener("click", function (e) {
@@ -210,13 +240,20 @@
         )
       )
         return;
-      products = products.filter(function (p) {
-        return p.id !== delBtn.dataset.id;
-      });
-      data.save(products);
-      renderAdminList();
-      if (idField.value === delBtn.dataset.id) resetForm();
-      showToast('Producto "' + target.name + '" eliminado');
+      data
+        .remove(delBtn.dataset.id)
+        .then(function () {
+          products = products.filter(function (p) {
+            return p.id !== delBtn.dataset.id;
+          });
+          renderAdminList();
+          if (idField.value === delBtn.dataset.id) resetForm();
+          showToast('Producto "' + target.name + '" eliminado');
+        })
+        .catch(function (err) {
+          console.error("No se pudo eliminar el producto:", err);
+          showToast("No se pudo eliminar. Verifica tu conexión e intenta de nuevo.");
+        });
     }
   });
 
@@ -225,15 +262,26 @@
   resetBtn.addEventListener("click", function () {
     if (
       !confirm(
-        "¿Restaurar el catálogo original? Se perderán los productos agregados/editados en este navegador."
+        "¿Restaurar el catálogo original? Se perderán los productos agregados/editados."
       )
     )
       return;
-    products = data.DEFAULT_PRODUCTS.slice();
-    data.save(products);
-    renderAdminList();
-    resetForm();
-    showToast("Catálogo restaurado a los valores originales");
+    resetBtn.disabled = true;
+    data
+      .resetToDefaults()
+      .then(function (restored) {
+        products = restored;
+        renderAdminList();
+        resetForm();
+        showToast("Catálogo restaurado a los valores originales");
+      })
+      .catch(function (err) {
+        console.error("No se pudo restaurar el catálogo:", err);
+        showToast("No se pudo restaurar. Verifica tu conexión e intenta de nuevo.");
+      })
+      .finally(function () {
+        resetBtn.disabled = false;
+      });
   });
 
   /* ---------- Importar / exportar CSV ---------- */
@@ -648,11 +696,22 @@
 
   csvAppendBtn.addEventListener("click", function () {
     if (!pendingImport || !pendingImport.length) return;
-    products = products.concat(pendingImport);
-    data.save(products);
-    renderAdminList();
-    showToast(pendingImport.length + " producto(s) agregado(s) desde el CSV");
-    resetCsvUI();
+    csvAppendBtn.disabled = true;
+    data
+      .importBulk(pendingImport, "append")
+      .then(function (updated) {
+        products = updated;
+        renderAdminList();
+        showToast(pendingImport.length + " producto(s) agregado(s) desde el CSV");
+        resetCsvUI();
+      })
+      .catch(function (err) {
+        console.error("No se pudo importar el CSV:", err);
+        showToast("No se pudo importar. Verifica tu conexión e intenta de nuevo.");
+      })
+      .finally(function () {
+        csvAppendBtn.disabled = false;
+      });
   });
 
   csvReplaceBtn.addEventListener("click", function () {
@@ -667,11 +726,24 @@
       )
     )
       return;
-    products = pendingImport;
-    data.save(products);
-    renderAdminList();
-    showToast("Catálogo reemplazado con " + pendingImport.length + " producto(s) del CSV");
-    resetCsvUI();
+    csvReplaceBtn.disabled = true;
+    data
+      .importBulk(pendingImport, "replace")
+      .then(function (updated) {
+        products = updated;
+        renderAdminList();
+        showToast(
+          "Catálogo reemplazado con " + pendingImport.length + " producto(s) del CSV"
+        );
+        resetCsvUI();
+      })
+      .catch(function (err) {
+        console.error("No se pudo reemplazar el catálogo:", err);
+        showToast("No se pudo reemplazar. Verifica tu conexión e intenta de nuevo.");
+      })
+      .finally(function () {
+        csvReplaceBtn.disabled = false;
+      });
   });
 
   csvCancelBtn.addEventListener("click", resetCsvUI);
@@ -730,7 +802,7 @@
      CURSOS (agregar / editar / eliminar / restaurar)
      ================================================================== */
   var cursosData = window.UniclimaCursos;
-  var cursos = cursosData.load();
+  var cursos = [];
 
   var cursoForm = document.getElementById("cursoForm");
   var cursoIdField = document.getElementById("cursoId");
@@ -827,7 +899,18 @@
   }
 
   populateKeywordCheckboxes([]);
-  renderCursoList();
+  cursoList.innerHTML = '<p class="data-loading">Cargando cursos…</p>';
+  cursosData
+    .load()
+    .then(function (loaded) {
+      cursos = loaded;
+      renderCursoList();
+    })
+    .catch(function (err) {
+      console.error("No se pudo cargar el catálogo de cursos:", err);
+      cursoList.innerHTML =
+        '<p class="data-error">No se pudo cargar el catálogo de cursos. Verifica tu conexión y recarga la página.</p>';
+    });
 
   cursoForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -844,23 +927,35 @@
     if (!entry.title || !entry.description || !entry.hours) return;
 
     var wasEdit = !!id;
-    if (id) {
-      var idx = cursos.findIndex(function (c) {
-        return c.id === id;
+    if (wasEdit) entry.id = id;
+
+    cursoSubmitBtn.disabled = true;
+    cursosData
+      .addOrUpdate(entry)
+      .then(function (newId) {
+        if (wasEdit) {
+          var idx = cursos.findIndex(function (c) {
+            return c.id === id;
+          });
+          if (idx !== -1) cursos[idx] = Object.assign({ id: id }, entry);
+        } else {
+          cursos.push(Object.assign({ id: newId }, entry));
+        }
+        renderCursoList();
+        resetCursoForm();
+        showToast(
+          wasEdit
+            ? "Curso actualizado correctamente"
+            : "Curso agregado correctamente"
+        );
+      })
+      .catch(function (err) {
+        console.error("No se pudo guardar el curso:", err);
+        showToast("No se pudo guardar. Verifica tu conexión e intenta de nuevo.");
+      })
+      .finally(function () {
+        cursoSubmitBtn.disabled = false;
       });
-      if (idx !== -1) cursos[idx] = Object.assign({ id: id }, entry);
-    } else {
-      entry.id = "c" + Date.now();
-      cursos.push(entry);
-    }
-    cursosData.save(cursos);
-    renderCursoList();
-    resetCursoForm();
-    showToast(
-      wasEdit
-        ? "Curso actualizado correctamente"
-        : "Curso agregado correctamente"
-    );
   });
 
   cursoList.addEventListener("click", function (e) {
@@ -899,13 +994,20 @@
         )
       )
         return;
-      cursos = cursos.filter(function (c) {
-        return c.id !== delBtn.dataset.id;
-      });
-      cursosData.save(cursos);
-      renderCursoList();
-      if (cursoIdField.value === delBtn.dataset.id) resetCursoForm();
-      showToast('Curso "' + target.title + '" eliminado');
+      cursosData
+        .remove(delBtn.dataset.id)
+        .then(function () {
+          cursos = cursos.filter(function (c) {
+            return c.id !== delBtn.dataset.id;
+          });
+          renderCursoList();
+          if (cursoIdField.value === delBtn.dataset.id) resetCursoForm();
+          showToast('Curso "' + target.title + '" eliminado');
+        })
+        .catch(function (err) {
+          console.error("No se pudo eliminar el curso:", err);
+          showToast("No se pudo eliminar. Verifica tu conexión e intenta de nuevo.");
+        });
     }
   });
 
@@ -914,14 +1016,25 @@
   resetCursosBtn.addEventListener("click", function () {
     if (
       !confirm(
-        "¿Restaurar los cursos originales? Se perderán los cursos agregados/editados en este navegador."
+        "¿Restaurar los cursos originales? Se perderán los cursos agregados/editados."
       )
     )
       return;
-    cursos = cursosData.DEFAULT_CURSOS.slice();
-    cursosData.save(cursos);
-    renderCursoList();
-    resetCursoForm();
-    showToast("Cursos restaurados a los valores originales");
+    resetCursosBtn.disabled = true;
+    cursosData
+      .resetToDefaults()
+      .then(function (restored) {
+        cursos = restored;
+        renderCursoList();
+        resetCursoForm();
+        showToast("Cursos restaurados a los valores originales");
+      })
+      .catch(function (err) {
+        console.error("No se pudo restaurar los cursos:", err);
+        showToast("No se pudo restaurar. Verifica tu conexión e intenta de nuevo.");
+      })
+      .finally(function () {
+        resetCursosBtn.disabled = false;
+      });
   });
 })();

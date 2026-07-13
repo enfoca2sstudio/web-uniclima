@@ -251,25 +251,53 @@
 
   var DEFAULT_CURSOS = CURSOS;
 
-  var STORAGE_KEY = "uniclima-cursos";
+  var COLLECTION = "cursos";
 
-  function load() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch (err) {
-      /* localStorage no disponible o dato corrupto: usar catálogo original */
-    }
-    return DEFAULT_CURSOS.slice();
+  /** Espera a que js/firebase-init.js (un módulo, carga aparte) esté listo. */
+  function waitForFirebase() {
+    return new Promise(function (resolve) {
+      if (global.UniclimaFirebase) {
+        resolve(global.UniclimaFirebase);
+        return;
+      }
+      global.addEventListener("uniclima-firebase-ready", function handler() {
+        global.removeEventListener("uniclima-firebase-ready", handler);
+        resolve(global.UniclimaFirebase);
+      });
+    });
   }
 
-  function save(cursos) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(cursos));
-      return true;
-    } catch (err) {
-      return false;
-    }
+  /**
+   * Trae el catálogo de cursos desde Firestore. La PRIMERA vez que corre
+   * el sitio contra un proyecto de Firebase nuevo (colección vacía), la
+   * llena automáticamente con DEFAULT_CURSOS.
+   */
+  async function load() {
+    var fb = await waitForFirebase();
+    await fb.seedIfEmpty(COLLECTION, DEFAULT_CURSOS);
+    return fb.getAll(COLLECTION);
+  }
+
+  /** Agrega un curso nuevo (sin id) o actualiza uno existente (con id). */
+  async function addOrUpdate(curso) {
+    var fb = await waitForFirebase();
+    var id = curso.id || "c" + Date.now();
+    await fb.setItem(COLLECTION, id, curso);
+    return id;
+  }
+
+  /** Elimina un curso por id. */
+  async function remove(id) {
+    var fb = await waitForFirebase();
+    await fb.deleteItem(COLLECTION, id);
+  }
+
+  /** Borra todo y vuelve a sembrar con los cursos originales. */
+  async function resetToDefaults() {
+    var fb = await waitForFirebase();
+    await fb.clearCollection(COLLECTION);
+    await fb.seedIfEmpty(COLLECTION, DEFAULT_CURSOS);
+    return fb.getAll(COLLECTION);
   }
 
   function escapeHtml(str) {
@@ -279,7 +307,6 @@
   }
 
   global.UniclimaCursos = {
-    STORAGE_KEY: STORAGE_KEY,
     DEFAULT_CURSOS: DEFAULT_CURSOS,
     KEYWORDS: KEYWORDS,
     LEVEL_LABELS: LEVEL_LABELS,
@@ -287,7 +314,9 @@
     ICONS: ICONS,
     LEVEL_ICON_CLASS: LEVEL_ICON_CLASS,
     load: load,
-    save: save,
+    addOrUpdate: addOrUpdate,
+    remove: remove,
+    resetToDefaults: resetToDefaults,
     escapeHtml: escapeHtml,
   };
 })(window);

@@ -15,7 +15,6 @@
 (function (global) {
   "use strict";
 
-  var STORAGE_KEY = "uniclima-products";
 
   var DEFAULT_PRODUCTS = [
     {
@@ -130,23 +129,74 @@
     vrf: ["CARRIER", "MDV"],
   };
 
-  function load() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch (err) {
-      /* localStorage no disponible o dato corrupto: usar catálogo original */
-    }
-    return DEFAULT_PRODUCTS.slice();
+  var COLLECTION = "products";
+
+  /** Espera a que js/firebase-init.js (un módulo, carga aparte) esté listo. */
+  function waitForFirebase() {
+    return new Promise(function (resolve) {
+      if (global.UniclimaFirebase) {
+        resolve(global.UniclimaFirebase);
+        return;
+      }
+      global.addEventListener("uniclima-firebase-ready", function handler() {
+        global.removeEventListener("uniclima-firebase-ready", handler);
+        resolve(global.UniclimaFirebase);
+      });
+    });
   }
 
-  function save(products) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-      return true;
-    } catch (err) {
-      return false;
+  /**
+   * Trae el catálogo completo desde Firestore. La PRIMERA vez que corre
+   * el sitio contra un proyecto de Firebase nuevo (colección vacía), la
+   * llena automáticamente con DEFAULT_PRODUCTS — así no hay que migrar
+   * nada a mano.
+   */
+  async function load() {
+    var fb = await waitForFirebase();
+    await fb.seedIfEmpty(COLLECTION, DEFAULT_PRODUCTS);
+    return fb.getAll(COLLECTION);
+  }
+
+  /** Agrega un producto nuevo (sin id) o actualiza uno existente (con id). */
+  async function addOrUpdate(product) {
+    var fb = await waitForFirebase();
+    var id = product.id || "p" + Date.now();
+    await fb.setItem(COLLECTION, id, product);
+    return id;
+  }
+
+  /** Elimina un producto por id. */
+  async function remove(id) {
+    var fb = await waitForFirebase();
+    await fb.deleteItem(COLLECTION, id);
+  }
+
+  /** Borra todo y vuelve a sembrar con el catálogo original. */
+  async function resetToDefaults() {
+    var fb = await waitForFirebase();
+    await fb.clearCollection(COLLECTION);
+    await fb.seedIfEmpty(COLLECTION, DEFAULT_PRODUCTS);
+    return fb.getAll(COLLECTION);
+  }
+
+  /**
+   * Importación masiva desde CSV. mode="append" agrega los items al
+   * catálogo actual (les asigna id si no traen); mode="replace" borra
+   * todo el catálogo actual primero. Devuelve el catálogo completo ya
+   * actualizado.
+   */
+  async function importBulk(items, mode) {
+    var fb = await waitForFirebase();
+    var withIds = items.map(function (item, i) {
+      var copy = Object.assign({}, item);
+      if (!copy.id) copy.id = "p" + Date.now() + "_" + i;
+      return copy;
+    });
+    if (mode === "replace") {
+      await fb.clearCollection(COLLECTION);
     }
+    await fb.bulkSet(COLLECTION, withIds);
+    return fb.getAll(COLLECTION);
   }
 
   function escapeHtml(str) {
@@ -156,12 +206,14 @@
   }
 
   global.UniclimaProducts = {
-    STORAGE_KEY: STORAGE_KEY,
     DEFAULT_PRODUCTS: DEFAULT_PRODUCTS,
     CATEGORY_LABELS: CATEGORY_LABELS,
     SUBCATEGORIES: SUBCATEGORIES,
     load: load,
-    save: save,
+    addOrUpdate: addOrUpdate,
+    remove: remove,
+    resetToDefaults: resetToDefaults,
+    importBulk: importBulk,
     escapeHtml: escapeHtml,
   };
 })(window);

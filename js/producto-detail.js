@@ -11,65 +11,74 @@
   "use strict";
 
   var data = window.UniclimaProducts;
-  var products = data.load();
-
-  var params = new URLSearchParams(window.location.search);
-  var id = params.get("id");
-  var product = id
-    ? products.find(function (p) {
-        return p.id === id;
-      })
-    : null;
-
   var notFoundEl = document.getElementById("productNotFound");
   var detailEl = document.getElementById("productDetail");
 
-  if (!product) {
-    notFoundEl.hidden = false;
-    detailEl.hidden = true;
-    return;
-  }
+  data
+    .load()
+    .then(function (products) {
+      var params = new URLSearchParams(window.location.search);
+      var id = params.get("id");
+      var product = id
+        ? products.find(function (p) {
+            return p.id === id;
+          })
+        : null;
 
-  document.title = product.name + " — Grupo Uniclima";
+      if (!product) {
+        notFoundEl.hidden = false;
+        detailEl.hidden = true;
+        return;
+      }
 
-  var img = document.getElementById("pdImage");
-  var placeholder = document.getElementById("pdPlaceholder");
-  if (product.image) {
-    img.src = product.image;
-    img.alt = product.name;
-    img.hidden = false;
-    img.onerror = function () {
-      img.hidden = true;
-      placeholder.hidden = false;
-    };
-  } else {
-    placeholder.hidden = false;
-  }
+      document.title = product.name + " — Grupo Uniclima";
 
-  document.getElementById("pdCategory").textContent =
-    data.CATEGORY_LABELS[product.category] || product.category;
+      var img = document.getElementById("pdImage");
+      var placeholder = document.getElementById("pdPlaceholder");
+      if (product.image) {
+        img.src = product.image;
+        img.alt = product.name;
+        img.hidden = false;
+        img.onerror = function () {
+          img.hidden = true;
+          placeholder.hidden = false;
+        };
+      } else {
+        placeholder.hidden = false;
+      }
 
-  var subEl = document.getElementById("pdSubcategory");
-  if (product.subcategory) {
-    subEl.textContent = product.subcategory;
-    subEl.hidden = false;
-  }
+      document.getElementById("pdCategory").textContent =
+        data.CATEGORY_LABELS[product.category] || product.category;
 
-  document.getElementById("pdName").textContent = product.name;
-  document.getElementById("pdSpecs").textContent = product.specs;
+      var subEl = document.getElementById("pdSubcategory");
+      if (product.subcategory) {
+        subEl.textContent = product.subcategory;
+        subEl.hidden = false;
+      }
 
-  // Precompleta el mensaje de WhatsApp con el nombre del producto.
-  var waBtn = document.getElementById("pdWhatsappBtn");
-  var waMessage = "Hola, quisiera más información sobre: " + product.name;
-  waBtn.href =
-    waBtn.href.split("?")[0] + "?text=" + encodeURIComponent(waMessage);
+      document.getElementById("pdName").textContent = product.name;
+      document.getElementById("pdSpecs").textContent = product.specs;
 
-  // Deja el nombre del producto disponible como parámetro por si
-  // cotizaciones.html quiere leerlo y precompletar el formulario.
-  var quoteBtn = document.getElementById("pdQuoteBtn");
-  quoteBtn.href =
-    quoteBtn.href.split("?")[0] + "?producto=" + encodeURIComponent(product.name);
+      // Precompleta el mensaje de WhatsApp con el nombre del producto.
+      var waBtn = document.getElementById("pdWhatsappBtn");
+      var waMessage = "Hola, quisiera más información sobre: " + product.name;
+      waBtn.href =
+        waBtn.href.split("?")[0] + "?text=" + encodeURIComponent(waMessage);
 
-  notFoundEl.hidden = true;
-  detailEl.hidden = false;
+      // Deja el nombre del producto disponible como parámetro por si
+      // cotizaciones.html quiere leerlo y precompletar el formulario.
+      var quoteBtn = document.getElementById("pdQuoteBtn");
+      quoteBtn.href =
+        quoteBtn.href.split("?")[0] +
+        "?producto=" +
+        encodeURIComponent(product.name);
+
+      notFoundEl.hidden = true;
+      detailEl.hidden = false;
+    })
+    .catch(function (err) {
+      console.error("No se pudo cargar el producto:", err);
+      notFoundEl.hidden = false;
+      detailEl.hidden = true;
+    });
 })();

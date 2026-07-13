@@ -11,7 +11,7 @@
   "use strict";
 
   var data = window.UniclimaProducts;
-  var products = data.load();
+  var products = [];
 
   var grid = document.getElementById("productGrid");
   var pillsWrap = document.getElementById("filterPills");
@@ -188,15 +188,23 @@
 
   if (search) search.addEventListener("input", applyFilters);
 
-  // Si el catálogo cambió en otra pestaña (ej. el panel de admin abierto
-  // en otra pestaña), refresca la grilla al volver a esta pestaña.
-  window.addEventListener("storage", function (e) {
-    if (e.key === data.STORAGE_KEY) {
-      products = data.load();
-      renderGrid();
-    }
-  });
-
+  /* ---------- Carga inicial desde Firestore ---------- */
   buildPills();
-  renderGrid();
+  if (grid) {
+    grid.innerHTML =
+      '<p class="data-loading">Cargando catálogo…</p>';
+  }
+  data
+    .load()
+    .then(function (loaded) {
+      products = loaded;
+      renderGrid();
+    })
+    .catch(function (err) {
+      console.error("No se pudo cargar el catálogo de productos:", err);
+      if (grid) {
+        grid.innerHTML =
+          '<p class="data-error">No se pudo cargar el catálogo. Por favor, recarga la página.</p>';
+      }
+    });
 })();

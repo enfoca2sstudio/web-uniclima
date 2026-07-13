@@ -30,7 +30,6 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="shortcut icon" href="img/fav-icon.png" type="image/x-icon" />
     <!-- Tailwind CSS via Play CDN (no build step needed for this static site) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="js/tailwind-config.js"></script>
@@ -74,11 +73,12 @@
                 </svg>
               </button>
               <div class="dropdown">
-                <a href="asesoria-tecnica.html">Asesoría Técnica</a>
-                <a href="ventas-instalacion.html">Ventas e Instalación</a>
+                <a href="asesoria-tecnica.html" class="active"
+                  >Asesoría Técnica</a
+                >
+                <a href="instalacion.html">Instalación</a>
                 <a href="mantenimiento.html">Mantenimiento</a>
-                <a href="limpieza-ductos.html">Limpieza de Ductos</a>
-                <a href="capacitacion-tecnica.html">Capacitación Técnica</a>
+                <a href="repuestos.html">Repuestos</a>
               </div>
             </li>
             <li class="has-dropdown">
@@ -105,7 +105,7 @@
             </li>
             <li><a href="cursos.html">Academia</a></li>
             <li><a href="cotizaciones.html" class="active">Cotización</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
+            <li><a href="index.html#contacto">Contacto</a></li>
           </ul>
           <button
             class="theme-toggle"
@@ -286,7 +286,11 @@
       <div class="mx-auto max-w-container px-6">
         <div class="footer-grid">
           <div>
-            <a href="index.html" class="logo" style="margin-bottom: 16px">
+            <a
+              href="index.html#inicio"
+              class="logo"
+              style="margin-bottom: 16px"
+            >
               <img
                 src="img/logo-footer.webp"
                 alt="Logo Uniclima"
@@ -301,44 +305,61 @@
           <div>
             <h4>Enlaces Rápidos</h4>
             <ul>
-              <li><a href="productos.html">Productos</a></li>
-              <li><a href="calculadora-btu.html">Calculadora BTU</a></li>
+              <li><a href="productos.html">Catálogos</a></li>
+              <li>
+                <a href="atencion-al-cliente/calculadora-btu.html"
+                  >Calculadora BTU</a
+                >
+              </li>
               <li><a href="cotizaciones.html">Solicitar Cotización</a></li>
-              <li><a href="asesoria-tecnica.html">Servicios</a></li>
+              <li><a href="index.html#servicios">Servicios</a></li>
             </ul>
           </div>
           <div>
             <h4>Contacto</h4>
             <ul class="footer-contact">
-              <a href="https://wa.me/584140260505">
-                <li>
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.9.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z"
-                      stroke="currentColor"
-                      stroke-width="1.4"
-                    />
-                  </svg>
-                  +58 414-0260505
-                </li>
-              </a>
-              <a href="mailto:uniclima@uniclima.net">
-                <li>
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M3 6h18v12H3V6Z"
-                      stroke="currentColor"
-                      stroke-width="1.4"
-                    />
-                    <path
-                      d="m3 7 9 6 9-6"
-                      stroke="currentColor"
-                      stroke-width="1.4"
-                    />
-                  </svg>
-                  info@grupouniclima.com
-                </li>
-              </a>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.9.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                  />
+                </svg>
+                +58 300-0000
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M3 6h18v12H3V6Z"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                  />
+                  <path
+                    d="m3 7 9 6 9-6"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                  />
+                </svg>
+                info@grupouniclima.com
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 21c4-3 7-6.5 7-11a7 7 0 1 0-14 0c0 4.5 3 8 7 11Z"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                  />
+                  <circle
+                    cx="12"
+                    cy="10"
+                    r="2.4"
+                    stroke="currentColor"
+                    stroke-width="1.4"
+                  />
+                </svg>
+                Caracas, Venezuela
+              </li>
             </ul>
           </div>
           <div>
@@ -440,6 +461,7 @@
       </div>
     </footer>
 
+    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/cursos-data.js"></script>
     <script src="js/main.js" defer></script>
     <script>
@@ -476,55 +498,65 @@
         /* ---------- Llenar el selector de cursos (solo activos) ---------- */
         if (window.UniclimaCursos && cursoSelect) {
           var cursosData = window.UniclimaCursos;
-          var cursos = cursosData.load();
-          var order = ["basico", "intermedio", "avanzado"];
-
           cursoSelect.innerHTML =
-            '<option value="">Selecciona un curso…</option>' +
-            order
-              .map(function (level) {
-                var opts = cursos
-                  .filter(function (c) {
-                    return c.level === level && c.activo !== false;
-                  })
-                  .map(function (c) {
-                    return (
-                      '<option value="' +
-                      cursosData.escapeHtml(c.title) +
-                      '">' +
-                      cursosData.escapeHtml(c.title) +
-                      "</option>"
-                    );
+            '<option value="">Cargando cursos…</option>';
+          cursosData
+            .load()
+            .then(function (cursos) {
+              var order = ["basico", "intermedio", "avanzado"];
+
+              cursoSelect.innerHTML =
+                '<option value="">Selecciona un curso…</option>' +
+                order
+                  .map(function (level) {
+                    var opts = cursos
+                      .filter(function (c) {
+                        return c.level === level && c.activo !== false;
+                      })
+                      .map(function (c) {
+                        return (
+                          '<option value="' +
+                          cursosData.escapeHtml(c.title) +
+                          '">' +
+                          cursosData.escapeHtml(c.title) +
+                          "</option>"
+                        );
+                      })
+                      .join("");
+                    return opts
+                      ? '<optgroup label="' +
+                          cursosData.escapeHtml(
+                            cursosData.LEVEL_SECTION_TITLES[level],
+                          ) +
+                          '">' +
+                          opts +
+                          "</optgroup>"
+                      : "";
                   })
                   .join("");
-                return opts
-                  ? '<optgroup label="' +
-                      cursosData.escapeHtml(
-                        cursosData.LEVEL_SECTION_TITLES[level],
-                      ) +
-                      '">' +
-                      opts +
-                      "</optgroup>"
-                  : "";
-              })
-              .join("");
 
-          // Preselecciona el curso si se llegó desde una ficha (?id=) o un
-          // enlace antiguo (?curso=).
-          var params = new URLSearchParams(window.location.search);
-          var preId = params.get("id");
-          var preTitle = params.get("curso");
-          var pre = null;
-          if (preId) {
-            pre = cursos.find(function (c) {
-              return c.id === preId;
+              // Preselecciona el curso si se llegó desde una ficha (?id=)
+              // o un enlace antiguo (?curso=).
+              var params = new URLSearchParams(window.location.search);
+              var preId = params.get("id");
+              var preTitle = params.get("curso");
+              var pre = null;
+              if (preId) {
+                pre = cursos.find(function (c) {
+                  return c.id === preId;
+                });
+              } else if (preTitle) {
+                pre = cursos.find(function (c) {
+                  return c.title === preTitle;
+                });
+              }
+              if (pre && pre.activo !== false) cursoSelect.value = pre.title;
+            })
+            .catch(function (err) {
+              console.error("No se pudo cargar la lista de cursos:", err);
+              cursoSelect.innerHTML =
+                '<option value="">No se pudo cargar la lista de cursos</option>';
             });
-          } else if (preTitle) {
-            pre = cursos.find(function (c) {
-              return c.title === preTitle;
-            });
-          }
-          if (pre && pre.activo !== false) cursoSelect.value = pre.title;
         }
 
         function showToast(msg, isError) {
