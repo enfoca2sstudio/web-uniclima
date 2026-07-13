@@ -2044,15 +2044,7 @@ html.theme-dark .brand-logo {
   padding: 149px 0 84px;
   text-align: center;
   color: #fff;
-  background:
-    linear-gradient(160deg, rgba(6, 15, 34, 0.88), rgba(10, 26, 58, 0.72)),
-    radial-gradient(circle at 15% 20%, rgba(28, 98, 201, 0.5), transparent 55%),
-    radial-gradient(
-      circle at 85% 80%,
-      rgba(45, 125, 210, 0.4),
-      transparent 55%
-    ),
-    var(--navy-950);
+  background: url("../img/productos-hero.webp") no-repeat center center/cover;
   overflow: hidden;
 }
 .catalog-hero h1 {
@@ -3121,7 +3113,7 @@ html.theme-dark .brand-logo {
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   align-items: center;
-  padding: 70px 174px;
+  padding: 70px 98px;
   width: 100%;
 }
 .service-detail-title h2 {
@@ -3650,14 +3642,8 @@ html.theme-dark .brand-logo {
   /* Placeholder: reemplaza por una foto real del equipo/instructores,
      ej. background-image: url('img/academia-hero.jpg'); con
      background-size:cover; conserva este overlay oscuro encima. */
-  background:
-    linear-gradient(160deg, rgba(6, 15, 34, 0.82), rgba(10, 38, 87, 0.68)),
-    radial-gradient(
-      circle at 15% 25%,
-      rgba(45, 125, 210, 0.4),
-      transparent 55%
-    ),
-    var(--navy-950);
+  background: url("../img/cursos/hero-academia.webp") no-repeat center
+    center/cover;
 }
 .academia-icon {
   width: 52px;
