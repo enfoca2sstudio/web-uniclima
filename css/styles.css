@@ -308,9 +308,6 @@ nav {
 .nav-close-item {
   display: none;
 }
-.nav-links li {
-  width: 156px !important;
-}
 @media (max-width: 920px) {
   .nav-links {
     position: fixed;
@@ -328,6 +325,9 @@ nav {
     overflow-y: auto;
     transform: translateX(100%);
     transition: transform 0.4s var(--ease);
+  }
+  .nav-links li {
+    width: 156px !important;
   }
   .nav-links a {
     color: var(--text-heading);
