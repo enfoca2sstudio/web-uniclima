@@ -27,6 +27,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <link rel="shortcut icon" href="img/fav-icon.png" type="image/x-icon" />
     <!-- Tailwind CSS via Play CDN (no build step needed for this static site) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="js/tailwind-config.js"></script>
@@ -42,7 +43,7 @@
     <header id="siteHeader">
       <div class="mx-auto max-w-container px-6">
         <nav>
-          <a href="index.html#inicio" class="logo">
+          <a href="index.html" class="logo">
             <img
               src="img/logo-head.png"
               alt="Logo UniClima"
@@ -50,7 +51,7 @@
             />
           </a>
           <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#inicio">Inicio</a></li>
+            <li><a href="index.html">Inicio</a></li>
             <li><a href="productos.html" class="active">Productos</a></li>
             <li><a href="proyectos.html">Proyectos</a></li>
             <li class="has-dropdown">
@@ -70,16 +71,15 @@
                 </svg>
               </button>
               <div class="dropdown">
-                <a href="servicios/asesoria-tecnica.html">Asesoría Técnica</a>
-                <a href="servicios/instalacion.html">Instalación</a>
-                <a href="servicios/mantenimiento.html">Mantenimiento</a>
-                <a href="servicios/repuestos.html">Repuestos</a>
+                <a href="asesoria-tecnica.html">Asesoría Técnica</a>
+                <a href="ventas-instalacion.html">Ventas e Instalación</a>
+                <a href="mantenimiento.html">Mantenimiento</a>
+                <a href="limpieza-ductos.html">Limpieza de Ductos</a>
+                <a href="capacitacion-tecnica.html">Capacitación Técnica</a>
               </div>
             </li>
             <li class="has-dropdown">
-              <a href="atencion-al-cliente/calculadora-btu.html"
-                >Atención al Cliente</a
-              >
+              <a href="index.html#atención">Atención al Cliente</a>
               <button
                 class="dd-toggle"
                 aria-label="Mostrar submenú de Atención al Cliente"
@@ -95,18 +95,14 @@
                 </svg>
               </button>
               <div class="dropdown">
-                <a href="atencion-al-cliente/calculadora-btu.html"
-                  >Calculadora BTU</a
-                >
-                <a href="atencion-al-cliente/guia-practica.html"
-                  >Guía Práctica</a
-                >
-                <a href="atencion-al-cliente/garantia.html">Garantía</a>
+                <a href="calculadora-btu.html">Calculadora BTU</a>
+                <a href="guia-practica.html">Guía Práctica</a>
+                <a href="garantia.html">Garantía</a>
               </div>
             </li>
             <li><a href="cursos.html">Academia</a></li>
             <li><a href="cotizaciones.html">Cotización</a></li>
-            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
           </ul>
           <button
             class="theme-toggle"
@@ -163,9 +159,7 @@
              catálogo aún no se cargó en este navegador). -->
         <div class="product-not-found" id="productNotFound" hidden>
           <h1>Producto no encontrado</h1>
-          <p>
-            El producto que buscas no existe o el enlace ya no es válido.
-          </p>
+          <p>El producto que buscas no existe o el enlace ya no es válido.</p>
           <a href="productos.html" class="btn btn-primary"
             >Ver todo el catálogo</a
           >
@@ -174,12 +168,7 @@
         <!-- Contenido real: lo llena js/producto-detail.js -->
         <div class="product-detail" id="productDetail" hidden>
           <div class="product-detail-media">
-            <img
-              id="pdImage"
-              src=""
-              alt=""
-              hidden
-            />
+            <img id="pdImage" src="" alt="" hidden />
             <svg
               id="pdPlaceholder"
               viewBox="0 0 100 100"
@@ -206,12 +195,19 @@
           <div class="product-detail-info">
             <div class="product-detail-tags">
               <span class="product-tag" id="pdCategory"></span>
-              <span class="product-tag product-tag-sub-standalone" id="pdSubcategory" hidden></span>
+              <span
+                class="product-tag product-tag-sub-standalone"
+                id="pdSubcategory"
+                hidden
+              ></span>
             </div>
             <h1 id="pdName"></h1>
             <p class="product-detail-specs" id="pdSpecs"></p>
             <div class="product-detail-actions">
-              <a href="cotizaciones.html" class="btn btn-primary" id="pdQuoteBtn"
+              <a
+                href="cotizaciones.html"
+                class="btn btn-primary"
+                id="pdQuoteBtn"
                 >Solicitar cotización</a
               >
               <a
@@ -232,7 +228,11 @@
       <div class="mx-auto max-w-container px-6">
         <div class="footer-grid">
           <div>
-            <a href="index.html#inicio" class="logo" style="margin-bottom: 16px">
+            <a
+              href="index.html#inicio"
+              class="logo"
+              style="margin-bottom: 16px"
+            >
               <img
                 src="img/logo-footer.webp"
                 alt="Logo Uniclima"
@@ -248,7 +248,11 @@
             <h4>Enlaces Rápidos</h4>
             <ul>
               <li><a href="productos.html">Catálogos</a></li>
-              <li><a href="atencion-al-cliente/calculadora-btu.html">Calculadora BTU</a></li>
+              <li>
+                <a href="atencion-al-cliente/calculadora-btu.html"
+                  >Calculadora BTU</a
+                >
+              </li>
               <li><a href="cotizaciones.html">Solicitar Cotización</a></li>
               <li><a href="index.html#servicios">Servicios</a></li>
             </ul>
