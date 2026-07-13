@@ -8,16 +8,30 @@
         { passive: true },
       );
 
-      // dropdown toggles (mobile tap-to-expand, desktop uses hover via CSS)
-      document.querySelectorAll(".dd-toggle").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
+      // dropdown toggles (mobile tap-to-expand, desktop uses hover via CSS).
+      // Se activa tanto al hacer clic en el botón de la flecha (.dd-toggle)
+      // como en el texto del link ("Servicios", "Atención al Cliente") —
+      // ambos son el mismo gatillo, ya que ese link no lleva a ninguna
+      // página real por sí solo.
+      function toggleDropdown(trigger) {
+        const parent = trigger.closest(".has-dropdown");
+        const wasOpen = parent.classList.contains("open");
+        document
+          .querySelectorAll(".has-dropdown.open")
+          .forEach((el) => el.classList.remove("open"));
+        if (!wasOpen) parent.classList.add("open");
+      }
+      document.querySelectorAll(".has-dropdown").forEach((item) => {
+        const mainLink = item.querySelector(":scope > a");
+        const toggleBtn = item.querySelector(".dd-toggle");
+        mainLink?.addEventListener("click", (e) => {
           e.preventDefault();
-          const parent = btn.closest(".has-dropdown");
-          const wasOpen = parent.classList.contains("open");
-          document
-            .querySelectorAll(".has-dropdown.open")
-            .forEach((el) => el.classList.remove("open"));
-          if (!wasOpen) parent.classList.add("open");
+          toggleDropdown(item);
+        });
+        toggleBtn?.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleDropdown(item);
         });
       });
 
@@ -284,9 +298,34 @@
       toggle.addEventListener("click", () => links.classList.toggle("open"));
       links
         .querySelectorAll("a")
-        .forEach((a) =>
-          a.addEventListener("click", () => links.classList.remove("open")),
-        );
+        .forEach((a) => {
+          // Los links que abren un submenú (Servicios, Atención al
+          // Cliente) no deben cerrar todo el panel móvil al hacer clic —
+          // solo deben abrir/cerrar su propio desplegable (ver más arriba,
+          // "dropdown toggles"). Se reconocen porque su padre directo es
+          // el <li class="has-dropdown">; los links de destino real
+          // (incluidos los del desplegable) no cumplen esa condición.
+          if (a.parentElement.classList.contains("has-dropdown")) return;
+          a.addEventListener("click", () => links.classList.remove("open"));
+        });
+
+      // Botón para cerrar el menú móvil desde adentro del panel. Se
+      // inserta por JS (no en cada HTML) porque main.js se carga en todas
+      // las páginas del sitio, así aparece en todas sin duplicar el
+      // marcado en cada una.
+      const navCloseBtn = document.createElement("button");
+      navCloseBtn.type = "button";
+      navCloseBtn.className = "nav-close-btn";
+      navCloseBtn.setAttribute("aria-label", "Cerrar menú");
+      navCloseBtn.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+      navCloseBtn.addEventListener("click", () =>
+        links.classList.remove("open"),
+      );
+      const navCloseItem = document.createElement("li");
+      navCloseItem.className = "nav-close-item";
+      navCloseItem.appendChild(navCloseBtn);
+      links.prepend(navCloseItem);
 
       // scroll reveal
       const revealEls = document.querySelectorAll(".reveal, .reveal-stagger");
@@ -354,3 +393,8 @@
         { threshold: 0.5 },
       );
       counters.forEach((c) => countIO.observe(c));
+
+      // El envío del formulario de inscripción (#cotizacionForm) se maneja
+      // en un <script> propio de cotizaciones.html, no aquí — así evitamos
+      // que se dispare dos veces (main.js se carga en todas las páginas,
+      // pero solo cotizaciones.html tiene ese formulario).

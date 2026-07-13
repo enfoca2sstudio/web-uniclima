@@ -13,6 +13,7 @@
   var data = window.UniclimaCursos;
   var cursosList = data.load();
   var activeKeyword = "";
+  var activeStatus = "";
   var activeLevel = "todos";
 
   var levelPillsWrap = document.getElementById("academiaLevelPills");
@@ -48,7 +49,7 @@
   }
 
   function buildKeywordDropdown() {
-    keywordsDropdown.innerHTML = data.KEYWORDS.map(function (kw) {
+    var keywordPills = data.KEYWORDS.map(function (kw) {
       return (
         '<button type="button" class="academia-keyword-pill" data-keyword="' +
         esc(kw) +
@@ -57,20 +58,37 @@
         "</button>"
       );
     }).join("");
+    // "Activo" es un filtro de estado, no una palabra clave de tema, pero
+    // vive en el mismo desplegable (se pidió así) — se distingue con su
+    // propio data-status en vez de data-keyword.
+    var statusPill =
+      '<span class="academia-keyword-divider"></span>' +
+      '<button type="button" class="academia-keyword-pill academia-keyword-pill-status" data-status="activo">Activo</button>';
+    keywordsDropdown.innerHTML = keywordPills + statusPill;
   }
 
   function courseCard(curso) {
     var iconSvg = data.ICONS[curso.icon] || data.ICONS.ac;
+    var isActive = curso.activo !== false;
+    var tag = isActive ? "a" : "div";
     var tagsHtml = curso.tags
       .map(function (t) {
         return '<span class="curso-chip">' + esc(t) + "</span>";
       })
       .join("");
     return (
-      '<a class="curso-card" href="curso.html?id=' +
-      encodeURIComponent(curso.id) +
-      '" data-level="' +
+      "<" +
+      tag +
+      ' class="curso-card' +
+      (isActive ? "" : " curso-card-inactive") +
+      '"' +
+      (isActive
+        ? ' href="curso.html?id=' + encodeURIComponent(curso.id) + '"'
+        : "") +
+      ' data-level="' +
       esc(curso.level) +
+      '" data-activo="' +
+      isActive +
       '" data-title="' +
       esc(curso.title.toLowerCase()) +
       '" data-desc="' +
@@ -78,6 +96,11 @@
       '" data-keywords="' +
       esc(curso.tags.join(",").toLowerCase()) +
       '">' +
+      '<span class="curso-card-badge ' +
+      (isActive ? "curso-card-badge-active" : "curso-card-badge-inactive") +
+      '">' +
+      (isActive ? "Activo" : "No disponible") +
+      "</span>" +
       '<div class="curso-card-media ' +
       data.LEVEL_ICON_CLASS[curso.level] +
       '">' +
@@ -105,7 +128,9 @@
       tagsHtml +
       "</div>" +
       "</div>" +
-      "</a>"
+      "</" +
+      tag +
+      ">"
     );
   }
 
@@ -153,7 +178,10 @@
       var matchesKeyword =
         !activeKeyword ||
         card.dataset.keywords.indexOf(activeKeyword.toLowerCase()) !== -1;
-      var visible = matchesLevel && matchesTerm && matchesKeyword;
+      var matchesStatus =
+        !activeStatus || card.dataset.activo === "true";
+      var visible =
+        matchesLevel && matchesTerm && matchesKeyword && matchesStatus;
       card.style.display = visible ? "" : "none";
       if (visible) visibleCount++;
     });
@@ -199,22 +227,37 @@
     else closeKeywordsDropdown();
   });
   keywordsDropdown.addEventListener("click", function (e) {
-    var btn = e.target.closest(".academia-keyword-pill");
-    if (!btn) return;
-    var kw = btn.dataset.keyword;
-    if (activeKeyword === kw) {
-      activeKeyword = "";
-      btn.classList.remove("active");
-    } else {
-      activeKeyword = kw;
-      keywordsDropdown
-        .querySelectorAll(".academia-keyword-pill")
-        .forEach(function (p) {
-          p.classList.remove("active");
-        });
-      btn.classList.add("active");
+    var statusBtn = e.target.closest(".academia-keyword-pill-status");
+    var kwBtn = !statusBtn && e.target.closest(".academia-keyword-pill");
+
+    if (statusBtn) {
+      if (activeStatus === "activo") {
+        activeStatus = "";
+        statusBtn.classList.remove("active");
+      } else {
+        activeStatus = "activo";
+        statusBtn.classList.add("active");
+      }
+      applyFilters();
+      return;
     }
-    applyFilters();
+
+    if (kwBtn) {
+      var kw = kwBtn.dataset.keyword;
+      if (activeKeyword === kw) {
+        activeKeyword = "";
+        kwBtn.classList.remove("active");
+      } else {
+        activeKeyword = kw;
+        keywordsDropdown
+          .querySelectorAll(".academia-keyword-pill:not(.academia-keyword-pill-status)")
+          .forEach(function (p) {
+            p.classList.remove("active");
+          });
+        kwBtn.classList.add("active");
+      }
+      applyFilters();
+    }
   });
   document.addEventListener("click", function (e) {
     if (

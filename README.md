@@ -16,14 +16,20 @@ Grupo Uniclima es un holding de empresas distribuidor autorizado de marcas líde
 - **Nosotros** – Historia, misión y trayectoria del grupo.
 - **Productos** – Catálogo de equipos HVAC (`productos.html`), con hero de presentación, buscador de productos en vivo y píldoras de filtro por categoría (Aplicado, Compresores, Línea CIAC, Otros, Residencial - Comercial Ligero, VRF, Válvulas de Control), cada una con su propio submenú desplegable de subcategorías, sobre una grilla de fichas de producto. El catálogo se administra desde un panel interno independiente — ver "🔐 Panel de administración" más abajo.
 - **Proyectos** – Portafolio de proyectos ejecutados.
-- **Cursos / Academia Uniclima** (`cursos.html`) – Catálogo de 16 cursos de formación HVAC organizados por nivel (Básico, Intermedio, Avanzado — cada uno en su propia sección), con buscador de texto, píldoras de nivel (Todos/Básico/Intermedio/Avanzado) y un desplegable de palabras clave (Chiller, Agua helada, VRF, Básico, Aire acondicionado, Inverter, Cargas térmicas, Software) dentro de la barra de búsqueda; los tres filtros se combinan entre sí. Incluye aviso de que los cursos no requieren examen y que los certificados no están avalados por Carrier. Se administra desde el mismo panel interno que los productos — ver "🔐 Panel de administración" más abajo.
-- **Cotizaciones** – Solicitud de cotizaciones de productos y proyectos.
+- **Servicios** – Cinco páginas de servicio (`servicios/`), todas con el mismo formato: hero con curva decorativa, sección "¿Por qué elegirnos?" con tarjetas, "Detalle del Servicio" con checklist, y CTA final.
+  - **Asesoría Técnica** (`servicios/asesoria-tecnica.html`)
+  - **Ventas e Instalación** (`servicios/ventas-instalacion.html`)
+  - **Mantenimiento** (`servicios/mantenimiento.html`)
+  - **Limpieza de Ductos** (`servicios/limpieza-ductos.html`)
+  - **Capacitación Técnica** (`servicios/capacitacion-tecnica.html`)
+- **Cursos / Academia Uniclima** (`cursos.html`) – Catálogo de 16 cursos de formación HVAC organizados por nivel (Básico, Intermedio, Avanzado — cada uno en su propia sección), con buscador de texto, píldoras de nivel (Todos/Básico/Intermedio/Avanzado) y un desplegable de palabras clave (Chiller, Agua helada, VRF, Básico, Aire acondicionado, Inverter, Cargas térmicas, Software, y "Activo" como filtro de estado) dentro de la barra de búsqueda; los filtros se combinan entre sí. Cada curso tiene su propia ficha (`curso.html?id=...`, ver `js/curso-detail.js`) con descripción completa y botón de registro. Incluye aviso de que los cursos no requieren examen y que los certificados no están avalados por Carrier. Se administra desde el mismo panel interno que los productos — ver "🔐 Panel de administración" más abajo.
+- **Planilla de Inscripción** (`cotizaciones.html`) – Formulario de inscripción a cursos de la Academia: nombre, correo, teléfono, curso de interés (desplegable poblado con los cursos activos) y comentario opcional. Al enviarse, además de guardar una copia local, se envía por correo mediante [FormSubmit](https://formsubmit.co) a `mercadeoypublicidaduniclima@gmail.com` (servicio gratuito de formulario-a-correo; requiere una activación única la primera vez que llega un envío real — ver el aviso en el propio archivo). Si el envío por correo falla, se le indica al visitante escribir por WhatsApp como respaldo. `registro-curso.html` existía antes como una página de inscripción independiente (con envío por WhatsApp); ahora es solo una redirección automática hacia esta página, para no romper enlaces ya compartidos.
 - **Noticias** – Blog / novedades de la empresa.
 - **Atención al Cliente**
   - **Calculadora de BTU** (`atencion-al-cliente/calculadora-btu.html`) – Calcula la capacidad de aire acondicionado recomendada a partir del ancho, largo y alto del espacio, la cantidad de personas y de equipos electrónicos. Sugiere además el tamaño de equipo comercial más cercano (9,000 / 12,000 / 18,000 BTU, etc.). Incluye instrucciones de uso en un modal aparte. Cálculo 100% en el cliente (JavaScript vanilla, sin backend) — ver `js/calculadora-btu.js`.
   - **Guía Práctica** (`atencion-al-cliente/guia-practica.html`) – Qué verificar antes de llamar al servicio técnico (interruptor, termostato, panel eléctrico, ventilador exterior, filtros) y cómo preparar la visita de un técnico (factura, marca/modelo/serial, historial de servicios, ubicación de las unidades, entre otros).
   - **Garantía** (`atencion-al-cliente/garantia.html`) – Condiciones de la garantía de los equipos, casos en los que no aplica, y botón de descarga de la planilla de solicitud de garantía en PDF.
-- **Contacto** – Datos de contacto y sucursales.
+- **Contacto** (`contacto.html`) – Las 10 sedes reales de Grupo Uniclima agrupadas por país: Venezuela (6), Panamá (3) y Miami (1), cada una con dirección, teléfono móvil y de oficina, correo y enlace directo a Google Maps.
 
 ## ❄️ Categorías de producto
 
@@ -35,6 +41,8 @@ Aire Acondicionado · Chillers · Equipos Compactos · Fan & Coil · Manejadoras
 - **Carrusel del hero** – La sección de Inicio muestra 3 diapositivas (marca general, proyectos/experiencia, servicio técnico) con transición tipo *crossfade*, autoplay (7s), flechas y puntos de navegación. El autoplay se pausa al pasar el mouse, al enfocar con teclado o al cambiar de pestaña, soporta swipe en móvil y respeta `prefers-reduced-motion`.
 - **Catálogo de productos con filtros en vivo** – La página de Productos (`productos.html`) incluye un buscador de texto y píldoras de filtro por categoría — con submenú de subcategorías — que muestran/ocultan las fichas de producto al instante, en el cliente y sin recargar la página (JavaScript vanilla, sin backend ni llamadas a servidor). El catálogo (categorías, subcategorías y productos) vive en `localStorage` y se gestiona desde un panel de administración separado — ver la sección dedicada más abajo.
 - **Academia con filtro combinado** – La página de Cursos (`cursos.html`) organiza los cursos en 3 secciones por nivel y permite filtrar por nivel, por palabra clave (en un desplegable dentro del buscador) y por texto libre al mismo tiempo; las secciones sin resultados se ocultan solas. Igual que el catálogo de productos, vive en `localStorage` y se administra desde el mismo panel.
+- **Cursos activos/inactivos** – Cada curso puede marcarse como activo o inactivo desde el panel de administración. Los inactivos se siguen mostrando en `cursos.html` (con una etiqueta "No disponible", visible al pasar el mouse) pero sin enlace funcional a su ficha, y quedan excluidos del desplegable de la Planilla de Inscripción.
+- **Menú responsive** – El panel deslizante del menú móvil incluye un botón de cierre propio (insertado por `main.js` en todas las páginas, sin duplicar marcado), submenús desplegables que se expanden en el lugar (Servicios, Atención al Cliente) sin cerrar el panel completo al abrirlos, y colores/sombras que se adaptan al tema claro/oscuro.
 - **Calculadora de BTU** – Estimación rápida de la capacidad de A/C necesaria (volumen del espacio × factor base, más ajustes por ocupantes y equipos electrónicos), con validación de campos y sugerencia del tamaño de equipo comercial más cercano. Cálculo instantáneo en el cliente, sin backend.
 
 ## 🔐 Panel de administración
@@ -43,7 +51,7 @@ Página interna independiente (`admin-productos.html`) para gestionar el catálo
 
 - **Pantalla de acceso propia** (no el `prompt()` del navegador) con contraseña simple; recuerda el acceso durante la sesión del navegador (`sessionStorage`).
 - **Pestaña Productos** – CRUD completo (agregar, editar, eliminar), incluyendo categoría y subcategoría (cada una de las 7 categorías tiene su propia lista de subcategorías — ver `js/products-data.js`). Incluye **importar / exportar CSV**: sube un CSV para agregar productos en bloque o reemplazar todo el catálogo. El importador reconoce automáticamente varios formatos de encabezado, en español e inglés, incluyendo exportaciones de WooCommerce/Shopify (`Name`/`Nombre`, `Categories`/`Categorías` — incluso jerárquicas tipo "Padre > Hijo" —, `Short description`/`Description`, `Images`/`Imágenes`). Si una categoría del CSV no coincide con las propias, el producto igual se importa (queda en "Otros" en vez de perderse). También permite descargar una plantilla CSV o exportar el catálogo actual.
-- **Pestaña Cursos** – CRUD completo (agregar, editar, eliminar, restaurar): título, nivel (Básico/Intermedio/Avanzado), horas, descripción, ícono de la tarjeta, y palabras clave como casillas de verificación (puede marcar varias por curso) — ver `js/cursos-data.js`.
+- **Pestaña Cursos** – CRUD completo (agregar, editar, eliminar, restaurar): título, nivel (Básico/Intermedio/Avanzado), horas, descripción, ícono de la tarjeta, estado activo/inactivo (interruptor visual), y palabras clave como casillas de verificación (puede marcar varias por curso) — ver `js/cursos-data.js`. La lista de cursos actuales muestra una etiqueta de estado (Activo/Inactivo) por cada uno.
 - **Notificación de confirmación** (toast) tras cada acción, en ambas pestañas.
 - Todo se guarda en `localStorage`: los productos bajo la misma clave que lee `productos.html` (`js/products-data.js`), y los cursos bajo la misma clave que lee `cursos.html` (`js/cursos-data.js`) — así los cambios se reflejan de inmediato en las páginas públicas, sin backend.
 
@@ -94,9 +102,17 @@ uniclima-web/
 ├── admin-productos.html        # panel interno de administración (pestañas: Productos y Cursos)
 ├── proyectos.html
 ├── cursos.html                 # Academia Uniclima: 16 cursos por nivel, con filtros (ver características destacadas)
-├── cotizaciones.html
+├── curso.html                  # ficha individual de curso (?id=...), con registro y estado activo/inactivo
+├── cotizaciones.html           # Planilla de Inscripción a cursos (envío por correo vía FormSubmit)
+├── registro-curso.html         # redirección a cotizaciones.html (página de inscripción anterior, ver características destacadas)
 ├── noticias.html
-├── contacto.html
+├── contacto.html                # las 10 sedes reales (Venezuela, Panamá, Miami)
+├── servicios/
+│   ├── asesoria-tecnica.html
+│   ├── ventas-instalacion.html
+│   ├── mantenimiento.html
+│   ├── limpieza-ductos.html
+│   └── capacitacion-tecnica.html
 ├── atencion-al-cliente/
 │   ├── calculadora-btu.html     # calculadora de BTU funcional (ver características destacadas)
 │   ├── guia-practica.html       # checklist antes de llamar a servicio técnico + preparación de visita
@@ -110,12 +126,15 @@ uniclima-web/
 │   │   └── styles.css          # componentes custom (no cubiertos por utilidades Tailwind)
 │   └── js/
 │       ├── tailwind-config.js  # tokens de marca para Tailwind (colores, tipografías, sombras)
-│       ├── main.js             # header, menú, dropdowns, reveal-on-scroll, contadores, tema claro/oscuro, carrusel del hero
+│       ├── main.js             # header, menú (con botón de cierre y submenús), dropdowns, reveal-on-scroll, contadores, tema claro/oscuro, carrusel del hero
 │       ├── calculadora-btu.js  # lógica de la Calculadora de BTU (atencion-al-cliente/calculadora-btu.html)
 │       ├── products-data.js    # catálogo de productos: categorías/subcategorías compartidas (localStorage)
 │       ├── productos-grid.js   # grilla pública + buscador + filtros (productos.html)
-│       ├── cursos-data.js      # catálogo de cursos: niveles/palabras clave compartidos (localStorage)
-│       ├── cursos-grid.js      # grilla pública + buscador + filtro nivel/palabra clave (cursos.html)
+│       ├── producto-detail.js  # ficha individual de producto (producto.html)
+│       ├── cursos-data.js      # catálogo de cursos: niveles/palabras clave/estado activo compartidos (localStorage)
+│       ├── cursos-grid.js      # grilla pública + buscador + filtro nivel/palabra clave/estado (cursos.html)
+│       ├── curso-detail.js     # ficha individual de curso (curso.html)
+│       ├── registro-curso.js   # sin uso actualmente (registro-curso.html pasó a ser una redirección)
 │       └── admin-productos.js  # pantalla de acceso + CRUD de productos (con import/export CSV) y de cursos (admin-productos.html)
 └── README.md
 ```

@@ -19,12 +19,11 @@
         }
       })();
     </script>
-    <title>Administrar Productos — Grupo Uniclima</title>
+    <title>Mantenimiento — Grupo Uniclima</title>
     <meta
       name="description"
-      content="Panel interno para administrar el catálogo de productos de Grupo Uniclima."
+      content="Mantenimiento preventivo y correctivo de sistemas de aire acondicionado, con técnicos certificados y repuestos originales."
     />
-    <meta name="robots" content="noindex, nofollow" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -33,7 +32,7 @@
     />
     <!-- Tailwind CSS via Play CDN (no build step needed for this static site) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="js/tailwind-config.js"></script>
+    <script src="/js/tailwind-config.js"></script>
     <script
       src="https://kit.fontawesome.com/49286760f0.js"
       crossorigin="anonymous"
@@ -46,7 +45,7 @@
     <header id="siteHeader">
       <div class="mx-auto max-w-container px-6">
         <nav>
-          <a href="index.html#inicio" class="logo">
+          <a href="index.html" class="logo">
             <img
               src="img/logo-head.png"
               alt="Logo UniClima"
@@ -54,10 +53,10 @@
             />
           </a>
           <ul class="nav-links" id="navLinks">
-            <li><a href="index.html#inicio">Inicio</a></li>
-            <li><a href="productos.html" class="active">Productos</a></li>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="productos.html">Productos</a></li>
             <li><a href="proyectos.html">Proyectos</a></li>
-            <li class="has-dropdown">
+            <li class="has-dropdown active-parent">
               <a href="index.html#servicios">Servicios</a>
               <button
                 class="dd-toggle"
@@ -74,16 +73,15 @@
                 </svg>
               </button>
               <div class="dropdown">
-                <a href="servicios/asesoria-tecnica.html">Asesoría Técnica</a>
-                <a href="servicios/instalacion.html">Instalación</a>
-                <a href="servicios/mantenimiento.html">Mantenimiento</a>
-                <a href="servicios/repuestos.html">Repuestos</a>
+                <a href="asesoria-tecnica.html">Asesoría Técnica</a>
+                <a href="ventas-instalacion.html">Ventas e Instalación</a>
+                <a href="mantenimiento.html" class="active">Mantenimiento</a>
+                <a href="limpieza-ductos.html">Limpieza de Ductos</a>
+                <a href="capacitacion-tecnica.html">Capacitación Técnica</a>
               </div>
             </li>
             <li class="has-dropdown">
-              <a href="atencion-al-cliente/calculadora-btu.html"
-                >Atención al Cliente</a
-              >
+              <a href="index.html#atención">Atención al Cliente</a>
               <button
                 class="dd-toggle"
                 aria-label="Mostrar submenú de Atención al Cliente"
@@ -99,18 +97,14 @@
                 </svg>
               </button>
               <div class="dropdown">
-                <a href="atencion-al-cliente/calculadora-btu.html"
-                  >Calculadora BTU</a
-                >
-                <a href="atencion-al-cliente/guia-practica.html"
-                  >Guía Práctica</a
-                >
-                <a href="atencion-al-cliente/garantia.html">Garantía</a>
+                <a href="calculadora-btu.html">Calculadora BTU</a>
+                <a href="guia-practica.html">Guía Práctica</a>
+                <a href="garantia.html">Garantía</a>
               </div>
             </li>
             <li><a href="cursos.html">Academia</a></li>
             <li><a href="cotizaciones.html">Cotización</a></li>
-            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
           </ul>
           <button
             class="theme-toggle"
@@ -147,156 +141,207 @@
       </div>
     </header>
 
-    <!-- ================= PÁGINA DE ADMINISTRACIÓN ================= -->
-    <section class="admin-page">
-      <div class="mx-auto max-w-container px-6">
-        <!-- Pantalla de acceso: se oculta y se muestra #adminContent tras
-             ingresar la contraseña correcta (ver js/admin-productos.js) -->
-        <div class="admin-gate" id="adminGate">
-          <div class="admin-gate-card">
-            <svg viewBox="0 0 24 24" fill="none">
-              <rect
-                x="5"
-                y="10"
-                width="14"
-                height="10"
-                rx="2"
-                stroke="currentColor"
-                stroke-width="1.6"
-              />
-              <path
-                d="M8 10V7a4 4 0 1 1 8 0v3"
-                stroke="currentColor"
-                stroke-width="1.6"
-              />
-            </svg>
-            <h1>Acceso administrador</h1>
-            <p>Ingresa la contraseña para gestionar el catálogo de productos.</p>
-            <form id="gateForm">
-              <input
-                type="password"
-                id="gatePassword"
-                placeholder="Contraseña"
-                autocomplete="current-password"
-                required
-              />
-              <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
-            <p class="admin-gate-error" id="gateError" hidden>
-              Contraseña incorrecta. Inténtalo de nuevo.
-            </p>
-            <a href="productos.html" class="admin-gate-back"
-              >← Volver al catálogo</a
-            >
-          </div>
+    <!-- ================= HERO ================= -->
+    <section class="service-hero">
+      <div class="service-hero-bg"></div>
+      <div class="mx-auto max-w-container px-6 service-hero-content">
+        <span
+          class="eyebrow font-poppins font-semibold text-[0.85rem] tracking-[0.1em]"
+          >Servicio Especializado</span
+        >
+        <h1 class="font-galano">Mantenimiento</h1>
+        <p>
+          <strong>Programas preventivos y correctivos para su equipo.</strong
+          ><br />
+          Extendemos la vida útil de su sistema de climatización con
+          mantenimiento profesional y regular.
+        </p>
+        <a href="../cotizaciones.html" class="btn btn-blanco"
+          >Solicitar Cotización</a
+        >
+      </div>
+      <svg
+        class="service-hero-curve"
+        viewBox="0 0 1440 200"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M0,200 L0,55 C 300,205 1140,205 1440,55 L1440,200 Z"
+          fill="var(--surface)"
+        />
+      </svg>
+    </section>
+
+    <!-- ================= ¿POR QUÉ ELEGIRNOS? ================= -->
+    <section class="service-why-section">
+      <div class="mx-auto max-w-container">
+        <div class="service-why-head">
+          <h2 class="reveal">¿Por qué <strong>elegirnos</strong>?</h2>
+          <svg viewBox="0 0 24 24" fill="#3e568d">
+            <path d="M4 8h16L12 18Z" />
+          </svg>
         </div>
-
-        <!-- Contenido real del panel: oculto hasta desbloquear -->
-        <div class="admin-content" id="adminContent" hidden>
-          <div class="admin-content-head">
-            <div>
-              <span
-                class="eyebrow font-poppins font-semibold text-[0.72rem] tracking-[0.22em] uppercase"
-                style="color: var(--blue-600)"
-                >Panel interno</span
-              >
-              <h1>Administrar productos</h1>
-            </div>
-            <a href="productos.html" class="btn btn-ghost"
-              >← Volver al catálogo</a
-            >
-          </div>
-
-          <form id="adminForm" class="admin-form">
-            <input type="hidden" id="prodId" />
-            <div class="admin-form-row">
-              <label>
-                Nombre del producto
-                <input
-                  type="text"
-                  id="prodName"
-                  required
-                  placeholder="Serie 16LJ"
+        <div class="service-why-grid reveal-stagger">
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-01.webp"
+                  alt=""
+                  class="img-servicios"
                 />
-              </label>
-              <label>
-                Categoría
-                <select id="prodCategory" required>
-                  <option value="aplicado">Aplicado</option>
-                  <option value="compresores">Compresores</option>
-                  <option value="ciac">Línea CIAC</option>
-                  <option value="otros">Otros</option>
-                  <option value="residencial">
-                    Residencial - Comercial Ligero
-                  </option>
-                  <option value="vrf">VRF</option>
-                  <option value="valvulas">Válvulas de Control</option>
-                </select>
-              </label>
+              </div>
+              <h3>Mantenimiento<br />Preventivo</h3>
             </div>
-            <label>
-              Especificaciones
-              <input
-                type="text"
-                id="prodSpecs"
-                required
-                placeholder="75 – 525 Toneladas"
-              />
-            </label>
-            <label>
-              URL de imagen (opcional)
-              <input
-                type="text"
-                id="prodImage"
-                placeholder="img/productos/16lj.jpg"
-              />
-            </label>
-            <div class="admin-form-actions">
-              <button type="submit" class="btn btn-primary" id="prodSubmitBtn">
-                Agregar producto
-              </button>
-              <button
-                type="button"
-                class="btn btn-ghost"
-                id="prodCancelBtn"
-                hidden
-              >
-                Cancelar edición
-              </button>
-            </div>
-          </form>
-
-          <div class="admin-list-head">
-            <h3>Productos actuales (<span id="adminCount">0</span>)</h3>
-            <button type="button" class="admin-reset" id="resetProductsBtn">
-              Restaurar catálogo original
-            </button>
+            <p>
+              Programas periódicos que previenen fallas y mantienen la
+              eficiencia de sus equipos.
+            </p>
           </div>
-          <ul class="admin-list" id="adminList"></ul>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-02.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Mantenimiento<br />Correctivo</h3>
+            </div>
+            <p>
+              Diagnóstico y reparación rápida para minimizar tiempos de
+              inactividad.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-03.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Repuestos<br />Originales</h3>
+            </div>
+            <p>
+              Utilizamos únicamente repuestos originales para garantizar la
+              calidad.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-04.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Técnicos<br />Capacitados</h3>
+            </div>
+            <p>
+              Personal certificado con experiencia en toda la línea de
+              productos.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-05.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Contratos<br />Anuales</h3>
+            </div>
+            <p>
+              Planes de mantenimiento anuales con precios preferenciales y
+              prioridad de atención.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-06.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Reportes<br />Detallados</h3>
+            </div>
+            <p>
+              Informes técnicos de cada servicio realizado con recomendaciones.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Notificación breve de "acción completada" -->
-    <div class="admin-toast" id="adminToast" role="status" aria-live="polite">
-      <svg viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" />
-        <path
-          d="m8 12.5 2.5 2.5L16 9.5"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-      <span id="adminToastText"></span>
-    </div>
+    <!-- ================= DETALLE DEL SERVICIO ================= -->
+    <section class="service-detail-section">
+      <div class="service-detail-bg"></div>
+      <div class="mx-auto max-w-container service-detail-grid">
+        <div class="service-detail-title reveal">
+          <h2>Detalle del<br /><span>Servicio</span></h2>
+          <div class="service-detail-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="service-detail-card reveal">
+          <ul>
+            <li>Mantenimiento preventivo de sistemas (limpieza).</li>
+            <li>Mantenimientos correctivos mayores.</li>
+            <li>Reemplazo de compresor.</li>
+            <li>
+              Reemplazo de partes y piezas (motores, tarjetas, sensores, etc.).
+            </li>
+            <li>Informe de diagnóstico del sistema.</li>
+            <li>Atención de garantías.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="service-cta-section">
+      <div class="mx-auto max-w-container px-6">
+        <div class="service-cta reveal">
+          <h2>¿Interesado en este <strong>servicio</strong>?</h2>
+          <p>Contáctenos para una asesoría personalizada y sin compromiso.</p>
+          <div class="service-cta-actions">
+            <a href="../cotizaciones.html" class="btn btn-secondary"
+              >Solicitar Cotización
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12h14M13 6l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                /></svg
+            ></a>
+            <a href="../index.html#contacto" class="btn btn-outline-dark"
+              >Contactar</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
 
     <footer id="contacto">
       <div class="mx-auto max-w-container px-6">
         <div class="footer-grid">
           <div>
-            <a href="index.html#inicio" class="logo" style="margin-bottom: 16px">
+            <a
+              href="index.html#inicio"
+              class="logo"
+              style="margin-bottom: 16px"
+            >
               <img
                 src="img/logo-footer.webp"
                 alt="Logo Uniclima"
@@ -312,7 +357,11 @@
             <h4>Enlaces Rápidos</h4>
             <ul>
               <li><a href="productos.html">Catálogos</a></li>
-              <li><a href="atencion-al-cliente/calculadora-btu.html">Calculadora BTU</a></li>
+              <li>
+                <a href="atencion-al-cliente/calculadora-btu.html"
+                  >Calculadora BTU</a
+                >
+              </li>
               <li><a href="cotizaciones.html">Solicitar Cotización</a></li>
               <li><a href="index.html#servicios">Servicios</a></li>
             </ul>
@@ -464,7 +513,5 @@
     </footer>
 
     <script src="js/main.js" defer></script>
-    <script src="js/products-data.js"></script>
-    <script src="js/admin-productos.js" defer></script>
   </body>
 </html>

@@ -25,6 +25,8 @@
   var successText = document.getElementById("registroSuccessText");
 
   /* ---------- Llenar el selector de cursos, agrupado por nivel ---------- */
+  /* Los cursos inactivos no se pueden registrar, así que no aparecen
+     como opción aquí (ver admin-productos.html, pestaña Cursos). */
   var order = ["basico", "intermedio", "avanzado"];
   cursoSelect.innerHTML =
     '<option value="">Selecciona un curso…</option>' +
@@ -32,7 +34,7 @@
       .map(function (level) {
         var opts = cursos
           .filter(function (c) {
-            return c.level === level;
+            return c.level === level && c.activo !== false;
           })
           .map(function (c) {
             return (
@@ -44,13 +46,13 @@
             );
           })
           .join("");
-        return (
-          '<optgroup label="' +
-          data.escapeHtml(data.LEVEL_SECTION_TITLES[level]) +
-          '">' +
-          opts +
-          "</optgroup>"
-        );
+        return opts
+          ? '<optgroup label="' +
+              data.escapeHtml(data.LEVEL_SECTION_TITLES[level]) +
+              '">' +
+              opts +
+              "</optgroup>"
+          : "";
       })
       .join("");
 
@@ -70,7 +72,14 @@
     });
   }
 
-  if (preselected) {
+  if (preselected && preselected.activo === false) {
+    // El curso al que apuntaba el enlace ya no está activo: se avisa en
+    // vez de dejarlo preseleccionado (no aparece en las opciones).
+    subtitle.textContent =
+      'El curso "' +
+      preselected.title +
+      '" no está disponible por ahora. Puedes elegir otro del listado.';
+  } else if (preselected) {
     cursoSelect.value = preselected.id;
     subtitle.textContent =
       'Complete sus datos para registrarse en "' +

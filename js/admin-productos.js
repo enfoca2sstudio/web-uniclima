@@ -739,12 +739,20 @@
   var cursoHoursField = document.getElementById("cursoHours");
   var cursoDescField = document.getElementById("cursoDescription");
   var cursoIconField = document.getElementById("cursoIcon");
+  var cursoActivoField = document.getElementById("cursoActivo");
+  var cursoActivoText = document.getElementById("cursoActivoText");
   var cursoKeywordsGroup = document.getElementById("cursoKeywordsGroup");
   var cursoSubmitBtn = document.getElementById("cursoSubmitBtn");
   var cursoCancelBtn = document.getElementById("cursoCancelBtn");
   var cursoList = document.getElementById("cursoList");
   var cursoCount = document.getElementById("cursoCount");
   var resetCursosBtn = document.getElementById("resetCursosBtn");
+
+  cursoActivoField.addEventListener("change", function () {
+    cursoActivoText.textContent = cursoActivoField.checked
+      ? "Activo"
+      : "Inactivo";
+  });
 
   function populateKeywordCheckboxes(checkedKeywords) {
     checkedKeywords = checkedKeywords || [];
@@ -776,6 +784,8 @@
     cursoIdField.value = "";
     cursoSubmitBtn.textContent = "Agregar curso";
     cursoCancelBtn.hidden = true;
+    cursoActivoField.checked = true;
+    cursoActivoText.textContent = "Activo";
     populateKeywordCheckboxes([]);
   }
 
@@ -783,13 +793,20 @@
     cursoCount.textContent = cursos.length;
     cursoList.innerHTML = cursos
       .map(function (c) {
+        var isActive = c.activo !== false;
         return (
-          '<li class="admin-list-item" data-id="' +
+          '<li class="admin-list-item' +
+          (isActive ? "" : " is-inactive") +
+          '" data-id="' +
           cursosData.escapeHtml(c.id) +
           '">' +
           "<div><strong>" +
           cursosData.escapeHtml(c.title) +
-          "</strong><span>" +
+          '<span class="admin-item-status status-' +
+          (isActive ? "active" : "inactive") +
+          '">' +
+          (isActive ? "Activo" : "Inactivo") +
+          "</span></strong><span>" +
           cursosData.escapeHtml(cursosData.LEVEL_LABELS[c.level] || c.level) +
           " · " +
           c.hours +
@@ -821,6 +838,7 @@
       hours: parseInt(cursoHoursField.value, 10) || 0,
       description: cursoDescField.value.trim(),
       icon: cursoIconField.value,
+      activo: cursoActivoField.checked,
       tags: getCheckedKeywords(),
     };
     if (!entry.title || !entry.description || !entry.hours) return;
@@ -860,6 +878,10 @@
       cursoHoursField.value = c.hours;
       cursoDescField.value = c.description;
       cursoIconField.value = c.icon || "ac";
+      cursoActivoField.checked = c.activo !== false;
+      cursoActivoText.textContent = cursoActivoField.checked
+        ? "Activo"
+        : "Inactivo";
       populateKeywordCheckboxes(c.tags || []);
       cursoSubmitBtn.textContent = "Guardar cambios";
       cursoCancelBtn.hidden = false;

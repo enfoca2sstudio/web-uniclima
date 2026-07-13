@@ -19,8 +19,11 @@
         }
       })();
     </script>
-    <title>Curso — Grupo Uniclima</title>
-    <meta name="description" content="Ficha de curso — Academia Uniclima." />
+    <title>Planilla de Inscripción — Academia Uniclima</title>
+    <meta
+      name="description"
+      content="Inscríbete en los cursos de la Academia Uniclima. Complete la planilla y nuestro equipo confirmará su cupo."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -100,8 +103,8 @@
               </div>
             </li>
             <li><a href="cursos.html">Academia</a></li>
-            <li><a href="cotizaciones.html" class="active">Cotización</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
+            <li><a href="cotizaciones.html">Cotización</a></li>
+            <li><a href="contacto.html" class="active">Contacto</a></li>
           </ul>
           <button
             class="theme-toggle"
@@ -138,151 +141,145 @@
       </div>
     </header>
 
-    <!-- ================= FICHA DE CURSO — nuevo diseño ================= -->
-    <!-- Barra superior: volver + pills -->
-    <div class="cd-topbar" id="cdTopbar">
-      <div class="mx-auto max-w-container px-6 cd-topbar-inner">
-        <a href="cursos.html" class="cd-back">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path
-              d="M19 12H5M11 18l-6-6 6-6"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          Volver a Academia
-        </a>
-        <div class="cd-pills">
-          <!-- Horas -->
-          <span class="cd-pill" id="cdPillHours">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 7v5l3 3" />
-            </svg>
-            <span id="cdHoursText">—</span>
-          </span>
-          <!-- Nivel -->
-          <span class="cd-pill" id="cdPillLevel">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="2" y="14" width="5" height="7" rx="1" />
-              <rect x="9.5" y="9" width="5" height="12" rx="1" />
-              <rect x="17" y="4" width="5" height="17" rx="1" />
-            </svg>
-            <span id="cdLevelText">—</span>
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Hero: título y descripción corta -->
-    <div class="cd-hero" id="cdHeroSection" hidden>
+    <!-- ================= COTIZACIONES HERO + FORMULARIO ================= -->
+    <section class="cotizacion-hero">
       <div class="mx-auto max-w-container px-6">
-        <h1 id="cdHeroTitle"></h1>
-        <p class="cd-hero-sub" id="cdHeroSub"></p>
-      </div>
-    </div>
-
-    <!-- Not found -->
-    <div class="cd-body" id="cdBodyNotFound" hidden>
-      <div class="mx-auto max-w-container px-6">
-        <div class="cd-not-found">
-          <h1>Curso no encontrado</h1>
-          <p>El curso que buscas no existe o el enlace ya no es válido.</p>
-          <a href="cursos.html" class="btn btn-primary">Ver toda la academia</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Cuerpo: imagen + info -->
-    <div class="cd-body" id="cdBodyContent" hidden>
-      <div class="mx-auto max-w-container px-6">
-        <!-- Imagen / ícono del curso -->
-        <div class="cd-media" id="cdMedia">
-          <svg
-            class="cd-icon"
-            id="cdIcon"
-            viewBox="0 0 24 24"
-            fill="none"
-          ></svg>
-        </div>
-
-        <!-- Info -->
-        <div class="cd-info">
-          <div class="cd-info-header">
-            <svg
-              class="cd-info-icon"
-              id="cdInfoIcon"
-              viewBox="0 0 24 24"
-              fill="none"
-            ></svg>
-            <h2 id="cdInfoTitle"></h2>
+        <div class="cotizacion-card reveal">
+          <div class="text-center">
+            <h1 class="font-galano text-3xl md:text-4xl font-extrabold">
+              Planilla de Inscripción
+            </h1>
+            <p class="text-slate-500 mt-2 text-base">
+              Complete sus datos para inscribirse en un curso de la Academia
+              Uniclima
+            </p>
           </div>
 
-          <p class="cd-description" id="cdDescription"></p>
+          <div class="cotizacion-form-box">
+            <form id="cotizacionForm" novalidate>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="cotizacion-field">
+                  <label for="cotNombre">Nombre *</label>
+                  <input
+                    type="text"
+                    id="cotNombre"
+                    name="nombre"
+                    autocomplete="name"
+                    required
+                  />
+                </div>
+                <div class="cotizacion-field">
+                  <label for="cotEmpresa">Empresa</label>
+                  <input
+                    type="text"
+                    id="cotEmpresa"
+                    name="empresa"
+                    autocomplete="organization"
+                  />
+                </div>
+                <div class="cotizacion-field">
+                  <label for="cotEmail">Email *</label>
+                  <input
+                    type="email"
+                    id="cotEmail"
+                    name="email"
+                    autocomplete="email"
+                    required
+                  />
+                </div>
+                <div class="cotizacion-field">
+                  <label for="cotTelefono">Teléfono *</label>
+                  <input
+                    type="tel"
+                    id="cotTelefono"
+                    name="telefono"
+                    autocomplete="tel"
+                    required
+                  />
+                </div>
+                <div class="cotizacion-field sm:col-span-2">
+                  <label for="cotCurso">Curso de interés *</label>
+                  <select id="cotCurso" name="curso" required>
+                    <option value="">Selecciona un curso…</option>
+                  </select>
+                </div>
+                <div class="cotizacion-field sm:col-span-2">
+                  <label for="cotMensaje">Comentario (opcional)</label>
+                  <textarea
+                    id="cotMensaje"
+                    name="mensaje"
+                    placeholder="¿Alguna pregunta o requerimiento particular?"
+                  ></textarea>
+                </div>
+              </div>
 
-          <div class="cd-chips" id="cdChips"></div>
+              <button type="submit" class="cotizacion-submit mt-6">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M22 2 11 13"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M22 2 15 22l-4-9-9-4 20-7Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                Enviar Inscripción
+              </button>
+            </form>
+          </div>
+        </div>
 
-          <div class="cd-disclaimer">
+        <div class="cotizacion-badges">
+          <span class="cotizacion-badge">
             <svg viewBox="0 0 24 24" fill="none">
-              <circle
-                cx="12"
-                cy="12"
-                r="9"
-                stroke="currentColor"
-                stroke-width="1.6"
-              />
               <path
-                d="M12 8v5M12 16h.01"
+                d="m20 6-11 11L4 12"
                 stroke="currentColor"
-                stroke-width="1.8"
+                stroke-width="2.2"
                 stroke-linecap="round"
+                stroke-linejoin="round"
               />
             </svg>
-            <span
-              >Este curso no requiere examen ni evaluación para obtener el
-              certificado de participación. El certificado
-              <strong>no está avalado por Carrier</strong>.</span
-            >
-          </div>
-
-          <div class="cd-actions">
-            <a
-              href="cotizaciones.html"
-              class="btn btn-primary"
-              id="cdRegisterBtn"
-              >Registrarme</a
-            >
-            <a
-              href="https://wa.me/584140260505"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline-dark"
-              id="cdWhatsappBtn"
-              >Consultar por WhatsApp</a
-            >
-          </div>
+            Respuesta en menos de 24h
+          </span>
+          <span class="cotizacion-badge">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="m20 6-11 11L4 12"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Asesoría técnica sin costo
+          </span>
+          <span class="cotizacion-badge">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="m20 6-11 11L4 12"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            +40 años de experiencia
+          </span>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- IDs de compatibilidad para curso-detail.js (ocultos) -->
-    <span id="cursoNotFound" hidden></span>
-    <span id="cursoDetail" hidden></span>
+    <div class="cotizacion-toast" id="cotizacionToast">
+      ¡Solicitud enviada! Te contactaremos muy pronto.
+    </div>
 
     <footer id="contacto">
       <div class="mx-auto max-w-container px-6">
@@ -463,8 +460,186 @@
       </div>
     </footer>
 
-    <script src="js/main.js" defer></script>
     <script src="js/cursos-data.js"></script>
-    <script src="js/curso-detail.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script>
+      /**
+       * Planilla de Inscripción (Academia Uniclima).
+       *
+       * El sitio es 100% estático (sin backend), así que el envío por
+       * correo se hace con FormSubmit (https://formsubmit.co): un
+       * servicio gratuito que recibe el POST del formulario y lo reenvía
+       * por email — no requiere backend propio ni API key.
+       *
+       * ⚠️ IMPORTANTE — activación única: la PRIMERA vez que llegue una
+       * inscripción real a mercadeoypublicidaduniclima@gmail.com,
+       * FormSubmit envía un correo de confirmación a esa misma casilla
+       * pidiendo hacer clic en un enlace para activar el envío. Hasta que
+       * se confirme ese correo, los envíos no llegarán. Después de esa
+       * activación única, todo funciona automáticamente.
+       *
+       * Además de enviar el correo, cada inscripción se guarda en
+       * localStorage (clave "uniclima-inscripciones") como respaldo local
+       * en este navegador.
+       */
+      (function () {
+        "use strict";
+
+        var form = document.getElementById("cotizacionForm");
+        var toast = document.getElementById("cotizacionToast");
+        var cursoSelect = document.getElementById("cotCurso");
+        if (!form) return;
+
+        var FORM_EMAIL = "mercadeoypublicidaduniclima@gmail.com";
+        var REGISTROS_KEY = "uniclima-inscripciones";
+
+        /* ---------- Llenar el selector de cursos (solo activos) ---------- */
+        if (window.UniclimaCursos && cursoSelect) {
+          var cursosData = window.UniclimaCursos;
+          var cursos = cursosData.load();
+          var order = ["basico", "intermedio", "avanzado"];
+
+          cursoSelect.innerHTML =
+            '<option value="">Selecciona un curso…</option>' +
+            order
+              .map(function (level) {
+                var opts = cursos
+                  .filter(function (c) {
+                    return c.level === level && c.activo !== false;
+                  })
+                  .map(function (c) {
+                    return (
+                      '<option value="' +
+                      cursosData.escapeHtml(c.title) +
+                      '">' +
+                      cursosData.escapeHtml(c.title) +
+                      "</option>"
+                    );
+                  })
+                  .join("");
+                return opts
+                  ? '<optgroup label="' +
+                      cursosData.escapeHtml(
+                        cursosData.LEVEL_SECTION_TITLES[level],
+                      ) +
+                      '">' +
+                      opts +
+                      "</optgroup>"
+                  : "";
+              })
+              .join("");
+
+          // Preselecciona el curso si se llegó desde una ficha (?id=) o un
+          // enlace antiguo (?curso=).
+          var params = new URLSearchParams(window.location.search);
+          var preId = params.get("id");
+          var preTitle = params.get("curso");
+          var pre = null;
+          if (preId) {
+            pre = cursos.find(function (c) {
+              return c.id === preId;
+            });
+          } else if (preTitle) {
+            pre = cursos.find(function (c) {
+              return c.title === preTitle;
+            });
+          }
+          if (pre && pre.activo !== false) cursoSelect.value = pre.title;
+        }
+
+        function showToast(msg, isError) {
+          if (!toast) return;
+          toast.textContent = msg;
+          toast.classList.toggle("toast-error", !!isError);
+          toast.classList.add("show");
+          window.clearTimeout(showToast._t);
+          showToast._t = window.setTimeout(function () {
+            toast.classList.remove("show");
+          }, 4500);
+        }
+
+        function saveLocalRecord(registro) {
+          try {
+            var raw = localStorage.getItem(REGISTROS_KEY);
+            var list = raw ? JSON.parse(raw) : [];
+            list.push(registro);
+            localStorage.setItem(REGISTROS_KEY, JSON.stringify(list));
+          } catch (err) {
+            /* si falla, la inscripción igual se intenta enviar por correo */
+          }
+        }
+
+        var submitBtn = form.querySelector(".cotizacion-submit");
+        var submitBtnOriginalHtml = submitBtn ? submitBtn.innerHTML : "";
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          var nombre = document.getElementById("cotNombre").value.trim();
+          var email = document.getElementById("cotEmail").value.trim();
+          var telefono = document.getElementById("cotTelefono").value.trim();
+          var curso = document.getElementById("cotCurso").value.trim();
+          var empresa = document.getElementById("cotEmpresa").value.trim();
+          var mensaje = document.getElementById("cotMensaje").value.trim();
+
+          if (!nombre || !email || !telefono || !curso) {
+            showToast("Por favor completa los campos obligatorios (*).", true);
+            return;
+          }
+
+          saveLocalRecord({
+            fecha: new Date().toISOString(),
+            nombre: nombre,
+            email: email,
+            telefono: telefono,
+            curso: curso,
+            empresa: empresa,
+            comentario: mensaje,
+          });
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Enviando…";
+          }
+
+          fetch("https://formsubmit.co/ajax/" + FORM_EMAIL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              _subject: "Nueva inscripción — Academia Uniclima",
+              Nombre: nombre,
+              Curso: curso,
+              Email: email,
+              Teléfono: telefono,
+              Empresa: empresa || "—",
+              Comentario: mensaje || "—",
+            }),
+          })
+            .then(function (res) {
+              if (!res.ok) throw new Error("HTTP " + res.status);
+              return res.json();
+            })
+            .then(function () {
+              showToast("¡Inscripción enviada! Te contactaremos muy pronto.");
+              form.reset();
+            })
+            .catch(function () {
+              showToast(
+                "No se pudo enviar por correo. Escríbenos por WhatsApp al +58 414-0260505 y con gusto te inscribimos.",
+                true,
+              );
+            })
+            .finally(function () {
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = submitBtnOriginalHtml;
+              }
+            });
+        });
+      })();
+    </script>
   </body>
 </html>

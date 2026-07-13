@@ -31,7 +31,7 @@
   --surface-alt: var(--ice-100);
   --text-heading: var(--navy-900);
   --text-body: var(--slate-600);
-  --card-border: #e9eef8;
+  --card-border: #d4dced;
   --divider: #e6ebf5;
 }
 
@@ -303,7 +303,13 @@ nav {
   display: none;
   background: none;
   border: none;
-  color: #fff;
+  color: var(--azul-unicli3);
+}
+.nav-close-item {
+  display: none;
+}
+.nav-links li {
+  width: 156px !important;
 }
 @media (max-width: 920px) {
   .nav-links {
@@ -312,14 +318,19 @@ nav {
     right: 0;
     height: 100vh;
     width: min(78vw, 320px);
-    background: var(--navy-950);
+    background: var(--surface);
+    box-shadow: -8px 0 30px -10px rgba(0, 0, 0, 0.25);
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     gap: 26px;
     padding: 40px;
+    overflow-y: auto;
     transform: translateX(100%);
     transition: transform 0.4s var(--ease);
+  }
+  .nav-links a {
+    color: var(--text-heading);
   }
   .nav-links.open {
     transform: translateX(0);
@@ -329,6 +340,67 @@ nav {
   }
   .menu-toggle {
     display: block;
+  }
+  .nav-close-item {
+    display: block;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+  .nav-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: var(--surface-alt);
+    color: var(--text-heading);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .nav-close-btn:hover {
+    background: var(--card-border);
+  }
+  .nav-close-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  .has-dropdown {
+    flex-direction: column;
+    align-items: flex-start !important;
+    width: 100%;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .has-dropdown > a {
+    display: inline-block;
+    margin: 0;
+    text-align: left;
+  }
+  .dd-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .dropdown {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    box-shadow: none;
+    background: transparent;
+    padding: 4px 0 0 14px;
+    margin-top: 10px;
+  }
+  .has-dropdown.open .dropdown {
+    display: flex;
   }
 }
 
@@ -1244,37 +1316,8 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
   background: var(--surface-alt);
 }
 @media (max-width: 920px) {
-  .has-dropdown {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-  }
-  .dropdown {
-    position: static;
-    transform: none;
-    opacity: 1;
-    pointer-events: none;
-    box-shadow: none;
-    background: transparent;
-    padding: 0 0 0 6px;
-    max-height: 0;
-    overflow: hidden;
-  }
-  .has-dropdown.open .dropdown {
-    pointer-events: auto;
-    max-height: 260px;
-    margin-top: 8px;
-  }
-  .dropdown a {
-    color: var(--slate-300);
-    padding: 8px 0;
-  }
-  .dropdown a:hover {
-    background: none;
-    color: #fff;
-  }
   .dd-toggle .chev {
-    color: #fff;
+    color: var(--text-heading);
   }
   .has-dropdown.open .dd-toggle .chev {
     transform: rotate(180deg);
@@ -1998,7 +2041,7 @@ html.theme-dark .brand-logo {
 /* ================= CATÁLOGO DE PRODUCTOS (productos.html) ================= */
 .catalog-hero {
   position: relative;
-  padding: 96px 0 84px;
+  padding: 149px 0 84px;
   text-align: center;
   color: #fff;
   background:
@@ -2276,7 +2319,7 @@ html.theme-dark .brand-logo {
   margin: 22px auto 0;
 }
 .admin-page {
-  padding: 56px 0 100px;
+  padding: 100px 0 100px;
   min-height: 60vh;
   background: var(--surface-alt);
 }
@@ -2661,7 +2704,7 @@ html.theme-dark .brand-logo {
 
 /* ================= FICHA DE PRODUCTO (producto.html) ================= */
 .product-detail-section {
-  padding: 40px 0 100px;
+  padding: 137px 0 100px;
   background: var(--surface-alt);
   min-height: 60vh;
 }
@@ -3367,12 +3410,9 @@ html.theme-dark .brand-logo {
      puede reemplazar por una foto real con
      background: url('img/academia-registro-bg.jpg') no-repeat center
      center/cover; */
-  background: linear-gradient(
-    165deg,
-    rgba(10, 42, 99, 0.9),
-    rgba(20, 82, 165, 0.75)
-  ),
-  var(--navy-950);
+  background:
+    linear-gradient(165deg, rgba(10, 42, 99, 0.9), rgba(20, 82, 165, 0.75)),
+    var(--navy-950);
 }
 .btu-hero-content {
   width: 100%;
@@ -3612,7 +3652,11 @@ html.theme-dark .brand-logo {
      background-size:cover; conserva este overlay oscuro encima. */
   background:
     linear-gradient(160deg, rgba(6, 15, 34, 0.82), rgba(10, 38, 87, 0.68)),
-    radial-gradient(circle at 15% 25%, rgba(45, 125, 210, 0.4), transparent 55%),
+    radial-gradient(
+      circle at 15% 25%,
+      rgba(45, 125, 210, 0.4),
+      transparent 55%
+    ),
     var(--navy-950);
 }
 .academia-icon {
@@ -3826,6 +3870,54 @@ html.theme-dark .brand-logo {
   transform: translateY(-5px);
   box-shadow: var(--shadow-soft);
 }
+.curso-card-inactive {
+  position: relative;
+  cursor: default;
+  opacity: 0.55;
+}
+.curso-card-inactive:hover {
+  transform: none;
+  box-shadow: none;
+}
+.curso-card-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 5px 11px;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+  pointer-events: none;
+}
+.curso-card:hover .curso-card-badge {
+  opacity: 1;
+}
+.curso-card-badge-active {
+  background: rgba(30, 142, 90, 0.9);
+}
+.curso-card-badge-inactive {
+  background: rgba(6, 15, 34, 0.82);
+}
+.academia-keyword-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--card-border);
+  margin: 4px 0;
+}
+.academia-keyword-pill-status {
+  border-color: rgba(30, 142, 90, 0.35);
+}
+.academia-keyword-pill-status.active {
+  background: #1e8e5a;
+  border-color: #1e8e5a;
+}
 .curso-card-media {
   aspect-ratio: 16 / 10;
   display: flex;
@@ -3945,4 +4037,649 @@ html.theme-dark .brand-logo {
 }
 .registro-back {
   margin-top: 18px;
+}
+
+/* ---- Interruptor Activo/Inactivo (formulario de cursos, admin) ---- */
+.admin-toggle-label {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+}
+.admin-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.admin-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 40px;
+  height: 22px;
+  margin: 0;
+  cursor: pointer;
+}
+.admin-toggle-track {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--card-border);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.admin-toggle-track::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+}
+.admin-toggle input:checked ~ .admin-toggle-track {
+  background: #1e8e5a;
+}
+.admin-toggle input:checked ~ .admin-toggle-track::before {
+  transform: translateX(18px);
+}
+.admin-toggle-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+.admin-list-item.is-inactive {
+  opacity: 0.6;
+}
+.admin-item-status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 999px;
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.admin-item-status.status-inactive {
+  background: rgba(214, 69, 69, 0.12);
+  color: #b23636;
+}
+.admin-item-status.status-active {
+  background: rgba(30, 142, 90, 0.12);
+  color: #1e8e5a;
+}
+
+/* ---- Botón deshabilitado (curso inactivo, curso.html) ---- */
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ================= COTIZACIONES / PLANILLA DE INSCRIPCIÓN (cotizaciones.html) ================= */
+.cotizacion-hero {
+  position: relative;
+  padding: 121px 0 82px;
+  background: url("../img/cotizacion/cotiza-bg.webp") no-repeat center
+    center/cover;
+  background-color: #0b1220;
+  isolation: isolate;
+}
+.cotizacion-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    60% 60% at 50% 0%,
+    rgba(37, 99, 235, 0.25),
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.cotizacion-card {
+  position: relative;
+  max-width: 660px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 28px;
+  box-shadow:
+    0 30px 60px -15px rgba(8, 15, 30, 0.45),
+    0 10px 25px -10px rgba(8, 15, 30, 0.25);
+  padding: 44px 40px 40px;
+}
+.cotizacion-card h1 {
+  color: #0f172a;
+}
+.cotizacion-form-box {
+  margin-top: 28px;
+  background: #ffffff;
+  border: 1px solid #e7eaf0;
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+  padding: 28px 26px;
+}
+.cotizacion-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+.cotizacion-field input,
+.cotizacion-field select,
+.cotizacion-field textarea {
+  width: 100%;
+  background: #f4f6f9;
+  border: 1px solid #e5e8ef;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  color: #0f172a;
+  font-family: inherit;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+.cotizacion-field select {
+  cursor: pointer;
+}
+.cotizacion-field input::placeholder,
+.cotizacion-field textarea::placeholder {
+  color: #9aa3b2;
+}
+.cotizacion-field input:focus,
+.cotizacion-field select:focus,
+.cotizacion-field textarea:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+.cotizacion-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.cotizacion-submit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 15px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease;
+}
+.cotizacion-submit:hover {
+  background: #1d4ed8;
+}
+.cotizacion-submit:active {
+  transform: translateY(1px);
+}
+.cotizacion-submit svg {
+  width: 18px;
+  height: 18px;
+}
+.cotizacion-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+.cotizacion-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #e6e9ef;
+  font-size: 0.85rem;
+  font-weight: 500;
+  backdrop-filter: blur(2px);
+}
+.cotizacion-badge svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.cotizacion-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(20px);
+  background: #0f172a;
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  z-index: 60;
+}
+.cotizacion-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.cotizacion-toast.toast-error {
+  background: #b91c1c;
+}
+@media (max-width: 640px) {
+  .cotizacion-hero {
+    padding: 64px 0 100px;
+  }
+  .cotizacion-card {
+    padding: 32px 20px 28px;
+  }
+  .cotizacion-form-box {
+    padding: 22px 18px;
+  }
+}
+
+/* ---- Tema oscuro ----
+         El header y el footer ya cambian solos porque comparten el CSS del
+         resto del sitio (js/main.js agrega/quita "theme-dark" en <html>).
+         El hero se mantiene oscuro en ambos temas (igual que el resto de
+         los hero del sitio), pero la tarjeta blanca del formulario sí debe
+         adaptarse para no quedar "flotando" en blanco sobre un sitio oscuro. */
+html.theme-dark .cotizacion-card {
+  background: #101827;
+  box-shadow:
+    0 30px 60px -15px rgba(0, 0, 0, 0.55),
+    0 10px 25px -10px rgba(0, 0, 0, 0.4);
+}
+html.theme-dark .cotizacion-card h1 {
+  color: #f1f5f9;
+}
+html.theme-dark .cotizacion-card > .text-center p {
+  color: #94a3b8;
+}
+html.theme-dark .cotizacion-form-box {
+  background: #16202f;
+  border-color: #26334a;
+  box-shadow: none;
+}
+html.theme-dark .cotizacion-field label {
+  color: #e2e8f0;
+}
+html.theme-dark .cotizacion-field input,
+html.theme-dark .cotizacion-field select,
+html.theme-dark .cotizacion-field textarea {
+  background: #0f172a;
+  border-color: #2b394f;
+  color: #f1f5f9;
+}
+html.theme-dark .cotizacion-field input::placeholder,
+html.theme-dark .cotizacion-field textarea::placeholder {
+  color: #64748b;
+}
+html.theme-dark .cotizacion-field input:focus,
+html.theme-dark .cotizacion-field select:focus,
+html.theme-dark .cotizacion-field textarea:focus {
+  background: #0f172a;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* ================= FICHA DE CURSO — REDISEÑO (curso.html) ================= */
+.curso-hero-bar {
+  padding: 130px 0 40px;
+  background: linear-gradient(160deg, var(--blue-700), var(--navy-950));
+  color: #fff;
+}
+.curso-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+.curso-hero-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #fff;
+}
+.curso-hero-back svg {
+  width: 18px;
+  height: 18px;
+}
+.curso-hero-back:hover {
+  opacity: 0.8;
+}
+.curso-hero-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.curso-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blue-500);
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 0.86rem;
+  padding: 10px 20px;
+  border-radius: 999px;
+}
+.curso-hero-badge svg {
+  width: 16px;
+  height: 16px;
+}
+.curso-hero-title {
+  font-size: clamp(1.8rem, 4.5vw, 2.7rem);
+  font-weight: 800;
+  margin-bottom: 14px;
+  line-height: 1.15;
+}
+.curso-hero-subtitle {
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate-300);
+  max-width: 800px;
+}
+
+.curso-detail-body {
+  padding: 48px 0 100px;
+  background: var(--surface);
+}
+.curso-detail-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.curso-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.curso-detail-image svg {
+  width: 22%;
+  height: 22%;
+  color: #fff;
+  opacity: 0.92;
+}
+
+.curso-programa {
+  max-width: 840px;
+  margin: 0 auto;
+}
+.curso-programa-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.curso-programa-head svg {
+  width: 26px;
+  height: 26px;
+  color: var(--blue-600);
+  flex-shrink: 0;
+}
+.curso-programa-head h2 {
+  font-size: clamp(1.3rem, 2.8vw, 1.7rem);
+  font-weight: 800;
+  color: var(--text-heading);
+}
+.curso-programa-intro {
+  color: var(--text-body);
+  font-size: 1rem;
+  line-height: 1.75;
+  margin-bottom: 26px;
+}
+.curso-programa-divider {
+  border: none;
+  border-top: 1px solid var(--divider);
+  margin: 0 0 32px;
+}
+.curso-programa-section {
+  margin-bottom: 32px;
+}
+.curso-programa-section h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin-bottom: 12px;
+}
+.curso-programa-section > p {
+  color: var(--text-body);
+  font-size: 0.96rem;
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+.curso-programa-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.curso-programa-list li {
+  position: relative;
+  padding-left: 20px;
+  color: var(--text-body);
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+.curso-programa-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blue-600);
+}
+.curso-programa-list li strong {
+  color: var(--text-heading);
+  font-weight: 700;
+}
+.curso-programa .curso-chips {
+  margin: 8px 0 28px;
+}
+@media (max-width: 640px) {
+  .curso-hero-bar {
+    padding: 110px 0 32px;
+  }
+  .curso-hero-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ================= CONTACTO (contacto.html) ================= */
+.contacto-country-flag {
+  display: block;
+  width: 44px;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px var(--card-border);
+  margin: 0 auto 12px;
+}
+.contacto-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.contacto-grid-single {
+  grid-template-columns: minmax(0, 480px);
+  justify-content: center;
+}
+.contacto-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
+}
+.contacto-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+.contacto-card-region {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--blue-600);
+  margin-bottom: 6px;
+}
+.contacto-card h3 {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin-bottom: 16px;
+}
+.contacto-details {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.contacto-details li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.contacto-details svg {
+  width: 16px;
+  height: 16px;
+  color: var(--blue-600);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.contacto-details span {
+  color: var(--text-body);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.contacto-details a {
+  color: var(--text-heading);
+  font-weight: 600;
+}
+.contacto-details a:hover {
+  color: var(--blue-600);
+}
+.contacto-map-link {
+  margin-top: auto;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--blue-600);
+}
+.contacto-map-link:hover {
+  text-decoration: underline;
+}
+@media (max-width: 1080px) {
+  .contacto-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .contacto-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= GARANTÍA OFICIAL (servicios/ventas-instalacion.html) ================= */
+.ventas-garantia {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.ventas-garantia h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--text-heading);
+  margin-bottom: 12px;
+}
+.ventas-garantia > p {
+  color: var(--text-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+.ventas-garantia-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+.ventas-garantia-logos img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.85;
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
+}
+.ventas-garantia-logos img:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+html.theme-dark .ventas-garantia-logos img {
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+}
+@media (max-width: 640px) {
+  .ventas-garantia-logos {
+    gap: 24px;
+  }
+  .ventas-garantia-logos img {
+    height: 30px;
+  }
+}
+
+/* ---- Variante de 4 tarjetas (servicios/limpieza-ductos.html) ---- */
+.service-why-grid-4 {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0;
+}
+@media (max-width: 760px) {
+  .service-why-grid-4 {
+    grid-template-columns: 1fr;
+  }
 }

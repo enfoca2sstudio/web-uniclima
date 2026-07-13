@@ -69,6 +69,7 @@
         "Principios físicos de la refrigeración y funcionamiento de los sistemas de aire acondicionado.",
       tags: ["Aire acondicionado", "Básico"],
       icon: "ac",
+      activo: true,
     },
     {
       id: "c2",
@@ -80,6 +81,7 @@
         "Fundamentos eléctricos necesarios para instalar y diagnosticar equipos de climatización con seguridad.",
       tags: ["Básico"],
       icon: "electric",
+      activo: true,
     },
     {
       id: "c3",
@@ -90,6 +92,7 @@
         "Conceptos base de los ciclos de refrigeración y las tecnologías actuales del mercado.",
       tags: ["Básico"],
       icon: "snow",
+      activo: true,
     },
     {
       id: "c4",
@@ -101,6 +104,7 @@
         "Procedimiento completo de instalación y arranque de equipos split y compactos MDV.",
       tags: ["Aire acondicionado", "Inverter"],
       icon: "ac",
+      activo: true,
     },
     {
       id: "c5",
@@ -111,6 +115,7 @@
         "Primeros pasos en el diseño e instalación de sistemas de agua helada (chillers).",
       tags: ["Chiller", "Agua helada"],
       icon: "water",
+      activo: true,
     },
     {
       id: "c6",
@@ -121,6 +126,7 @@
         "Introducción a la tecnología VRF: componentes, funcionamiento y aplicaciones.",
       tags: ["VRF", "Básico"],
       icon: "vrf",
+      activo: true,
     },
 
     // ---------- Intermedios ----------
@@ -133,6 +139,7 @@
         "Arranque y diagnóstico de fallas en sistemas VRF VC MAX.",
       tags: ["VRF"],
       icon: "vrf",
+      activo: true,
     },
     {
       id: "c8",
@@ -143,6 +150,7 @@
         "Operación y mantenimiento preventivo/correctivo de sistemas de agua helada.",
       tags: ["Chiller", "Agua helada"],
       icon: "water",
+      activo: true,
     },
     {
       id: "c9",
@@ -154,6 +162,7 @@
         "Diseño y cálculo de ductería de aire apoyado en herramientas de inteligencia artificial.",
       tags: ["Software", "Cargas térmicas"],
       icon: "software",
+      activo: true,
     },
     {
       id: "c10",
@@ -165,6 +174,7 @@
         "Masterclass en vivo sobre el rol de los sistemas VRF en la edificación moderna.",
       tags: ["VRF"],
       icon: "vrf",
+      activo: true,
     },
     {
       id: "c11",
@@ -175,6 +185,7 @@
         "Panorama actual de los refrigerantes de nueva generación R-32 y R-454B.",
       tags: ["Inverter"],
       icon: "snow",
+      activo: true,
     },
     {
       id: "c12",
@@ -186,6 +197,7 @@
         "Configuración de controles VRF y su compatibilidad con termostatos de distintas marcas.",
       tags: ["VRF"],
       icon: "vrf",
+      activo: true,
     },
     {
       id: "c13",
@@ -196,6 +208,7 @@
         "Metodologías de diagnóstico para identificar fallas comunes en sistemas de aire acondicionado.",
       tags: ["Aire acondicionado"],
       icon: "ac",
+      activo: true,
     },
 
     // ---------- Avanzados ----------
@@ -208,6 +221,7 @@
         "Selección y optimización de sistemas VRF V8 utilizando el software de diseño MDV.",
       tags: ["VRF", "Software"],
       icon: "software",
+      activo: true,
     },
     {
       id: "c15",
@@ -219,6 +233,7 @@
         "Lectura e interpretación avanzada de diagramas eléctricos en sistemas de agua helada.",
       tags: ["Chiller", "Agua helada"],
       icon: "electric",
+      activo: true,
     },
     {
       id: "c16",
@@ -230,6 +245,7 @@
         "Cálculo especializado de cargas térmicas utilizando el software HAP de Carrier.",
       tags: ["Cargas térmicas", "Software"],
       icon: "software",
+      activo: true,
     },
   ];
 

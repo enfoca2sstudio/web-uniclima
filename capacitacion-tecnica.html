@@ -19,8 +19,11 @@
         }
       })();
     </script>
-    <title>Curso — Grupo Uniclima</title>
-    <meta name="description" content="Ficha de curso — Academia Uniclima." />
+    <title>Capacitación Técnica — Grupo Uniclima</title>
+    <meta
+      name="description"
+      content="Capacitación técnica in-situ o presencial para equipos de mantenimiento e instalación de sistemas HVAC."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -29,7 +32,7 @@
     />
     <!-- Tailwind CSS via Play CDN (no build step needed for this static site) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="js/tailwind-config.js"></script>
+    <script src="/js/tailwind-config.js"></script>
     <script
       src="https://kit.fontawesome.com/49286760f0.js"
       crossorigin="anonymous"
@@ -53,7 +56,7 @@
             <li><a href="index.html">Inicio</a></li>
             <li><a href="productos.html">Productos</a></li>
             <li><a href="proyectos.html">Proyectos</a></li>
-            <li class="has-dropdown">
+            <li class="has-dropdown active-parent">
               <a href="index.html#servicios">Servicios</a>
               <button
                 class="dd-toggle"
@@ -74,7 +77,9 @@
                 <a href="ventas-instalacion.html">Ventas e Instalación</a>
                 <a href="mantenimiento.html">Mantenimiento</a>
                 <a href="limpieza-ductos.html">Limpieza de Ductos</a>
-                <a href="capacitacion-tecnica.html">Capacitación Técnica</a>
+                <a href="capacitacion-tecnica.html" class="active"
+                  >Capacitación Técnica</a
+                >
               </div>
             </li>
             <li class="has-dropdown">
@@ -100,7 +105,7 @@
               </div>
             </li>
             <li><a href="cursos.html">Academia</a></li>
-            <li><a href="cotizaciones.html" class="active">Cotización</a></li>
+            <li><a href="cotizaciones.html">Cotización</a></li>
             <li><a href="contacto.html">Contacto</a></li>
           </ul>
           <button
@@ -138,151 +143,197 @@
       </div>
     </header>
 
-    <!-- ================= FICHA DE CURSO — nuevo diseño ================= -->
-    <!-- Barra superior: volver + pills -->
-    <div class="cd-topbar" id="cdTopbar">
-      <div class="mx-auto max-w-container px-6 cd-topbar-inner">
-        <a href="cursos.html" class="cd-back">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path
-              d="M19 12H5M11 18l-6-6 6-6"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+    <!-- ================= HERO ================= -->
+    <section class="service-hero">
+      <div class="service-hero-bg"></div>
+      <div class="mx-auto max-w-container px-6 service-hero-content">
+        <span
+          class="eyebrow font-poppins font-semibold text-[0.85rem] tracking-[0.1em]"
+          >Formación Especializada</span
+        >
+        <h1 class="font-galano">Capacitación Técnica</h1>
+        <p>
+          Formación especializada para su equipo técnico. Programas de
+          capacitación diseñados para que su personal domine la operación y
+          mantenimiento de sistemas HVAC.
+        </p>
+        <a href="../cotizaciones.html" class="btn btn-blanco"
+          >Solicitar Cotización</a
+        >
+      </div>
+      <svg
+        class="service-hero-curve"
+        viewBox="0 0 1440 200"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M0,200 L0,55 C 300,205 1140,205 1440,55 L1440,200 Z"
+          fill="var(--surface)"
+        />
+      </svg>
+    </section>
+
+    <!-- ================= ¿POR QUÉ ELEGIRNOS? ================= -->
+    <section class="service-why-section">
+      <div class="mx-auto max-w-container">
+        <div class="service-why-head">
+          <h2 class="reveal">¿Por qué <strong>elegirnos</strong>?</h2>
+          <svg viewBox="0 0 24 24" fill="#3e568d">
+            <path d="M4 8h16L12 18Z" />
           </svg>
-          Volver a Academia
-        </a>
-        <div class="cd-pills">
-          <!-- Horas -->
-          <span class="cd-pill" id="cdPillHours">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 7v5l3 3" />
-            </svg>
-            <span id="cdHoursText">—</span>
-          </span>
-          <!-- Nivel -->
-          <span class="cd-pill" id="cdPillLevel">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="2" y="14" width="5" height="7" rx="1" />
-              <rect x="9.5" y="9" width="5" height="12" rx="1" />
-              <rect x="17" y="4" width="5" height="17" rx="1" />
-            </svg>
-            <span id="cdLevelText">—</span>
-          </span>
         </div>
-      </div>
-    </div>
-
-    <!-- Hero: título y descripción corta -->
-    <div class="cd-hero" id="cdHeroSection" hidden>
-      <div class="mx-auto max-w-container px-6">
-        <h1 id="cdHeroTitle"></h1>
-        <p class="cd-hero-sub" id="cdHeroSub"></p>
-      </div>
-    </div>
-
-    <!-- Not found -->
-    <div class="cd-body" id="cdBodyNotFound" hidden>
-      <div class="mx-auto max-w-container px-6">
-        <div class="cd-not-found">
-          <h1>Curso no encontrado</h1>
-          <p>El curso que buscas no existe o el enlace ya no es válido.</p>
-          <a href="cursos.html" class="btn btn-primary">Ver toda la academia</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Cuerpo: imagen + info -->
-    <div class="cd-body" id="cdBodyContent" hidden>
-      <div class="mx-auto max-w-container px-6">
-        <!-- Imagen / ícono del curso -->
-        <div class="cd-media" id="cdMedia">
-          <svg
-            class="cd-icon"
-            id="cdIcon"
-            viewBox="0 0 24 24"
-            fill="none"
-          ></svg>
-        </div>
-
-        <!-- Info -->
-        <div class="cd-info">
-          <div class="cd-info-header">
-            <svg
-              class="cd-info-icon"
-              id="cdInfoIcon"
-              viewBox="0 0 24 24"
-              fill="none"
-            ></svg>
-            <h2 id="cdInfoTitle"></h2>
+        <div class="service-why-grid reveal-stagger">
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-01.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Instructores<br />Certificados</h3>
+            </div>
+            <p>
+              Capacitadores con certificación y amplia experiencia en el campo.
+            </p>
           </div>
-
-          <p class="cd-description" id="cdDescription"></p>
-
-          <div class="cd-chips" id="cdChips"></div>
-
-          <div class="cd-disclaimer">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle
-                cx="12"
-                cy="12"
-                r="9"
-                stroke="currentColor"
-                stroke-width="1.6"
-              />
-              <path
-                d="M12 8v5M12 16h.01"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-              />
-            </svg>
-            <span
-              >Este curso no requiere examen ni evaluación para obtener el
-              certificado de participación. El certificado
-              <strong>no está avalado por Carrier</strong>.</span
-            >
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-02.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Práctica en<br />Equipos Reales</h3>
+            </div>
+            <p>
+              Sesiones prácticas con equipos reales para un aprendizaje
+              aplicado.
+            </p>
           </div>
-
-          <div class="cd-actions">
-            <a
-              href="cotizaciones.html"
-              class="btn btn-primary"
-              id="cdRegisterBtn"
-              >Registrarme</a
-            >
-            <a
-              href="https://wa.me/584140260505"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline-dark"
-              id="cdWhatsappBtn"
-              >Consultar por WhatsApp</a
-            >
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-03.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Certificación</h3>
+            </div>
+            <p>
+              Constancias de capacitación reconocidas por la industria HVAC.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-04.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Programas a<br />Medida</h3>
+            </div>
+            <p>
+              Contenido adaptado a las necesidades específicas de su equipo
+              técnico.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-05.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Material<br />Didáctico</h3>
+            </div>
+            <p>
+              Manuales técnicos, guías de referencia y material de apoyo
+              incluido.
+            </p>
+          </div>
+          <div class="service-why-card">
+            <div class="service-why-card-head">
+              <div class="icon-line">
+                <img
+                  src="img/servicios/icon-servicio-06.webp"
+                  alt=""
+                  class="img-servicios"
+                />
+              </div>
+              <h3>Actualización<br />Continua</h3>
+            </div>
+            <p>
+              Programas de actualización sobre nuevas tecnologías y productos
+              del sector HVAC.
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- IDs de compatibilidad para curso-detail.js (ocultos) -->
-    <span id="cursoNotFound" hidden></span>
-    <span id="cursoDetail" hidden></span>
+    <!-- ================= DETALLE DEL SERVICIO ================= -->
+    <section class="service-detail-section">
+      <div class="service-detail-bg"></div>
+      <div class="mx-auto max-w-container service-detail-grid">
+        <div class="service-detail-title reveal">
+          <h2>Detalle del<br /><span>Servicio</span></h2>
+          <div class="service-detail-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="service-detail-card reveal">
+          <ul>
+            <li>Diagnóstico de necesidades de capacitación del equipo.</li>
+            <li>
+              Diseño del programa según el nivel técnico de los participantes.
+            </li>
+            <li>Sesiones teóricas sobre fundamentos y normativas HVAC.</li>
+            <li>Prácticas guiadas con equipos y herramientas reales.</li>
+            <li>Evaluación de los conocimientos adquiridos.</li>
+            <li>Material de apoyo y guías de referencia.</li>
+            <li>Recomendaciones de mejora continua para el equipo técnico.</li>
+            <li>Entrega de constancia de participación.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="service-cta-section">
+      <div class="mx-auto max-w-container px-6">
+        <div class="service-cta reveal">
+          <h2>¿Interesado en este <strong>servicio</strong>?</h2>
+          <p>Contáctenos para una asesoría personalizada y sin compromiso.</p>
+          <div class="service-cta-actions">
+            <a href="../cotizaciones.html" class="btn btn-secondary"
+              >Solicitar Cotización
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12h14M13 6l6 6-6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                /></svg
+            ></a>
+            <a href="../index.html#contacto" class="btn btn-outline-dark"
+              >Contactar</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
 
     <footer id="contacto">
       <div class="mx-auto max-w-container px-6">
@@ -464,7 +515,5 @@
     </footer>
 
     <script src="js/main.js" defer></script>
-    <script src="js/cursos-data.js"></script>
-    <script src="js/curso-detail.js" defer></script>
   </body>
 </html>
