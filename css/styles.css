@@ -1,4 +1,25 @@
 @import url("fuentes.css");
+
+/* =====================================================================
+   ESCALA DE BREAKPOINTS (documentación)
+   -----------------------------------------------------------------
+   Antes este archivo usaba 11 valores de max-width distintos y casi
+   sueltos (460 / 480 / 520 / 560 / 640 / 700 / 760 / 860 / 900 / 920 /
+   1080), lo que generaba solapes y bloques @media duplicados para la
+   misma sección. Se consolidó todo a una escala fija de 5 niveles;
+   cualquier @media nuevo debería usar uno de estos valores:
+
+     1080px  → escritorio pequeño / notebook (ajustes de columnas)
+      920px  → tablet — también el breakpoint del menú móvil (nav)
+      760px  → tablet chica / teléfono grande (apaisado)
+      640px  → teléfono (retrato) — breakpoint "móvil" principal
+      480px  → teléfono chico (ajustes finos de tipografía/espaciado)
+
+   El rango "solo tablet" (921px–1080px) se usa cuando una regla debe
+   aplicar entre el breakpoint del menú (920px) y el de escritorio
+   (1080px), sin pisar los estilos de teléfono.
+   ===================================================================== */
+
 :root {
   --navy-950: #060f22;
   --navy-900: #0a1a3a;
@@ -223,6 +244,7 @@ header {
   right: 0;
   z-index: 100;
   padding: 18px 0;
+  padding-top: calc(18px + env(safe-area-inset-top, 0px));
   transition:
     background 0.35s,
     box-shadow 0.35s,
@@ -234,6 +256,7 @@ header.scrolled {
   backdrop-filter: blur(14px);
   box-shadow: 0 8px 30px -12px rgba(0, 0, 0, 0.4);
   padding: 12px 0;
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
 }
 nav {
   display: flex;
@@ -308,32 +331,109 @@ nav {
 .nav-close-item {
   display: none;
 }
+.tlf {
+  display: none;
+}
+.desk {
+  display: block;
+}
 @media (max-width: 920px) {
+  .desk {
+    display: none;
+  }
+  .tlf {
+    display: block;
+  }
+  /* Fondo oscurecido detrás del panel. Es opcional: si el HTML no
+     incluye un <div class="nav-backdrop">, esta regla simplemente no
+     tiene efecto (no rompe nada). Ver nota en la respuesta sobre cómo
+     activarla con una línea de JS. */
+  .nav-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: rgba(6, 15, 34, 0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s var(--ease);
+  }
+  .nav-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .nav-links {
     position: fixed;
     top: 0;
     right: 0;
     height: 100vh;
-    width: min(78vw, 320px);
+    width: min(84vw, 340px);
     background: var(--surface);
-    box-shadow: -8px 0 30px -10px rgba(0, 0, 0, 0.25);
+    border-left: 1px solid var(--card-border);
+    border-top-left-radius: 26px;
+    border-bottom-left-radius: 26px;
+    box-shadow: -20px 0 50px -18px rgba(6, 15, 34, 0.45);
+    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 26px;
-    padding: 40px;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 4px;
+    padding: calc(88px + env(safe-area-inset-top, 0px)) 22px 28px;
     overflow-y: auto;
     transform: translateX(100%);
-    transition: transform 0.4s var(--ease);
+    opacity: 0;
+    transition:
+      transform 0.45s var(--ease),
+      opacity 0.35s var(--ease);
+  }
+  /* Franja de acento arriba del panel, puramente decorativa */
+  .nav-links::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(84vw, 340px);
+    height: 4px;
+    background: linear-gradient(90deg, var(--azul-unicli1), var(--blue-600));
+    border-top-left-radius: 26px;
+    opacity: 0;
+    transition: opacity 0.35s var(--ease) 0.1s;
+    pointer-events: none;
+  }
+  .nav-links.open::before {
+    opacity: 1;
   }
   .nav-links li {
-    width: 156px !important;
+    width: 100% !important;
   }
   .nav-links a {
     color: var(--text-heading);
+    display: block;
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: 12px;
+    font-size: 0.96rem;
+    transition:
+      background 0.25s var(--ease),
+      color 0.25s var(--ease),
+      padding-left 0.25s var(--ease);
+  }
+  .nav-links a::after {
+    display: none;
+  }
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    background: var(--surface-alt);
+    padding-left: 20px;
+  }
+  .nav-links a.active {
+    background: var(--bg-active);
+    border-radius: 12px;
   }
   .nav-links.open {
     transform: translateX(0);
+    opacity: 1;
   }
   .nav-cta {
     display: none;
@@ -344,46 +444,57 @@ nav {
   .nav-close-item {
     display: block;
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 18px;
+    left: 281px;
   }
   .nav-close-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    border: none;
+    border: 1px solid var(--card-border);
     background: var(--surface-alt);
     color: var(--text-heading);
     cursor: pointer;
-    transition: background 0.2s;
+    transition:
+      background 0.2s,
+      transform 0.2s var(--ease);
   }
   .nav-close-btn:hover {
     background: var(--card-border);
+    transform: rotate(90deg);
   }
   .nav-close-btn svg {
     width: 16px;
     height: 16px;
   }
   .has-dropdown {
+    position: relative;
     flex-direction: column;
-    align-items: flex-start !important;
+    align-items: stretch !important;
     width: 100%;
     gap: 0;
     margin: 0;
     padding: 0;
   }
   .has-dropdown > a {
-    display: inline-block;
+    display: block;
     margin: 0;
+    padding-right: 44px;
     text-align: left;
   }
   .dd-toggle {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 4px;
+    top: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+  .has-dropdown.open .dd-toggle {
+    background: var(--surface-alt);
   }
   .dropdown {
     position: static;
@@ -396,11 +507,20 @@ nav {
     min-width: 0;
     box-shadow: none;
     background: transparent;
-    padding: 4px 0 0 14px;
-    margin-top: 10px;
+    padding: 4px 0 6px 16px;
+    margin: 2px 0 4px;
+    border-left: 2px solid var(--card-border);
   }
   .has-dropdown.open .dropdown {
     display: flex;
+  }
+  .dropdown a {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: var(--text-body);
+  }
+  .dropdown a:hover {
+    color: var(--text-heading);
   }
 }
 
@@ -846,12 +966,12 @@ nav {
   font-size: 0.92rem;
   line-height: 1.6;
 }
-@media (max-width: 860px) {
+@media (max-width: 920px) {
   .why-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .why-grid {
     grid-template-columns: 1fr;
   }
@@ -913,7 +1033,7 @@ nav {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-@media (max-width: 520px) {
+@media (max-width: 480px) {
   .cat-scroller {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -974,7 +1094,7 @@ nav {
     grid-template-columns: 1fr 1fr;
   }
 }
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .services-grid {
     grid-template-columns: 1fr;
   }
@@ -1090,7 +1210,7 @@ nav {
   font-size: 0.88rem;
   line-height: 1.6;
 }
-@media (max-width: 900px) {
+@media (max-width: 920px) {
   .process-grid {
     grid-template-columns: 1fr;
   }
@@ -1210,12 +1330,12 @@ footer {
 .firma-foot:hover {
   color: var(--blue-600);
 }
-@media (max-width: 860px) {
+@media (max-width: 920px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
-@media (max-width: 520px) {
+@media (max-width: 480px) {
   .footer-grid {
     grid-template-columns: 1fr;
   }
@@ -1253,6 +1373,45 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
   color: black;
 }
 
+/* ---- el botón de tema (el mismo del header) se mete dentro del
+   panel móvil en vez de quedarse suelto en la barra superior ----
+   Sigue siendo el único <button id="themeToggle"> del HTML: acá solo
+   lo reposicionamos con position:fixed y lo sincronizamos con la
+   apertura del panel (misma técnica que ya usa la regla de color de
+   arriba, vía el selector de hermano general `.nav-links.open ~`).
+   Queda del lado opuesto al botón de cerrar (que main.js inserta con
+   right:18px), pegado al borde izquierdo del panel. */
+@media (max-width: 920px) {
+  .theme-toggle {
+    position: fixed;
+    top: 18px;
+    /* ancho del panel (min(84vw,340px)) menos 18px de aire menos
+       36px del propio botón = queda pegado al borde izq. del panel */
+    right: calc(min(84vw, 340px) - 54px);
+    width: 36px;
+    height: 36px;
+    margin-left: 0;
+    z-index: 101;
+    transform: translateX(120%);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.45s var(--ease),
+      opacity 0.3s var(--ease),
+      background 0.3s;
+  }
+  .nav-links.open ~ .theme-toggle {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  html.theme-dark .theme-toggle,
+  html.theme-dark header.scrolled .theme-toggle,
+  html.theme-dark header:not(.scrolled) .nav-links.open ~ .theme-toggle {
+    color: #fff;
+  }
+}
+
 /* ================= NAV DROPDOWNS ================= */
 .has-dropdown {
   position: relative;
@@ -1274,6 +1433,7 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
 .dd-toggle .chev {
   width: 11px;
   height: 11px;
+  transition: transform 0.3s var(--ease);
 }
 .has-dropdown:hover .dd-toggle .chev {
   transform: rotate(180deg);
@@ -1282,40 +1442,65 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(8px);
-  min-width: 220px;
+  transform: translateX(-50%) translateY(6px) scale(0.97);
+  min-width: 240px;
   background: var(--surface);
-  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
   box-shadow: var(--shadow-soft);
   padding: 10px;
   opacity: 0;
   pointer-events: none;
   z-index: 50;
   transition:
-    opacity 0.3s var(--ease),
-    transform 0.3s var(--ease);
+    opacity 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+/* pequeña flecha que conecta el dropdown con su link padre */
+.dropdown::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: var(--surface);
+  border-left: 1px solid var(--card-border);
+  border-top: 1px solid var(--card-border);
+  border-radius: 2px;
 }
 .has-dropdown:hover .dropdown,
 .has-dropdown.open .dropdown {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(-50%) translateY(4px);
+  transform: translateX(-50%) translateY(10px) scale(1);
 }
 .dropdown a {
-  display: block;
-  padding: 10px 14px;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  border-radius: 10px;
   color: var(--text-heading);
-  font-size: 0.86rem;
-  transition: background 0.2s;
+  font-size: 0.87rem;
+  font-weight: 500;
+  transition:
+    background 0.2s var(--ease),
+    padding-left 0.2s var(--ease),
+    color 0.2s var(--ease);
 }
 .dropdown a::after {
   display: none;
 }
 .dropdown a:hover {
   background: var(--surface-alt);
+  padding-left: 18px;
+  color: var(--blue-600);
 }
 @media (max-width: 920px) {
+  .dropdown::before {
+    display: none;
+  }
   .dd-toggle .chev {
     color: var(--text-heading);
   }
@@ -1539,6 +1724,16 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
   margin-left: 2px;
 }
 
+@media (max-width: 920px) {
+  .somos-dots {
+    margin-top: 34px;
+  }
+
+  .somos-right .somos-dots {
+    margin-bottom: 12px;
+  }
+}
+
 /* ---- somos carousel (mismo formato/mecánica que .hero-slide) ---- */
 .somos-carousel {
   position: relative;
@@ -1610,18 +1805,21 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
   width: 26px;
   background: var(--blue-300);
 }
-@media (max-width: 860px) {
+@media (max-width: 920px) {
   .somos-carousel {
     min-height: 280px;
   }
-}
-@media (max-width: 860px) {
   .somos-card {
     grid-template-columns: 1fr;
+    margin: auto;
   }
   .somos-left,
   .somos-right {
     padding: 46px 30px;
+  }
+
+  .somos-left {
+    align-items: center;
   }
 }
 
@@ -1709,7 +1907,7 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .services-alt {
     grid-template-columns: 1fr;
   }
@@ -1729,25 +1927,26 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
 }
 .carrier-photo {
   position: absolute;
-  top: -28px;
+  top: 0;
   left: -28px;
-  bottom: -28px;
-  width: calc(68% + -19px);
+  bottom: 0;
+  width: calc(57% + -19px);
+  background: url("../img/carrier-lifestyle.jpg") no-repeat center center/cover;
   z-index: 1;
+  border-radius: 40px 0 0 40px;
 }
-.carrier-photo img {
+
+/* .carrier-photo img {
   width: 100%;
   height: auto;
   object-fit: cover;
   display: block;
-}
+} */
 .carrier-info {
   position: absolute;
-  left: 38%;
+  left: 43%;
   right: 0;
-  top: 50%;
-  transform: translateY(-56%);
-  height: 324px;
+  top: 0;
   background: #070b4b;
   background: -webkit-linear-gradient(
     90deg,
@@ -1765,29 +1964,13 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
     rgba(13, 158, 230, 1) 100%
   );
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#070B4B", endColorstr="#0D9EE6", GradientType=1);
-  padding: 52px 48px 52px 302px;
+  padding: 76px 48px 76px 196px;
   color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   border-radius: 0 40px 40px 0;
   box-shadow: var(--shadow-soft);
-  /* Mismo corte diagonal (espejado) en la esquina superior izquierda,
-     recto en el resto del borde para que calce con .carrier-photo.
-     La esquina inferior derecha se redondea con una curva aproximada
-     por puntos (radio de 40px, igual que el border-radius) porque
-     clip-path: polygon() no admite arcos reales. */
-  clip-path: polygon(
-    8.5% 0,
-    100% 0,
-    100% calc(100% - 40px),
-    calc(100% - 3px) calc(100% - 24.7px),
-    calc(100% - 11.7px) calc(100% - 11.7px),
-    calc(100% - 24.7px) calc(100% - 3px),
-    calc(100% - 40px) 100%,
-    0 100%,
-    0 17.9%
-  );
   z-index: 0;
 }
 .carrier-info .eyebrow {
@@ -1835,7 +2018,7 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
   padding-bottom: 9px !important;
   margin-top: 18px !important;
 }
-@media (max-width: 860px) {
+@media (max-width: 920px) {
   .carrier-banner {
     margin: 0;
   }
@@ -1843,6 +2026,7 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
     position: static;
     width: 100%;
     min-height: 260px;
+    border-radius: 40px 40px 0 0;
   }
   .carrier-info {
     position: static;
@@ -1852,6 +2036,13 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
     border-radius: 0 0 40px 40px;
     clip-path: none;
     padding: 44px 30px;
+  }
+  .logo-carrier {
+    margin: -26px auto 9px;
+    width: 42%;
+  }
+  .carrier-info p {
+    margin: auto;
   }
 }
 
@@ -1948,6 +2139,9 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
   .cursos-cards {
     grid-template-columns: 1fr;
   }
+  #academia {
+    padding-top: 20px !important;
+  }
 }
 
 /* ================= BRANDS STRIP ================= */
@@ -2020,9 +2214,6 @@ html.theme-dark .brand-logo {
   .brands-track {
     animation: none;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
@@ -2281,7 +2472,7 @@ html.theme-dark .brand-logo {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-@media (max-width: 460px) {
+@media (max-width: 480px) {
   .product-grid {
     grid-template-columns: 1fr;
   }
@@ -2815,7 +3006,7 @@ html.theme-dark .brand-logo {
   flex-wrap: wrap;
   gap: 12px;
 }
-@media (max-width: 860px) {
+@media (max-width: 920px) {
   .product-detail {
     grid-template-columns: 1fr;
     gap: 28px;
@@ -3196,7 +3387,7 @@ html.theme-dark .brand-logo {
   color: var(--blue-400);
   font-weight: 700;
 }
-@media (max-width: 860px) {
+@media (max-width: 920px) {
   .service-detail-grid {
     grid-template-columns: 1fr;
     gap: 36px;
@@ -3244,7 +3435,7 @@ html.theme-dark .brand-logo {
     grid-template-columns: 1fr;
   }
 }
-@media (max-width: 1080px) and (min-width: 761px) {
+@media (max-width: 1080px) and (min-width: 921px) {
   .service-why-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -3378,12 +3569,21 @@ html.theme-dark .brand-logo {
   font-weight: 600;
   text-decoration: underline;
 }
-@media (max-width: 700px) {
+@media (max-width: 640px) {
   .btu-steps {
     grid-template-columns: 1fr;
   }
   .btu-modal {
     padding: 36px 24px;
+  }
+  .btu-card {
+    padding: 32px 24px 36px;
+  }
+  .btu-grid-3 {
+    grid-template-columns: 1fr;
+  }
+  .btu-grid-2 {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -3541,17 +3741,6 @@ html.theme-dark .brand-logo {
 .btu-result.btu-result-error .btu-result-value {
   color: #d64545;
   font-size: 1.2rem;
-}
-@media (max-width: 640px) {
-  .btu-card {
-    padding: 32px 24px 36px;
-  }
-  .btu-grid-3 {
-    grid-template-columns: 1fr;
-  }
-  .btu-grid-2 {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ================= GUÍA PRÁCTICA (atencion-al-cliente/guia-practica.html) ================= */

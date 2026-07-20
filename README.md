@@ -14,7 +14,7 @@ Grupo Uniclima es un holding de empresas distribuidor autorizado de marcas líde
 
 - **Inicio** – Hero en carrusel (3 diapositivas: marca general, proyectos/experiencia, servicio técnico), presentación general de la empresa y marcas representadas.
 - **Nosotros** – Historia, misión y trayectoria del grupo.
-- **Productos** – Catálogo de equipos HVAC (`productos.html`), con hero de presentación, buscador de productos en vivo y píldoras de filtro por categoría (Aplicado, Compresores, Línea CIAC, Otros, Residencial - Comercial Ligero, VRF, Válvulas de Control), cada una con su propio submenú desplegable de subcategorías, sobre una grilla de fichas de producto. El catálogo se administra desde un panel interno independiente — ver "🔐 Panel de administración" más abajo.
+- **Productos** – Catálogo de equipos HVAC (`productos.html`), con hero de presentación, buscador de productos en vivo y píldoras de filtro por categoría (Aplicado, Compresores, Línea CIAC, Otros, Residencial - Comercial Ligero, VRF, Válvulas de Control), cada una con su propio submenú desplegable de subcategorías, sobre una grilla de fichas de producto. El catálogo vive en una base de datos real (Firestore) y se administra desde un panel interno independiente — ver "🔐 Panel de administración" y "🔥 Base de datos (Firestore)" más abajo.
 - **Proyectos** – Portafolio de proyectos ejecutados.
 - **Servicios** – Cinco páginas de servicio (`servicios/`), todas con el mismo formato: hero con curva decorativa, sección "¿Por qué elegirnos?" con tarjetas, "Detalle del Servicio" con checklist, y CTA final.
   - **Asesoría Técnica** (`servicios/asesoria-tecnica.html`)
@@ -39,8 +39,8 @@ Aire Acondicionado · Chillers · Equipos Compactos · Fan & Coil · Manejadoras
 
 - **Tema claro/oscuro** – Toggle en el header que alterna entre tema claro y oscuro. La preferencia se guarda en `localStorage` y, si el usuario no ha elegido ninguna, se respeta la preferencia del sistema operativo (`prefers-color-scheme`) y se sigue actualizando en vivo si esta cambia. Un script inline en el `<head>` aplica el tema antes del primer render para evitar parpadeos (FOUC). Las secciones oscuras por diseño (hero, footer, banners) se mantienen igual en ambos temas; solo cambian las secciones "claras" (fondos, tarjetas, textos).
 - **Carrusel del hero** – La sección de Inicio muestra 3 diapositivas (marca general, proyectos/experiencia, servicio técnico) con transición tipo *crossfade*, autoplay (7s), flechas y puntos de navegación. El autoplay se pausa al pasar el mouse, al enfocar con teclado o al cambiar de pestaña, soporta swipe en móvil y respeta `prefers-reduced-motion`.
-- **Catálogo de productos con filtros en vivo** – La página de Productos (`productos.html`) incluye un buscador de texto y píldoras de filtro por categoría — con submenú de subcategorías — que muestran/ocultan las fichas de producto al instante, en el cliente y sin recargar la página (JavaScript vanilla, sin backend ni llamadas a servidor). El catálogo (categorías, subcategorías y productos) vive en `localStorage` y se gestiona desde un panel de administración separado — ver la sección dedicada más abajo.
-- **Academia con filtro combinado** – La página de Cursos (`cursos.html`) organiza los cursos en 3 secciones por nivel y permite filtrar por nivel, por palabra clave (en un desplegable dentro del buscador) y por texto libre al mismo tiempo; las secciones sin resultados se ocultan solas. Igual que el catálogo de productos, vive en `localStorage` y se administra desde el mismo panel.
+- **Catálogo de productos con filtros en vivo** – La página de Productos (`productos.html`) incluye un buscador de texto y píldoras de filtro por categoría — con submenú de subcategorías — que muestran/ocultan las fichas de producto al instante, en el cliente. El catálogo (categorías, subcategorías y productos) vive en Firestore y se gestiona desde un panel de administración separado — ver "🔐 Panel de administración" y "🔥 Base de datos (Firestore)" más abajo.
+- **Academia con filtro combinado** – La página de Cursos (`cursos.html`) organiza los cursos en 3 secciones por nivel y permite filtrar por nivel, por palabra clave (en un desplegable dentro del buscador) y por texto libre al mismo tiempo; las secciones sin resultados se ocultan solas. Igual que el catálogo de productos, vive en Firestore y se administra desde el mismo panel.
 - **Cursos activos/inactivos** – Cada curso puede marcarse como activo o inactivo desde el panel de administración. Los inactivos se siguen mostrando en `cursos.html` (con una etiqueta "No disponible", visible al pasar el mouse) pero sin enlace funcional a su ficha, y quedan excluidos del desplegable de la Planilla de Inscripción.
 - **Menú responsive** – El panel deslizante del menú móvil incluye un botón de cierre propio (insertado por `main.js` en todas las páginas, sin duplicar marcado), submenús desplegables que se expanden en el lugar (Servicios, Atención al Cliente) sin cerrar el panel completo al abrirlos, y colores/sombras que se adaptan al tema claro/oscuro.
 - **Calculadora de BTU** – Estimación rápida de la capacidad de A/C necesaria (volumen del espacio × factor base, más ajustes por ocupantes y equipos electrónicos), con validación de campos y sugerencia del tamaño de equipo comercial más cercano. Cálculo instantáneo en el cliente, sin backend.
@@ -53,9 +53,37 @@ Página interna independiente (`admin-productos.html`) para gestionar el catálo
 - **Pestaña Productos** – CRUD completo (agregar, editar, eliminar), incluyendo categoría y subcategoría (cada una de las 7 categorías tiene su propia lista de subcategorías — ver `js/products-data.js`). Incluye **importar / exportar CSV**: sube un CSV para agregar productos en bloque o reemplazar todo el catálogo. El importador reconoce automáticamente varios formatos de encabezado, en español e inglés, incluyendo exportaciones de WooCommerce/Shopify (`Name`/`Nombre`, `Categories`/`Categorías` — incluso jerárquicas tipo "Padre > Hijo" —, `Short description`/`Description`, `Images`/`Imágenes`). Si una categoría del CSV no coincide con las propias, el producto igual se importa (queda en "Otros" en vez de perderse). También permite descargar una plantilla CSV o exportar el catálogo actual.
 - **Pestaña Cursos** – CRUD completo (agregar, editar, eliminar, restaurar): título, nivel (Básico/Intermedio/Avanzado), horas, descripción, ícono de la tarjeta, estado activo/inactivo (interruptor visual), y palabras clave como casillas de verificación (puede marcar varias por curso) — ver `js/cursos-data.js`. La lista de cursos actuales muestra una etiqueta de estado (Activo/Inactivo) por cada uno.
 - **Notificación de confirmación** (toast) tras cada acción, en ambas pestañas.
-- Todo se guarda en `localStorage`: los productos bajo la misma clave que lee `productos.html` (`js/products-data.js`), y los cursos bajo la misma clave que lee `cursos.html` (`js/cursos-data.js`) — así los cambios se reflejan de inmediato en las páginas públicas, sin backend.
+- Todo se guarda en **Firestore** (ver la sección siguiente): los cambios quedan disponibles de inmediato para cualquier visitante del sitio, no solo en el navegador donde se hicieron.
 
-> ⚠️ **Aviso de seguridad:** la contraseña del panel (definida en `js/admin-productos.js`) es solo para desalentar ediciones accidentales — el sitio es 100% estático y ese código, incluida la contraseña, es público y legible por cualquiera. No reemplaza un control de acceso real, que requeriría un backend con autenticación.
+> ⚠️ **Aviso de seguridad:** la contraseña del panel (definida en `js/admin-productos.js`) es solo para desalentar ediciones accidentales — el sitio es 100% estático y ese código, incluida la contraseña, es público y legible por cualquiera. Sin Firebase Authentication (no incluido en esta versión), alguien con conocimientos técnicos podría escribir en la base de datos sin pasar por esta contraseña. No reemplaza un control de acceso real — ver el aviso ampliado en `js/firebase-init.js`.
+
+## 🔥 Base de datos (Firestore)
+
+El catálogo de productos y de cursos vive en **Cloud Firestore** (Google Firebase), no en el navegador. Antes de esta migración usaban `localStorage`, que solo persistía en el navegador donde se hacía el cambio — un curso agregado desde el panel de administración nunca lo veía nadie más. Con Firestore, cualquier cambio hecho desde el panel es visible para todos los visitantes del sitio, de inmediato.
+
+- **`js/firebase-init.js`** – Inicializa Firebase/Firestore (vía el SDK modular de Firebase, cargado desde CDN como módulo de JavaScript — no requiere `npm install` ni build) y expone `window.UniclimaFirebase` con funciones básicas (`getAll`, `setItem`, `deleteItem`, `seedIfEmpty`, `bulkSet`, `clearCollection`) para que el resto de los scripts del sitio las use sin tener que lidiar con imports.
+- **`js/products-data.js`** y **`js/cursos-data.js`** – Ya no exponen `load()`/`save()` síncronos; ahora son funciones asíncronas (`load()`, `addOrUpdate()`, `remove()`, `resetToDefaults()`, y `importBulk()` para productos) que leen/escriben en las colecciones `products` y `cursos` de Firestore. La primera vez que el sitio corre contra un proyecto de Firebase nuevo (colección vacía), se siembra sola con el catálogo original incluido en el código — no hace falta migrar datos a mano.
+- Las páginas que muestran este contenido (`productos.html`, `producto.html`, `cursos.html`, `curso.html`, `admin-productos.html`, y el desplegable de cursos en `cotizaciones.html`) muestran un mensaje de "Cargando…" mientras llega la respuesta de Firestore, y un mensaje de error si la conexión falla.
+
+### Configuración necesaria en Firebase Console
+
+Este repositorio ya trae el código listo, pero **Firestore no funciona hasta que se complete esta configuración manual** (no se puede hacer desde el código):
+
+1. En [Firebase Console](https://console.firebase.google.com), dentro del proyecto, ir a **Build → Firestore Database → Crear base de datos** (si todavía no existe).
+2. En **Firestore Database → Reglas**, pegar unas reglas que permitan leer y escribir (ver el aviso de seguridad más abajo):
+   ```
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /{document=**} {
+         allow read, write: if true;
+       }
+     }
+   }
+   ```
+3. La configuración del proyecto (`apiKey`, `projectId`, etc.) ya está incluida en `js/firebase-init.js`. Si se conecta el sitio a un proyecto de Firebase distinto, hay que reemplazar el objeto `firebaseConfig` ahí (Firebase Console → Configuración del proyecto → tu app web → `</>`).
+
+> ⚠️ **Aviso de seguridad:** las reglas de arriba (`allow read, write: if true`) dejan escribir en la base de datos a cualquiera que sepa cómo llamar a Firestore directamente desde las herramientas de desarrollador del navegador, no solo a través del panel de administración. Es funcional pero no ofrece protección real. Para un control de acceso real, la solución es agregar **Firebase Authentication** y condicionar las reglas de escritura a un usuario autenticado — no incluido en esta versión.
 
 ## 🖼️ Descarga local de imágenes de CSV
 
@@ -71,7 +99,8 @@ Detecta y reutiliza imágenes repetidas, y si una descarga falla deja la URL ori
 
 - **Frontend:** HTML5, JavaScript (Vanilla, sin frameworks de JS)
 - **Estilos:** [Tailwind CSS](https://tailwindcss.com) vía Play CDN (`assets/js/tailwind-config.js` define los tokens de color/tipografía de la marca) + CSS custom (`assets/css/styles.css`) para componentes bespoke (gradientes, animaciones, clip-paths) que no se expresan bien como utilidades
-- **Persistencia:** localStorage (preferencia de tema claro/oscuro; disponible también para paneles admin o datos locales si se necesita)
+- **Base de datos:** [Cloud Firestore](https://firebase.google.com/docs/firestore) (Firebase), vía el SDK modular cargado desde CDN — ver "🔥 Base de datos (Firestore)" más abajo. Guarda el catálogo de productos y de cursos.
+- **Persistencia local:** localStorage (preferencia de tema claro/oscuro; también se usa para recordar el acceso al panel de administración durante la sesión)
 - **Integraciones:** WhatsApp (contacto directo), formularios de cotización, calculadora de BTU
 - **Sin backend / servidor:** sitio 100% estático, desplegable en cualquier hosting estático
 - **Sin build step:** Tailwind se carga vía CDN (Play CDN), así que no hace falta `npm install` ni compilar nada para ver el sitio. Si el proyecto crece, se recomienda migrar a un build local de Tailwind (Tailwind CLI) para producción.
@@ -91,6 +120,8 @@ npx serve .
 # o
 python3 -m http.server 8000
 ```
+
+> Para que el catálogo de productos y de cursos cargue (no solo el resto del sitio), el proyecto de Firebase debe estar configurado — ver "🔥 Base de datos (Firestore)" más abajo. Sin eso, esas páginas se quedan en "Cargando…".
 
 ## 📁 Estructura del proyecto
 
@@ -128,10 +159,11 @@ uniclima-web/
 │       ├── tailwind-config.js  # tokens de marca para Tailwind (colores, tipografías, sombras)
 │       ├── main.js             # header, menú (con botón de cierre y submenús), dropdowns, reveal-on-scroll, contadores, tema claro/oscuro, carrusel del hero
 │       ├── calculadora-btu.js  # lógica de la Calculadora de BTU (atencion-al-cliente/calculadora-btu.html)
-│       ├── products-data.js    # catálogo de productos: categorías/subcategorías compartidas (localStorage)
+│       ├── firebase-init.js    # inicializa Firebase/Firestore, expone window.UniclimaFirebase (ver "🔥 Base de datos (Firestore)")
+│       ├── products-data.js    # catálogo de productos: categorías/subcategorías compartidas (Firestore)
 │       ├── productos-grid.js   # grilla pública + buscador + filtros (productos.html)
 │       ├── producto-detail.js  # ficha individual de producto (producto.html)
-│       ├── cursos-data.js      # catálogo de cursos: niveles/palabras clave/estado activo compartidos (localStorage)
+│       ├── cursos-data.js      # catálogo de cursos: niveles/palabras clave/estado activo compartidos (Firestore)
 │       ├── cursos-grid.js      # grilla pública + buscador + filtro nivel/palabra clave/estado (cursos.html)
 │       ├── curso-detail.js     # ficha individual de curso (curso.html)
 │       ├── registro-curso.js   # sin uso actualmente (registro-curso.html pasó a ser una redirección)
