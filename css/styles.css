@@ -66,7 +66,9 @@ html.theme-dark {
   --divider: rgba(255, 255, 255, 0.1);
   --azul-unicli1: #33b4f7;
   --azul-unicli2: #1c62c9;
+  --azul-unicli3: #3651ab;
   --azul-unicli4: #6f8ec7;
+  --azul-unicli5: #247ff0;
 }
 html {
   transition:
