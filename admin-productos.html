@@ -55,7 +55,7 @@
           </a>
           <ul class="nav-links" id="navLinks">
             <li><a href="index.html#inicio">Inicio</a></li>
-            <li><a href="productos.html" class="active">Productos</a></li>
+            <li><a href="productos.html">Productos</a></li>
             <li><a href="proyectos.html">Proyectos</a></li>
             <li class="has-dropdown">
               <a href="index.html#servicios">Servicios</a>
@@ -110,7 +110,7 @@
             </li>
             <li><a href="cursos.html">Academia</a></li>
             <li><a href="cotizaciones.html">Cotización</a></li>
-            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
           </ul>
           <button
             class="theme-toggle"
@@ -204,7 +204,10 @@
               >
               <h1>Administrar contenido</h1>
             </div>
-            <a href="productos.html" class="btn btn-outline-dark" id="adminBackLink"
+            <a
+              href="productos.html"
+              class="btn btn-outline-dark"
+              id="adminBackLink"
               >← Volver al catálogo</a
             >
           </div>
@@ -223,150 +226,158 @@
           </div>
 
           <div class="admin-panel-section" id="panelProductos">
-          <form id="adminForm" class="admin-form">
-            <input type="hidden" id="prodId" />
-            <div class="admin-form-row">
+            <form id="adminForm" class="admin-form">
+              <input type="hidden" id="prodId" />
+              <div class="admin-form-row">
+                <label>
+                  Nombre del producto
+                  <input
+                    type="text"
+                    id="prodName"
+                    required
+                    placeholder="Serie 16LJ"
+                  />
+                </label>
+                <label>
+                  Categoría
+                  <select id="prodCategory" required>
+                    <option value="aplicado">Aplicado</option>
+                    <option value="compresores">Compresores</option>
+                    <option value="ciac">Línea CIAC</option>
+                    <option value="otros">Otros</option>
+                    <option value="residencial">
+                      Residencial - Comercial Ligero
+                    </option>
+                    <option value="vrf">VRF</option>
+                    <option value="valvulas">Válvulas de Control</option>
+                  </select>
+                </label>
+                <label>
+                  Subcategoría (opcional)
+                  <select id="prodSubcategory">
+                    <option value="">— Ninguna —</option>
+                  </select>
+                </label>
+              </div>
               <label>
-                Nombre del producto
+                Especificaciones
                 <input
                   type="text"
-                  id="prodName"
+                  id="prodSpecs"
                   required
-                  placeholder="Serie 16LJ"
+                  placeholder="75 – 525 Toneladas"
                 />
               </label>
               <label>
-                Categoría
-                <select id="prodCategory" required>
-                  <option value="aplicado">Aplicado</option>
-                  <option value="compresores">Compresores</option>
-                  <option value="ciac">Línea CIAC</option>
-                  <option value="otros">Otros</option>
-                  <option value="residencial">
-                    Residencial - Comercial Ligero
-                  </option>
-                  <option value="vrf">VRF</option>
-                  <option value="valvulas">Válvulas de Control</option>
-                </select>
+                URL de imagen (opcional)
+                <input
+                  type="text"
+                  id="prodImage"
+                  placeholder="img/productos/16lj.jpg"
+                />
               </label>
-              <label>
-                Subcategoría (opcional)
-                <select id="prodSubcategory">
-                  <option value="">— Ninguna —</option>
-                </select>
-              </label>
-            </div>
-            <label>
-              Especificaciones
-              <input
-                type="text"
-                id="prodSpecs"
-                required
-                placeholder="75 – 525 Toneladas"
-              />
-            </label>
-            <label>
-              URL de imagen (opcional)
-              <input
-                type="text"
-                id="prodImage"
-                placeholder="img/productos/16lj.jpg"
-              />
-            </label>
-            <div class="admin-form-actions">
-              <button type="submit" class="btn btn-primary" id="prodSubmitBtn">
-                Agregar producto
-              </button>
-              <button
-                type="button"
-                class="btn btn-outline-dark"
-                id="prodCancelBtn"
-                hidden
-              >
-                Cancelar edición
-              </button>
-            </div>
-          </form>
-
-          <div class="admin-csv">
-            <div class="admin-csv-head">
-              <h3>Importar / exportar CSV</h3>
-              <p>
-                Sube un CSV para agregar varios productos de una sola vez.
-                Reconoce automáticamente varios formatos de encabezado,
-                incluyendo exportaciones de WooCommerce/Shopify: por ejemplo
-                <code>nombre</code>/<code>name</code>,
-                <code>categoria</code>/<code>categories</code>,
-                <code>especificaciones</code>/<code>short description</code>,
-                <code>imagen</code>/<code>images</code>. Solo el nombre del
-                producto es obligatorio. Si una categoría no coincide con las
-                nuestras (Aplicado, Compresores, Línea CIAC, Otros, Residencial
-                - Comercial Ligero, VRF, Válvulas de Control), el producto igual
-                se importa y queda como <code>Otros</code> — puedes corregirla
-                luego con "Editar".
-              </p>
-              <div class="admin-csv-actions">
-                <label class="btn btn-outline-dark admin-csv-upload">
-                  Elegir archivo CSV
-                  <input
-                    type="file"
-                    id="csvFile"
-                    accept=".csv,text/csv"
-                    hidden
-                  />
-                </label>
+              <div class="admin-form-actions">
                 <button
-                  type="button"
-                  class="btn btn-outline-dark"
-                  id="csvTemplateBtn"
+                  type="submit"
+                  class="btn btn-primary"
+                  id="prodSubmitBtn"
                 >
-                  Descargar plantilla CSV
+                  Agregar producto
                 </button>
                 <button
                   type="button"
                   class="btn btn-outline-dark"
-                  id="csvExportBtn"
+                  id="prodCancelBtn"
+                  hidden
                 >
-                  Exportar catálogo actual a CSV
+                  Cancelar edición
                 </button>
               </div>
-              <p class="admin-csv-filename" id="csvFileName" hidden></p>
-            </div>
+            </form>
 
-            <!-- Vista previa: aparece tras elegir un archivo válido, antes
+            <div class="admin-csv">
+              <div class="admin-csv-head">
+                <h3>Importar / exportar CSV</h3>
+                <p>
+                  Sube un CSV para agregar varios productos de una sola vez.
+                  Reconoce automáticamente varios formatos de encabezado,
+                  incluyendo exportaciones de WooCommerce/Shopify: por ejemplo
+                  <code>nombre</code>/<code>name</code>,
+                  <code>categoria</code>/<code>categories</code>,
+                  <code>especificaciones</code>/<code>short description</code>,
+                  <code>imagen</code>/<code>images</code>. Solo el nombre del
+                  producto es obligatorio. Si una categoría no coincide con las
+                  nuestras (Aplicado, Compresores, Línea CIAC, Otros,
+                  Residencial - Comercial Ligero, VRF, Válvulas de Control), el
+                  producto igual se importa y queda como <code>Otros</code> —
+                  puedes corregirla luego con "Editar".
+                </p>
+                <div class="admin-csv-actions">
+                  <label class="btn btn-outline-dark admin-csv-upload">
+                    Elegir archivo CSV
+                    <input
+                      type="file"
+                      id="csvFile"
+                      accept=".csv,text/csv"
+                      hidden
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    class="btn btn-outline-dark"
+                    id="csvTemplateBtn"
+                  >
+                    Descargar plantilla CSV
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-dark"
+                    id="csvExportBtn"
+                  >
+                    Exportar catálogo actual a CSV
+                  </button>
+                </div>
+                <p class="admin-csv-filename" id="csvFileName" hidden></p>
+              </div>
+
+              <!-- Vista previa: aparece tras elegir un archivo válido, antes
                  de aplicar los cambios de verdad. -->
-            <div class="admin-csv-preview" id="csvPreview" hidden>
-              <p id="csvSummary"></p>
-              <ul class="admin-csv-errors" id="csvErrors" hidden></ul>
-              <div class="admin-csv-preview-actions">
-                <button type="button" class="btn btn-primary" id="csvAppendBtn">
-                  Agregar estos productos al catálogo
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-dark"
-                  id="csvReplaceBtn"
-                >
-                  Reemplazar todo el catálogo
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-dark"
-                  id="csvCancelBtn"
-                >
-                  Cancelar
-                </button>
+              <div class="admin-csv-preview" id="csvPreview" hidden>
+                <p id="csvSummary"></p>
+                <ul class="admin-csv-errors" id="csvErrors" hidden></ul>
+                <div class="admin-csv-preview-actions">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="csvAppendBtn"
+                  >
+                    Agregar estos productos al catálogo
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-dark"
+                    id="csvReplaceBtn"
+                  >
+                    Reemplazar todo el catálogo
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-dark"
+                    id="csvCancelBtn"
+                  >
+                    Cancelar
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="admin-list-head">
-            <h3>Productos actuales (<span id="adminCount">0</span>)</h3>
-            <button type="button" class="admin-reset" id="resetProductsBtn">
-              Restaurar catálogo original
-            </button>
-          </div>
-          <ul class="admin-list" id="adminList"></ul>
+            <div class="admin-list-head">
+              <h3>Productos actuales (<span id="adminCount">0</span>)</h3>
+              <button type="button" class="admin-reset" id="resetProductsBtn">
+                Restaurar catálogo original
+              </button>
+            </div>
+            <ul class="admin-list" id="adminList"></ul>
           </div>
 
           <div class="admin-panel-section" id="panelCursos" hidden>

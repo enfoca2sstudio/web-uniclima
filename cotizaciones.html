@@ -105,7 +105,7 @@
             </li>
             <li><a href="cursos.html">Academia</a></li>
             <li><a href="cotizaciones.html" class="active">Cotización</a></li>
-            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
           </ul>
           <button
             class="theme-toggle"
@@ -498,8 +498,7 @@
         /* ---------- Llenar el selector de cursos (solo activos) ---------- */
         if (window.UniclimaCursos && cursoSelect) {
           var cursosData = window.UniclimaCursos;
-          cursoSelect.innerHTML =
-            '<option value="">Cargando cursos…</option>';
+          cursoSelect.innerHTML = '<option value="">Cargando cursos…</option>';
           cursosData
             .load()
             .then(function (cursos) {

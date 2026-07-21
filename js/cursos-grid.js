@@ -7,11 +7,11 @@
  * Intermedio, Avanzado) con sus tarjetas de curso, y el buscador +
  * filtro por palabra clave (funcionan juntos, en el cliente).
  */
-(function () {
+(async function () {
   "use strict";
 
   var data = window.UniclimaCursos;
-  var cursosList = data.load();
+  var cursosList = await data.load();
   var activeKeyword = "";
   var activeStatus = "";
   var activeLevel = "todos";
@@ -276,11 +276,16 @@
 
   // Si el catálogo de cursos cambió en otra pestaña (ej. el panel de
   // admin abierto en otra pestaña), refresca la grilla al volver a esta.
+  // Nota: como el catálogo ahora vive en Firestore (no en localStorage),
+  // el evento "storage" ya no se dispara para estos cambios — queda acá
+  // por si en el futuro se agrega algún dato que sí use localStorage.
   window.addEventListener("storage", function (e) {
     if (e.key === data.STORAGE_KEY) {
-      cursosList = data.load();
-      buildLevels();
-      applyFilters();
+      data.load().then(function (list) {
+        cursosList = list;
+        buildLevels();
+        applyFilters();
+      });
     }
   });
 
