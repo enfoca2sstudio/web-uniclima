@@ -33,8 +33,7 @@
     var order = ["todos", "basico", "intermedio", "avanzado"];
     levelPillsWrap.innerHTML = order
       .map(function (level) {
-        var label =
-          level === "todos" ? "Todos" : data.LEVEL_LABELS[level];
+        var label = level === "todos" ? "Todos" : data.LEVEL_LABELS[level];
         return (
           '<button type="button" class="academia-pill' +
           (level === "todos" ? " active" : "") +
@@ -101,12 +100,12 @@
       '">' +
       (isActive ? "Activo" : "No disponible") +
       "</span>" +
-      '<div class="curso-card-media ' +
-      data.LEVEL_ICON_CLASS[curso.level] +
+      '<div class="curso-card-media' +
+      (curso.image ? "" : " " + data.LEVEL_ICON_CLASS[curso.level]) +
       '">' +
-      '<svg viewBox="0 0 24 24" fill="none">' +
-      iconSvg +
-      "</svg>" +
+      (curso.image
+        ? '<img src="' + esc(curso.image) + '" alt="" loading="lazy" />'
+        : '<svg viewBox="0 0 24 24" fill="none">' + iconSvg + "</svg>") +
       "</div>" +
       '<div class="curso-card-body">' +
       '<div class="curso-meta">' +
@@ -178,8 +177,7 @@
       var matchesKeyword =
         !activeKeyword ||
         card.dataset.keywords.indexOf(activeKeyword.toLowerCase()) !== -1;
-      var matchesStatus =
-        !activeStatus || card.dataset.activo === "true";
+      var matchesStatus = !activeStatus || card.dataset.activo === "true";
       var visible =
         matchesLevel && matchesTerm && matchesKeyword && matchesStatus;
       card.style.display = visible ? "" : "none";
@@ -192,7 +190,7 @@
         sec.querySelectorAll(".curso-card"),
         function (c) {
           return c.style.display !== "none";
-        }
+        },
       );
       sec.hidden = !anyVisible;
     });
@@ -250,7 +248,9 @@
       } else {
         activeKeyword = kw;
         keywordsDropdown
-          .querySelectorAll(".academia-keyword-pill:not(.academia-keyword-pill-status)")
+          .querySelectorAll(
+            ".academia-keyword-pill:not(.academia-keyword-pill-status)",
+          )
           .forEach(function (p) {
             p.classList.remove("active");
           });
@@ -268,8 +268,7 @@
     }
   });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && !keywordsDropdown.hidden)
-      closeKeywordsDropdown();
+    if (e.key === "Escape" && !keywordsDropdown.hidden) closeKeywordsDropdown();
   });
 
   if (search) search.addEventListener("input", applyFilters);

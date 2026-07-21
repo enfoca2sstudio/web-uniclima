@@ -69,6 +69,7 @@
         "Principios físicos de la refrigeración y funcionamiento de los sistemas de aire acondicionado.",
       tags: ["Aire acondicionado", "Básico"],
       icon: "ac",
+      image: "img/cursos/c1.jpg",
       activo: true,
     },
     {
@@ -81,6 +82,7 @@
         "Fundamentos eléctricos necesarios para instalar y diagnosticar equipos de climatización con seguridad.",
       tags: ["Básico"],
       icon: "electric",
+      image: "img/cursos/c2.jpg",
       activo: true,
     },
     {
@@ -92,6 +94,7 @@
         "Conceptos base de los ciclos de refrigeración y las tecnologías actuales del mercado.",
       tags: ["Básico"],
       icon: "snow",
+      image: "img/cursos/c3.jpg",
       activo: true,
     },
     {
@@ -104,6 +107,7 @@
         "Procedimiento completo de instalación y arranque de equipos split y compactos MDV.",
       tags: ["Aire acondicionado", "Inverter"],
       icon: "ac",
+      image: "img/cursos/c4.jpg",
       activo: true,
     },
     {
@@ -115,6 +119,7 @@
         "Primeros pasos en el diseño e instalación de sistemas de agua helada (chillers).",
       tags: ["Chiller", "Agua helada"],
       icon: "water",
+      image: "img/cursos/c5.jpg",
       activo: true,
     },
     {
@@ -126,6 +131,7 @@
         "Introducción a la tecnología VRF: componentes, funcionamiento y aplicaciones.",
       tags: ["VRF", "Básico"],
       icon: "vrf",
+      image: "img/cursos/c6.jpg",
       activo: true,
     },
 
@@ -135,10 +141,10 @@
       level: "intermedio",
       hours: 28,
       title: "Puesta en Marcha y Diagnóstico de Fallas en Sistemas VRF VC MAX",
-      description:
-        "Arranque y diagnóstico de fallas en sistemas VRF VC MAX.",
+      description: "Arranque y diagnóstico de fallas en sistemas VRF VC MAX.",
       tags: ["VRF"],
       icon: "vrf",
+      image: "img/cursos/c7.jpg",
       activo: true,
     },
     {
@@ -150,6 +156,7 @@
         "Operación y mantenimiento preventivo/correctivo de sistemas de agua helada.",
       tags: ["Chiller", "Agua helada"],
       icon: "water",
+      image: "img/cursos/c8.jpg",
       activo: true,
     },
     {
@@ -162,6 +169,7 @@
         "Diseño y cálculo de ductería de aire apoyado en herramientas de inteligencia artificial.",
       tags: ["Software", "Cargas térmicas"],
       icon: "software",
+      image: "img/cursos/c9.jpg",
       activo: true,
     },
     {
@@ -174,17 +182,20 @@
         "Masterclass en vivo sobre el rol de los sistemas VRF en la edificación moderna.",
       tags: ["VRF"],
       icon: "vrf",
+      image: "img/cursos/c10.jpg",
       activo: true,
     },
     {
       id: "c11",
       level: "intermedio",
       hours: 16,
-      title: "Nuevas Tendencias en Refrigerantes: Aplicaciones de R-32 y R-454B",
+      title:
+        "Nuevas Tendencias en Refrigerantes: Aplicaciones de R-32 y R-454B",
       description:
         "Panorama actual de los refrigerantes de nueva generación R-32 y R-454B.",
       tags: ["Inverter"],
       icon: "snow",
+      image: "img/cursos/c11.jpg",
       activo: true,
     },
     {
@@ -197,17 +208,20 @@
         "Configuración de controles VRF y su compatibilidad con termostatos de distintas marcas.",
       tags: ["VRF"],
       icon: "vrf",
+      image: "img/cursos/c12.jpg",
       activo: true,
     },
     {
       id: "c13",
       level: "intermedio",
       hours: 24,
-      title: "Técnicas Avanzadas para la Detección de Fallas en Aire Acondicionado",
+      title:
+        "Técnicas Avanzadas para la Detección de Fallas en Aire Acondicionado",
       description:
         "Metodologías de diagnóstico para identificar fallas comunes en sistemas de aire acondicionado.",
       tags: ["Aire acondicionado"],
       icon: "ac",
+      image: "img/cursos/c13.jpg",
       activo: true,
     },
 
@@ -216,11 +230,13 @@
       id: "c14",
       level: "avanzado",
       hours: 32,
-      title: "Optimización y Selección de Sistemas VRF V8 mediante Software MDV",
+      title:
+        "Optimización y Selección de Sistemas VRF V8 mediante Software MDV",
       description:
         "Selección y optimización de sistemas VRF V8 utilizando el software de diseño MDV.",
       tags: ["VRF", "Software"],
       icon: "software",
+      image: "img/cursos/c14.jpg",
       activo: true,
     },
     {
@@ -233,6 +249,7 @@
         "Lectura e interpretación avanzada de diagramas eléctricos en sistemas de agua helada.",
       tags: ["Chiller", "Agua helada"],
       icon: "electric",
+      image: "img/cursos/c15.jpg",
       activo: true,
     },
     {
@@ -245,6 +262,7 @@
         "Cálculo especializado de cargas térmicas utilizando el software HAP de Carrier.",
       tags: ["Cargas térmicas", "Software"],
       icon: "software",
+      image: "img/cursos/c16.jpg",
       activo: true,
     },
   ];

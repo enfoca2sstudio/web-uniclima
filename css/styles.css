@@ -2090,7 +2090,7 @@ header:not(.scrolled) .nav-links.open ~ .theme-toggle {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s var(--ease);
+  /* transition: transform 0.5s var(--ease); */
 }
 .curso-card:hover .curso-card-media img {
   transform: scale(1.06);
